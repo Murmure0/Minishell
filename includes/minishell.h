@@ -6,20 +6,20 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 13:05:41 by mberthet          #+#    #+#             */
-/*   Updated: 2022/01/12 16:13:06 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/01/12 17:10:34 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/errno.h>
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
-#endif
 
+# include "./libft.h"
+# include <fcntl.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <sys/errno.h>
+# include <stdio.h>
 
 /* --Maillon des lst chainees des infiles/outfile--*/
 
@@ -39,7 +39,7 @@ typedef struct s_command
 	char **cmd; //la cmd du pipe actuel
 	char **env;
 	struct s_command *next; // la commande du prochain pipe
-} t_command;
+} 	t_command;
 
 /* --Declaration de notre structure globale-- */
 
@@ -49,7 +49,19 @@ typedef struct s_shell
 	char **env;
 	char **path;
 	char *line;
-}		t_shell;
+}	t_shell;
 
-struct s_shell g_struct;
+t_shell g_struct;
 
+/* g_struct */ 
+void    init_struct(t_shell *g_struct, char **env);
+
+/* env */ 
+char	*find_env_paths(char **envp);
+char	**get_env_paths(char **envp);
+char	**get_env(char **env);
+
+/* main */ 
+
+
+#endif

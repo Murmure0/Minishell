@@ -6,7 +6,7 @@
 #    By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/11 13:08:44 by mberthet          #+#    #+#              #
-#    Updated: 2022/01/12 16:13:05 by mberthet         ###   ########.fr        #
+#    Updated: 2022/01/12 17:05:07 by mberthet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,12 +29,10 @@ LIBFT = ./libft/libft.a
 
 OBJECTS = $(SOURCES:.c=.o)
 
-HEADER = minishell.h
-
 all : $(NAME)
 
-$(NAME): $(OBJECTS) $(HEADER)
-		@$(CC) $(CFLAGS) $(OBJECTS) -L./libft -lft -o $(NAME)
+$(NAME): $(LIBFT) $(OBJECTS)
+	@$(CC) $(CFLAGS) $(OBJECTS) -L./libft -lft -o $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C ./libft

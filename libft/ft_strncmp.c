@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/11 13:20:01 by mberthet          #+#    #+#             */
-/*   Updated: 2022/01/12 17:12:14 by mberthet         ###   ########.fr       */
+/*   Created: 2021/09/13 09:27:08 by vmasse            #+#    #+#             */
+/*   Updated: 2021/09/15 11:27:07 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../includes/libft.h"
 
-
-int main(int argc, char **argv, char **env)
+int	ft_strncmp(const char *s1, const char *s2, unsigned int n)
 {
-	t_command lst_cmd;
+	unsigned int	i;
 
-	init_struct(&g_struct, env); /*fonction qui va initialiser notre structure globale*/
-
-	exec(g_struct, lst_cmd);
+	i = 0;
+	while ((s1[i] || s2[i]) && i < n)
+	{
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
+	}
 	return (0);
 }
