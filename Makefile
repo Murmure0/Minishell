@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+         #
+#    By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/11 13:08:44 by mberthet          #+#    #+#              #
-#    Updated: 2022/01/12 11:32:27 by vmasse           ###   ########.fr        #
+#    Updated: 2022/01/12 14:13:24 by vmasse           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,28 +14,33 @@ NAME = minishell
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
+# CFLAGS = -Wall -Wextra -Werror
+# CFLAGS += -g
 
-MAIN = main.c \
+MAIN = 	srcs/main.c			\
+		srcs/init_struct.c	\
+		srcs/env.c			\
 
 SOURCES = $(MAIN)
 
-OBJECTS = $(SOURCES:.c=.o)
+LIBFT = ./libft/libft.a
 
-HEADER = minishell.h
+OBJECTS = $(SOURCES:.c=.o)
 
 all : $(NAME)
 
-$(NAME): $(OBJECTS) $(HEADER)
-			@$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME)
+$(NAME): $(LIBFT) $(OBJECTS)
+	@$(CC) $(CFLAGS) $(OBJECTS) -L./libft -lft -o $(NAME)
+
+$(LIBFT):
+	$(MAKE) -C ./libft
 
 clean:
-	/bin/rm -f $(OBJECTS) $(BOBJECTS) all
+	/bin/rm -f $(OBJECTS) && cd ./libft/ && make clean
 	
 fclean: clean
-	/bin/rm -f $(NAME) all
+	/bin/rm -f $(NAME) && cd ./libft/ && make fclean
 	
 re: fclean all
 
 .PHONY: clean fclean re all
-

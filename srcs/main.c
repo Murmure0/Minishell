@@ -1,14 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_struct.c                                      :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/11 14:07:58 by mberthet          #+#    #+#             */
-/*   Updated: 2022/01/11 17:55:33 by mberthet         ###   ########.fr       */
+/*   Created: 2022/01/11 13:20:01 by mberthet          #+#    #+#             */
+/*   Updated: 2022/01/12 14:22:19 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
+int main(int argc, char **argv, char **env)
+{
+	init_struct(&g_struct, env); /*fonction qui va initialiser notre structure globale*/
+	return (0);
+}
