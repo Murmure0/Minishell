@@ -6,12 +6,11 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 13:14:07 by mberthet          #+#    #+#             */
-/*   Updated: 2022/01/12 16:02:15 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/01/12 17:21:17 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-
+#include "../includes/minishell.h"
 
 int exec(t_shell g_struct, t_command lst_cmd)
 {
@@ -31,15 +30,17 @@ int exec(t_shell g_struct, t_command lst_cmd)
 			fd_in = open(lst_cmd.infiles->name, O_RDONLY);
 			if (fd_in < 0)
 			{
-				if (ENOENT)
+				if (errno == ENOENT)
 				{
 					write(2, &lst_cmd.infiles->name, ft_strlen(lst_cmd.infiles->name));
-					write(2, ": Permission denied", 20);
+					perror(": ");
+					//write(2, ": Permission denied", 20);
 				}
-				else if (EACCES)
+				else if (errno == EACCES)
 				{
 					write(2, &lst_cmd.infiles->name, ft_strlen(lst_cmd.infiles->name));
-					write(2, ": No such file or directory", 28);
+					perror(": ");
+					//write(2, ": No such file or directory", 28);
 				}
 				exit (errno);
 			}

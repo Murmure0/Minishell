@@ -6,11 +6,11 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 11:17:42 by mberthet          #+#    #+#             */
-/*   Updated: 2022/01/12 14:11:37 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/01/12 17:21:12 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 /*char	*adj_av(char **av)
 {
@@ -58,8 +58,8 @@ int	here_doc(char **av, int ac)
 	char	*line;
 	char	*str;
 
-	str = adj_av(av);
-	if (!ft_strcmp("here_doc", av[1]))
+	str = adj_av(av); //lst_cmd.infile.name
+	if (!ft_strcmp("here_doc", av[1])) // 
 	{
 		if (ac < 6)
 			error_message(10);
