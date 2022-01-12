@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 13:05:41 by mberthet          #+#    #+#             */
-/*   Updated: 2022/01/12 14:21:26 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/01/12 15:35:05 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void    init_struct(t_shell *g_struct, char **env);
 /* env */ 
 char	*find_env_paths(char **envp);
 char	**get_env_paths(char **envp);
+char	**get_env(char **env);
 
 /* main */ 
 

@@ -6,11 +6,32 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 13:32:31 by vmasse            #+#    #+#             */
-/*   Updated: 2022/01/12 14:16:09 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/01/12 15:41:36 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+char	**get_env(char **env)
+{
+	int		i;
+	char	**env_cpy;
+
+	i = -1;
+	while (env && env[++i])
+		continue ;
+	env_cpy = malloc(sizeof(char *) * i);
+	if (!env_cpy)
+		return (NULL);
+	i = -1;
+	while (env && env[++i])
+	{
+		env_cpy[i] = ft_strdup(env[i]);
+		if (!env_cpy[i])
+			return (NULL);
+	}
+	return (env_cpy);
+}
 
 char	*find_env_paths(char **envp)
 {

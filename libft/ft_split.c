@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.s19.be>             +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 16:21:30 by vmasse            #+#    #+#             */
-/*   Updated: 2021/09/15 11:26:57 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/01/12 15:40:57 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	nb_elems = count_elems(s, c);
-	arr = (char **)malloc((nb_elems + 1 ) * sizeof(char *));
+	arr = (char **)malloc((nb_elems + 1) * sizeof(char *));
 	if (!arr)
 		return (NULL);
 	arr[nb_elems] = 0;
