@@ -6,9 +6,15 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 13:05:41 by mberthet          #+#    #+#             */
-/*   Updated: 2022/01/11 17:55:31 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/01/12 16:13:06 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/errno.h>
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -17,7 +23,7 @@
 
 /* --Maillon des lst chainees des infiles/outfile--*/
 
-struct s_file
+typedef struct s_file
 {
 	int double_chevron;
 	char *name;
@@ -26,7 +32,7 @@ struct s_file
 
 /* --Maillon de la lst chainée des commandes : un maillon = une commande, separateur de cmd : |-- */
 
-struct s_command
+typedef struct s_command
 {
 	struct s_file *infiles; //tout les infile precedents la cmd sont stockés la dedans dans 
 	struct s_file *outfiles; // tous les outfile suivant la cmd 
@@ -38,12 +44,12 @@ struct s_command
 /* --Declaration de notre structure globale-- */
 
 
-struct s_shell
+typedef struct s_shell
 {
 	char **env;
 	char **path;
 	char *line;
-};
+}		t_shell;
 
 struct s_shell g_struct;
 
