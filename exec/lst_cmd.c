@@ -25,25 +25,25 @@ t_file *creat_lst_file(int chevron, char *name)
 		return (NULL);
 	tmp = first;
 
-	while () /* HEY */
-	{
+	// while () /* HEY */
+	// {
 
-		tmp->next = newfile(chevron, name);
-		if (!tmp->next)
-		{
-			ft_lstclear(&tmp);
-			return(NULL);
-		}
-		tmp = tmp->next;
-	}
+	// 	tmp->next = newfile(chevron, name);
+	// 	if (!tmp->next)
+	// 	{
+	// 		ft_lstclear(&tmp);
+	// 		return(NULL);
+	// 	}
+	// 	tmp = tmp->next;
+	// }
 	tmp->next = NULL;
 	return(first);
 }
 
-t_command *newcmd(t_file *infiles, t_file *outfiles, char **)
-{
+// t_command *newcmd(t_file *infiles, t_file *outfiles, char **)
+// {
 
-}
+// }
 
 t_command *creat_lst_cmd()
 {

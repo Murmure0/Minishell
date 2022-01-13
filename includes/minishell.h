@@ -1,6 +1,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+/* ! faire le tri a la fin dans les differents headers pour ne pas avoir de doublons*/
+
 # include "./libft.h"
 # include <fcntl.h>
 # include <stdio.h>
@@ -8,6 +10,7 @@
 # include <stdlib.h>
 # include <sys/errno.h>
 # include <stdio.h>
+# include <readline/readline.h>
 
 /* --Maillon des lst chainees des infiles/outfile--*/
 
@@ -51,5 +54,9 @@ char	**get_env(char **env);
 
 /* main */ 
 void	ft_free(void);
+void	ft_exit(void);
+
+/* main */ 
+void	parse(void);
 
 #endif

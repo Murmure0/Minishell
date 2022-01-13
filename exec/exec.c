@@ -1,9 +1,9 @@
 #include "../includes/minishell.h"
 
-int exec(t_shell g_shell, t_command lst_cmd)
+int exec(t_command lst_cmd)
 {
 	int fd_in;
-	int fd_out;
+	// int fd_out;
 	
 	//parcourir la lst_cmd.infile : verification qu'il y a du contenu (erreur); si un fd ne peut pas etre ouvert on quitte
 	// o/c chaque infile tant qu'il y a un next;
@@ -58,5 +58,5 @@ int exec(t_shell g_shell, t_command lst_cmd)
 
 	//si lst_cmd.next : il y a un pipe
 	//dup2 
-
+	return (0);
 }

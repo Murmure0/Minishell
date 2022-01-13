@@ -1,20 +1,8 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/01/11 13:08:44 by mberthet          #+#    #+#              #
-#    Updated: 2022/01/12 17:05:07 by mberthet         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME = minishell
 
 CC = gcc
 
-# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 # CFLAGS += -g
 
 MAIN = 	srcs/main.c			\
@@ -22,6 +10,8 @@ MAIN = 	srcs/main.c			\
 		srcs/env.c			\
 		./exec/exec.c \
 		./exec/here_doc.c \
+		./exec/lst_cmd.c \
+		./parsing/parse.c \
 
 SOURCES = $(MAIN)
 
@@ -32,7 +22,7 @@ OBJECTS = $(SOURCES:.c=.o)
 all : $(NAME)
 
 $(NAME): $(LIBFT) $(OBJECTS)
-	@$(CC) $(CFLAGS) $(OBJECTS) -L./libft -lft -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJECTS) -L./libft -lft -lreadline -o $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C ./libft

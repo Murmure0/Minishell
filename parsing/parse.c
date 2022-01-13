@@ -10,12 +10,20 @@ void	parse(void)
 			- 	sinon => erreur
 			- on remplace toutes les variables $ sauf celles entre ''
 			- 
-			- on resplit chaque node obtenu avec espaces / tabs
-			- 
+			- ajout du chevron + filename dans un char **
+			- creation de la liste chainee
+			- ajout du chevron + filename dans un char **
 		
 	*/
+
 	nodes = ft_split(g_shell.prompt, '|');
+	// savoir ce qui a dans nodes sans pipes
 	if (!nodes)
-		return ;
-	
+		ft_exit();
+
+	while (nodes)
+	{
+		printf("%s\n", *nodes);
+		nodes++;
+	}
 }
