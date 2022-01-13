@@ -45,10 +45,10 @@ t_file *creat_lst_file(int chevron, char *name)
 
 // }
 
-t_command *creat_lst_cmd()
-{
-	t_command *first;
-	t_command *tmp;
+// t_command *creat_lst_cmd()
+// {
+// 	t_command *first;
+// 	t_command *tmp;
 
 
-}
+// }

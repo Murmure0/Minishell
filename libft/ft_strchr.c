@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/08 08:25:16 by vmasse            #+#    #+#             */
-/*   Updated: 2022/01/13 13:05:21 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/01/13 15:42:17 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,5 +17,5 @@ char	*ft_strchr(const char *s, int c)
 	while (*s != (char)c)
 		if (!*s++)
 			return (0);
-	return ((char *)s);
+	return (ft_strdup((char *)s));
 }

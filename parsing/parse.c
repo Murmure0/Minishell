@@ -1,8 +1,25 @@
 #include "../includes/minishell.h"
 
+int	arr_len(char **s)
+{
+	int	i;
+
+	i = 0;
+	while (s && s[i])
+		i++;
+	return (i);
+}
+
+char	*check_quotes(char **to_replace)
+{
+
+	return (NULL);
+}
+
 void	parse(void)
 {
 	char **nodes;
+	char **to_replace;
 
 	/*  - on recupere l'input, puis on le split avec les pipes
 			- check le 1er " ou '
@@ -20,10 +37,14 @@ void	parse(void)
 	// savoir ce qui a dans nodes sans pipes
 	if (!nodes)
 		ft_exit();
-
-	while (nodes)
+	to_replace = malloc(sizeof(char *) * arr_len(nodes));
+	if (!to_replace)
+		ft_exit();
+	while (nodes && *nodes)
 	{
-		printf("%s\n", *nodes);
+		// printf("%s\n", *nodes);
+		*to_replace = check_quotes(*nodes);
+		to_replace++;
 		nodes++;
 	}
 }
