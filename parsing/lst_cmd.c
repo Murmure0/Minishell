@@ -56,7 +56,7 @@ t_command *new_cmd(t_file *lst_infiles, t_file *lst_outfiles, char ** cmd)
 	new->infiles = lst_infiles;
 	new->outfiles = lst_outfiles;
 	new->cmd = cmd;
-	new->env = shell.env;
+	new->env = g_shell.env;
 	return (new);
 }
 
@@ -75,7 +75,7 @@ t_command *creat_lst_cmd(t_file *lst_infiles, t_file *lst_outfiles, char ** cmd)
 		return(NULL);
 	tmp = first;
 
-	while (++i < n) /* le nb de noeud = (nb de |) + 1*/
+	while (++i < n) /* le nb n de noeud = (nb de |)*/
 	{
 		tmp->next = new_cmd(lst_infiles, lst_outfiles, cmd);
 		if (!tmp->next)
