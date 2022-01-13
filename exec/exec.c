@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int exec(t_shell g_struct, t_command lst_cmd)
+int exec(t_shell g_shell, t_command lst_cmd)
 {
 	int fd_in;
 	int fd_out;
