@@ -60,3 +60,28 @@ int exec(t_shell g_shell, t_command lst_cmd)
 	//dup2 
 
 }
+
+
+/*
+	int main(int ac, char **av, char **env)
+	{
+		t_command cmd;
+		cmd.env = env;
+		cmd.cmd = {"echo", "hello", NULL};
+		cmd.next = NULL;
+		
+		t_files in1, in2, out1, out2;
+		in1.double_chevron = 1;
+		in1.name = infile_1;
+		in2.double_chevron = 1;
+		in2.name = infile_2;
+		in1.next = &in2;
+		cmd.infiles = &in1;
+		out1.double_chevron = 1;
+		out1.name = outfile_1;
+		out2.double_chevron = 2;
+		out2.name = outfile_2;
+		out1.next = &out2;
+		cmd.outfiles = &out1;
+	}
+*/
