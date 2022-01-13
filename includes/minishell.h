@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/11 13:05:41 by mberthet          #+#    #+#             */
-/*   Updated: 2022/01/12 17:10:34 by mberthet         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -48,13 +36,13 @@ typedef struct s_shell
 {
 	char **env;
 	char **path;
-	char *line;
+	char *prompt;
 }	t_shell;
 
-t_shell g_struct;
+t_shell g_shell;
 
-/* g_struct */ 
-void    init_struct(t_shell *g_struct, char **env);
+/* g_shell */ 
+void    init_struct(t_shell *g_shell, char **env);
 
 /* env */ 
 char	*find_env_paths(char **envp);
@@ -62,6 +50,6 @@ char	**get_env_paths(char **envp);
 char	**get_env(char **env);
 
 /* main */ 
-
+void	ft_free(void);
 
 #endif

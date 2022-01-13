@@ -1,18 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/12 13:14:07 by mberthet          #+#    #+#             */
-/*   Updated: 2022/01/12 17:21:17 by mberthet         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/minishell.h"
 
-int exec(t_shell g_struct, t_command lst_cmd)
+int exec(t_shell g_shell, t_command lst_cmd)
 {
 	int fd_in;
 	int fd_out;
