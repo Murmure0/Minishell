@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 
 void	ft_lstclear_file(t_file **lst)
