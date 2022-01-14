@@ -10,7 +10,7 @@ MAIN = 	srcs/main.c			\
 		srcs/env.c			\
 		./exec/exec.c \
 		./exec/here_doc.c \
-		./exec/lst_cmd.c \
+		./parsing/lst_cmd.c \
 		./parsing/parse.c \
 
 SOURCES = $(MAIN)
