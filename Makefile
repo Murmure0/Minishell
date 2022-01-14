@@ -2,14 +2,16 @@ NAME = minishell
 
 CC = gcc
 
-# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 # CFLAGS += -g
 
 MAIN = 	srcs/main.c			\
 		srcs/init_struct.c	\
 		srcs/env.c			\
-		./exec/exec.c \
-		./exec/here_doc.c \
+		srcs/exec/exec.c \
+		srcs/exec/here_doc.c \
+		srcs/parsing/lst_cmd.c \
+		srcs/parsing/parse.c \
 
 SOURCES = $(MAIN)
 
@@ -20,7 +22,7 @@ OBJECTS = $(SOURCES:.c=.o)
 all : $(NAME)
 
 $(NAME): $(LIBFT) $(OBJECTS)
-	@$(CC) $(CFLAGS) $(OBJECTS) -L./libft -lft -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJECTS) -L./libft -lft -lreadline -o $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C ./libft
