@@ -25,8 +25,8 @@ typedef struct s_file
 
 typedef struct s_command
 {
-	struct s_file *infiles; //tout les infile precedents la cmd sont stockés la dedans dans 
-	struct s_file *outfiles; // tous les outfile suivant la cmd 
+	t_file *infiles; //tout les infile precedents la cmd sont stockés la dedans dans 
+	t_file *outfiles; // tous les outfile suivant la cmd 
 	char **cmd; //la cmd du pipe actuel
 	char **env;
 	struct s_command *next; // la commande du prochain pipe
