@@ -65,8 +65,16 @@ char	**get_env(char **env);
 void	ft_free(void);
 void	ft_exit(void);
 
-/* parse */
-void	check_pipe_split(int next_pipe, int last_pipe);
+/* --------------------------------------------------------------------------------- */
+/* ------------------------------------ PARSING ------------------------------------ */
+/* --------------------------------------------------------------------------------- */
+
+/* ------------------------------------ parse.c ------------------------------------ */
 void	parse(void);
+
+/* ------------------------------------ parse_quotes.c ------------------------------ */
+int		get_quote_pos(int start);
+int		get_matching_quote_pos(int start, int quote_pos);
+void	check_quotes_for_pipe_split(int next_pipe, int last_pipe);
 
 #endif
