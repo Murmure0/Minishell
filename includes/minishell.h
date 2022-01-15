@@ -37,12 +37,9 @@ typedef struct s_command
 typedef struct s_parsing
 {
 	char	**nodes; // ensemble des noeuds split par |
-	int	next_pipe_pos;
-	int	last_pipe_pos;
 }	t_parsing;
 
 /* --Declaration de notre structure globale-- */
-
 
 typedef struct s_shell
 {
@@ -74,7 +71,7 @@ void	parse(void);
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
 int		get_quote_pos(int start);
-int		get_matching_quote_pos(int start, int quote_pos);
-void	check_quotes_for_pipe_split(int next_pipe, int last_pipe);
+int		get_matching_quote_pos(int start);
+void	check_quotes_for_pipe_split(void);
 
 #endif
