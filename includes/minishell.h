@@ -14,28 +14,29 @@
 
 /* --Maillon des lst chainees des infiles/outfile--*/
 
-typedef struct s_file
+typedef struct s_token
 {
-	int double_chevron; // 0 si simple ou double <, 1 si double et >
+	int redir; // 0 si no redir, 1 si simple <, 2 si double >
 	char *name;
-	struct s_file *next;
-}	t_file;
+	struct s_token *next;
+}	t_token;
 
 /* --Maillon de la lst chainée des commandes : un maillon = une commande, separateur de cmd : |-- */
 
-typedef struct s_command
+typedef struct s_node
 {
-	t_file *infiles; //tout les infile precedents la cmd sont stockés la dedans dans 
-	t_file *outfiles; // tous les outfile suivant la cmd 
+	t_token *infiles; //tout les infile precedents la cmd sont stockés la dedans dans 
+	t_token *outfiles; // tous les outfile suivant la cmd 
 	char **cmd; //la cmd du pipe actuel
-	char **env;
-	struct s_command *next; // la commande du prochain pipe
-} 	t_command;
+	char **env; // pourquoi ?
+	struct s_node *next; // la commande du prochain pipe
+} 	t_node;
 
 /* Parsing */
 
 typedef struct s_parsing
 {
+	char 	*prompt;
 	char	**nodes; // ensemble des noeuds split par |
 }	t_parsing;
 
@@ -45,12 +46,11 @@ typedef struct s_shell
 {
 	char **env;
 	char **path;
-	char *prompt;
 }	t_shell;
 
 t_shell g_shell;
 
-/* g_shell */ 
+/* ------------------------------------ init_struct.c ------------------------------------ */
 void    init_struct(t_shell *g_shell, char **env);
 
 /* env */ 
@@ -67,11 +67,18 @@ void	ft_exit(void);
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ parse.c ------------------------------------ */
-void	parse(void);
+void	parse(t_parsing *parstruct);
+void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node);
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
-int		get_quote_pos(int start);
-int		get_matching_quote_pos(int start);
-void	check_quotes_for_pipe_split(void);
+int		get_quote_pos(t_parsing *parstruct, int start);
+int		get_matching_quote_pos(t_parsing *parstruct, int start);
+void	check_quotes_for_pipe_split(t_parsing *parstruct);
+
+/* ------------------------------------ lst_cmd.c ----------------------------------- */
+t_token *new_token(int redir, char *name);
+t_token *create_lst_token(int chevron, char *name);
+t_node *new_node(t_token *lst_infiles, t_token *lst_outfiles, char **node);
+t_node *create_lst_node(t_token *lst_infiles, t_token *lst_outfiles, char **node);
 
 #endif
