@@ -34,4 +34,9 @@ void	parse(t_parsing *parstruct)
 		// printf("%s\n", *parstruct->nodes);
 		parstruct->nodes++;
 	}
+<<<<<<< Updated upstream
 }	
+=======
+}
+	
+>>>>>>> Stashed changes
