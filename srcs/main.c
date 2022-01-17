@@ -25,6 +25,7 @@ int main(int argc, char **argv, char **env)
 	while (1)
 	{
 		g_shell.prompt = readline("minishell$ ");
+		add_history(g_shell.prompt);
 		parse();
 		// exec(g_shell, lst_cmd);
 	}

@@ -8,10 +8,11 @@ CFLAGS = -Wall -Wextra -Werror
 MAIN = 	srcs/main.c			\
 		srcs/init_struct.c	\
 		srcs/env.c			\
-		srcs/exec/exec.c \
 		srcs/exec/here_doc.c \
 		srcs/parsing/lst_cmd.c \
 		srcs/parsing/parse.c \
+		srcs/parsing/parse_quotes.c \
+		# srcs/exec/exec.c \
 
 SOURCES = $(MAIN)
 

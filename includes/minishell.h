@@ -37,16 +37,9 @@ typedef struct s_command
 typedef struct s_parsing
 {
 	char	**nodes; // ensemble des noeuds split par |
-
-	int	inhib; // 0 si cest double, 1 si simple
-	int	d_quotes_nb;
-	int	s_quotes_nb;
-	int	*pos_d_quotes; // array of pos to match "
-	int	*pos_s_quotes; // array of pos to match '
 }	t_parsing;
 
 /* --Declaration de notre structure globale-- */
-
 
 typedef struct s_shell
 {
@@ -69,7 +62,16 @@ char	**get_env(char **env);
 void	ft_free(void);
 void	ft_exit(void);
 
-/* main */ 
+/* --------------------------------------------------------------------------------- */
+/* ------------------------------------ PARSING ------------------------------------ */
+/* --------------------------------------------------------------------------------- */
+
+/* ------------------------------------ parse.c ------------------------------------ */
 void	parse(void);
+
+/* ------------------------------------ parse_quotes.c ------------------------------ */
+int		get_quote_pos(int start);
+int		get_matching_quote_pos(int start);
+void	check_quotes_for_pipe_split(void);
 
 #endif

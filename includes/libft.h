@@ -11,6 +11,6 @@ int		ft_strlen(const char *str);
 void	ft_bzero(void *s, size_t n);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(char *src);
-char	*ft_strchr(const char *s, int c);
+int		ft_strchr_pos(char *s, char c, int pos);
 
 #endif

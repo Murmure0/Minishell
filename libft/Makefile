@@ -7,7 +7,7 @@ SRCS =	ft_bzero.c	\
 		ft_strncmp.c	\
 		ft_substr.c	\
 		ft_strdup.c	\
-		ft_strchr.c	\
+		ft_strchr_pos.c	\
 
 OBJS = $(SRCS:.c=.o)
 

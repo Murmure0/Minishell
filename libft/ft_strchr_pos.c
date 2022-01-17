@@ -6,16 +6,16 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/08 08:25:16 by vmasse            #+#    #+#             */
-/*   Updated: 2022/01/13 15:42:17 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/01/14 16:40:53 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
 
-char	*ft_strchr(const char *s, int c)
+int	ft_strchr_pos(char *s, char c, int pos)
 {
-	while (*s != (char)c)
-		if (!*s++)
-			return (0);
-	return (ft_strdup((char *)s));
+	while (s[++pos] != (char)c)
+		if (!s[pos])
+			return (-1);
+	return (pos);
 }
