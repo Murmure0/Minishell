@@ -36,6 +36,7 @@ typedef struct s_command
 
 typedef struct s_parsing
 {
+	char 	*prompt;
 	char	**nodes; // ensemble des noeuds split par |
 }	t_parsing;
 
@@ -45,7 +46,6 @@ typedef struct s_shell
 {
 	char **env;
 	char **path;
-	char *prompt;
 }	t_shell;
 
 t_shell g_shell;
@@ -67,11 +67,12 @@ void	ft_exit(void);
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ parse.c ------------------------------------ */
-void	parse(void);
+
+void	parse(t_parsing *parstruct);
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
-int		get_quote_pos(int start);
-int		get_matching_quote_pos(int start);
-void	check_quotes_for_pipe_split(void);
+int		get_quote_pos(t_parsing *parstruct, int start);
+int		get_matching_quote_pos(t_parsing *parstruct, int start);
+void	check_quotes_for_pipe_split(t_parsing *parstruct);
 
 #endif
