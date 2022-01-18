@@ -30,10 +30,10 @@ int main(int argc, char **argv, char **env)
 		add_history(parstruct.prompt);
 		//first_node = parse(&parstruct);
 		first_node = parse(&parstruct);
-		printf("recup first node : |%s|\n", first_node->cmd[0]);
-		printf("recup first node : |%s|\n", first_node->cmd[1]);
-		printf("recup first node : |%s|\n", first_node->cmd[2]);
-		printf("recup first node : |%s|\n", first_node->cmd[3]);
+		// printf("recup first node : |%s|\n", first_node->cmd[0]);
+		// printf("recup first node : |%s|\n", first_node->cmd[1]);
+		// printf("recup first node : |%s|\n", first_node->cmd[2]);
+		// printf("recup first node : |%s|\n", first_node->cmd[3]);
 		exec(first_node);
 	}
 	ft_free();

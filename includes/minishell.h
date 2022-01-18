@@ -91,4 +91,15 @@ void	token_add_back(t_parsing *parstruct, t_token **token, int redir, char *name
 t_node *new_node(t_token *lst_infiles, t_token *lst_outfiles, char **node);
 t_node *create_lst_node(t_token *lst_infiles, t_token *lst_outfiles, char **node, int pipe_nb);
 
+/* --------------------------------------------------------------------------------- */
+/* ------------------------------------ EXEC --------------------------------------- */
+/* --------------------------------------------------------------------------------- */
+
+/* ------------------------------------ exec_clean.c ------------------------------- */
+int		exec(t_node *node);
+void	child_process(pid_t child_pid/*, int fd_in*/, t_node *node/*, int *fds*/);
+
+/* ------------------------------------ exec_lst.c ------------------------------- */
+int		find_fd_in(t_node *node);
+
 #endif
