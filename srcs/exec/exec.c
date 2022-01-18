@@ -1,4 +1,5 @@
 #include "../../includes/minishell.h"
+#include "../../includes/libft.h"
 
 char	*ft_strdup(char *src)
 {
@@ -78,41 +79,15 @@ static char	**recup_path(char **env)
 	{
 		if (!ft_strncmp("PATH=", env[i], 5))
 		{
-			path_line = ft_substr(env[i], 5, (my_strlen(env[i]) - 5));
+			path_line = ft_substr(env[i], 5, (ft_strlen(env[i]) - 5));
 			if (!path_line)
 				return (NULL);
-			path_tab = ft_split(path_line, ':', 1);
+			path_tab = ft_split(path_line, ':');
 			if (!path_tab)
 				return (NULL);
 		}
 	}
 	return (path_tab);
-}
-
-static char	**recup_cmd(char *str)
-{
-	char	**cmd_tab;
-	char	*cmd;
-	int		z;
-
-	z = 0;
-	if (!str || !*str || str[0] == ' ')
-		return (NULL);
-	cmd = ft_strdup(str);
-	cmd_tab = ft_split(cmd, ' ', 0);
-	if (!cmd_tab)
-	{
-		free(cmd);
-		return (NULL);
-	}
-	while (cmd_tab[z])
-	{
-		if (cmd_tab[z][my_strlen(cmd_tab[z]) - 1] == ' ')
-			cmd_tab[z][my_strlen(cmd_tab[z]) - 1] = '\0';
-		z++;
-	}
-	free(cmd);
-	return (cmd_tab);
 }
 
 static int	path_finder(char **cmd_tab, char **path_tab, char **env)
@@ -136,7 +111,7 @@ static int	path_finder(char **cmd_tab, char **path_tab, char **env)
 	return (0);
 }
 
-static void	free_all(char **path_tab, char **cmd_tab, int z)
+/*static void	free_all(char **path_tab, char **cmd_tab, int z)
 {
 	int	i;
 
@@ -151,30 +126,22 @@ static void	free_all(char **path_tab, char **cmd_tab, int z)
 			free(cmd_tab[i]);
 		free(cmd_tab);
 	}
-}
+}*/
 
 int	exec_cmd(t_node node, char **env)
 {
 	char	**path_tab;
-	char	**cmd_tab;
 
 	path_tab = recup_path(env);
 	if (!path_tab)
 		return (-1);
-	cmd_tab = recup_cmd(av);
-	if (!cmd_tab)
+	if (!path_finder(node.cmd, path_tab, env))
 	{
-		free_all(path_tab, cmd_tab, 0);
-		write(2, "Error : invalid command.", 24);
+		//ft_exit();
+		//free node.cmd
 		return (-1);
 	}
-	if (!path_finder(cmd_tab, path_tab, env))
-	{
-		free_all(path_tab, cmd_tab, 1);
-		write(2, "Error : invalid command.", 24);
-		return (-1);
-	}
-	free_all(path_tab, cmd_tab, 1);
+	//free_all(path_tab, cmd_tab, 1);
 	return (0);
 }
 
@@ -189,8 +156,8 @@ void child_process(pid_t child_pid, int fd_in, t_node node, char **env/*, int *f
 		{
 			if (dup2(fd_in, STDIN_FILENO) < 0)
 			{
-			perror(": ");
-			exit (errno);
+				perror(": ");
+				exit (errno);
 			}
 		}
 		/*if (dup2(fds[1], STDOUT_FILENO) < 0)
@@ -200,7 +167,7 @@ void child_process(pid_t child_pid, int fd_in, t_node node, char **env/*, int *f
 		close(fds[1]);*/
 		exec_cmd(node, env);
 		close(STDOUT_FILENO);
-		ft_exit();
+		//ft_exit();
 	}
 }
 
@@ -260,15 +227,13 @@ int exec(t_node node, char **env)
 	int main(int ac, char **av, char **env)
 	{
 		t_node node;
-
+		char *str[3] = {"echo", "hello", NULL};
 		char *str1 = {"infile_1"};
 		char *str2 = {"infile_2"};
 		char *str3 = {"outfile_1"};
 		char *str4 = {"outfile_2"};
-		char *str5 = {"echo"};
-		char *str6 = {"hello"};
 
-		t_token in1, in2, out1, out2, cmd1, cmd2;
+		t_token in1, in2, out1, out2;
 
 		//lst chainee infile
 		in1.redir = 0;
@@ -289,21 +254,14 @@ int exec(t_node node, char **env)
 		out1.next = &out2;
 		out2.next = NULL;
 
-		/*lst chainee cmd*/
-		cmd1.redir = 0;
-		cmd1.name = ft_strdup(str5);
-		cmd1.next = &cmd2;
-
-		cmd2.redir = 0;
-		cmd2.name = ft_strdup(str6);
-		cmd2.next = NULL;
+		/*cmd*/
+		
 		/*link les lst chainee dans le maillon lst_cmd*/
 
 		node.infiles = &in1;
 		node.outfiles = &out1;
-		node.cmd = &cmd1;
-		/*attribuer env, node et next*/
-		node.env = env;
+		node.cmd = str;
+		/*attribuer node et next*/
 		node.next = NULL;
 		/*okay here we go*/
 
