@@ -75,8 +75,10 @@ void	ft_exit(void);
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ parse.c ------------------------------------ */
-void	parse(t_parsing *parstruct);
-void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node);
+//void	parse(t_parsing *parstruct); //modif
+t_node	*parse(t_parsing *parstruct); //
+//void	tokenize(t_node *first_node, t_parsing *parstruct, char *raw_node);
+t_node	*tokenize(t_parsing *parstruct, char *raw_node);
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
 int		get_quote_pos(t_parsing *parstruct, int start);

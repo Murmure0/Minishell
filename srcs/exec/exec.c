@@ -1,5 +1,5 @@
 #include "../../includes/minishell.h"
-
+/*
 char	*ft_strdup(char *src)
 {
 	char	*string;
@@ -34,7 +34,7 @@ int	ft_strlen(const char *str)
 	return (count);
 }
 
-/* ------------*/
+------------*/
 
 int find_fd_in(t_node node)
 {
@@ -204,7 +204,7 @@ void child_process(pid_t child_pid, int fd_in, t_node node, char **env/*, int *f
 	}
 }
 
-int exec(t_node node, char **env)
+int exec(t_node node)
 {
 	
 	int fd_in;
@@ -255,7 +255,7 @@ int exec(t_node node, char **env)
 	return (0);
 }
 
-/*------------*/
+/*-----main-------
 
 	int main(int ac, char **av, char **env)
 	{
@@ -280,7 +280,7 @@ int exec(t_node node, char **env)
 		in1.next = &in2;
 		in2.next = NULL;
 
-		/*lst chainee outfile*/
+		lst chainee outfile
 		out1.redir = 0;
 		out1.name = ft_strdup(str3);
 
@@ -289,7 +289,7 @@ int exec(t_node node, char **env)
 		out1.next = &out2;
 		out2.next = NULL;
 
-		/*lst chainee cmd*/
+		lst chainee cmd
 		cmd1.redir = 0;
 		cmd1.name = ft_strdup(str5);
 		cmd1.next = &cmd2;
@@ -297,16 +297,17 @@ int exec(t_node node, char **env)
 		cmd2.redir = 0;
 		cmd2.name = ft_strdup(str6);
 		cmd2.next = NULL;
-		/*link les lst chainee dans le maillon lst_cmd*/
+
 
 		node.infiles = &in1;
 		node.outfiles = &out1;
 		node.cmd = &cmd1;
-		/*attribuer env, node et next*/
+
 		node.env = env;
 		node.next = NULL;
-		/*okay here we go*/
+
 
 		exec(node, env);
 		return (0);
 	}
+*/

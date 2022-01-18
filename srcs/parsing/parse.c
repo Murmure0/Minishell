@@ -17,11 +17,13 @@ void	check_after_chevron()
 
 }
 
-void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node)
+//void	tokenize(t_node *first_node, t_parsing *parstruct, char *raw_node)
+t_node	*tokenize(t_parsing *parstruct, char *raw_node)
 {
 	int	i;
 	char	**tokens;
 	// t_token	*token;
+	t_node *first_node;
 
 	// faire un split special avec non printable chars ? (ascii entre 9 et 13)
 	tokens = ft_split(raw_node, ' ');
@@ -79,8 +81,14 @@ void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node)
 		token = new_token(no_redir, tokens[0]);
 	}
 	*/
-	node = create_lst_node(NULL, NULL, &tokens[0], parstruct->pipe_nb);
-	// printf("%s\n", node->cmd[0]);
+	//node = create_lst_node(NULL, NULL, &tokens[0], parstruct->pipe_nb);
+	first_node = new_node(NULL, NULL, &tokens[0]); //pour le premier node
+	printf("%s\n", first_node->cmd[0]);
+	printf("%s\n", first_node->cmd[1]);
+	printf("%s\n", first_node->cmd[2]);
+	printf("%s\n", first_node->cmd[3]);
+	//pour les nodes suivants on utilisera :
+	//node_add_back(first_node, lst_infile, lst_outfile, cmd);
 	while (tokens[++i])
 	{
 		// if (tokens[i] == '<' || tokens[i] == '>')
@@ -95,14 +103,17 @@ void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node)
 		// une fois les tokens crees, on peut creer les nodes
 		// printf("%s\n", tokens[i]);
 	}
-	(void)node;
+	//(void)node;
 	(void)parstruct;
+	return(first_node);
 }
 
-void	parse(t_parsing *parstruct)
+//void	parse(t_parsing *parstruct)
+t_node	*parse(t_parsing *parstruct)
 {
-	t_node	node;
+	t_node *first_node;
 
+	first_node = NULL;
 	check_quotes_for_pipe_split(parstruct);
 	parstruct->nodes = ft_split(parstruct->prompt, '|');
 	parstruct->pipe_nb = arr_len(parstruct->nodes) - 1;
@@ -110,8 +121,10 @@ void	parse(t_parsing *parstruct)
 		ft_exit();
 	while (parstruct->nodes && *parstruct->nodes)
 	{
-		tokenize(&node, parstruct, *parstruct->nodes);
+		//tokenize(&first_node, parstruct, *parstruct->nodes); 
+		first_node = tokenize(parstruct, *parstruct->nodes);
 		// printf("%s\n", *parstruct->nodes);
 		parstruct->nodes++;
 	}
+	return (first_node);
 }	
