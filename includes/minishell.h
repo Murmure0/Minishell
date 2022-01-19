@@ -22,6 +22,7 @@
 typedef struct s_token
 {
 	int redir; // 0 si no redir, 1 si simple <, 2 si >, 3 si >>
+	int pos; // 0 si no redir, 1 si simple <, 2 si >, 3 si >>
 	char *name;
 	struct s_token *next;
 }	t_token;
@@ -76,7 +77,9 @@ void	ft_exit(void);
 
 /* ------------------------------------ parse.c ------------------------------------ */
 void	parse(t_parsing *parstruct);
-void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node);
+// void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node);
+void	create_nodes(t_node *nodes, t_parsing *parstruct, char **raw_nodes);
+int		get_tokens_nb(char *node);
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
 int		get_quote_pos(t_parsing *parstruct, int start);

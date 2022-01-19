@@ -12,12 +12,7 @@ int	arr_len(char **arr)
 	return (i);
 }
 
-void	check_after_chevron()
-{
-
-}
-
-void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node)
+/*void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node)
 {
 	int	i;
 	char	**tokens;
@@ -28,7 +23,7 @@ void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node)
 	if (!tokens)
 		ft_exit();
 	i = -1;
-	/*
+	
 	if (tokens[0][0] == '<')
 	{
 		parstruct->chevron = '<';
@@ -78,7 +73,7 @@ void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node)
 	{
 		token = new_token(no_redir, tokens[0]);
 	}
-	*/
+
 	node = create_lst_node(NULL, NULL, &tokens[0], parstruct->pipe_nb);
 	// printf("%s\n", node->cmd[0]);
 	while (tokens[++i])
@@ -97,21 +92,61 @@ void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node)
 	}
 	(void)node;
 	(void)parstruct;
+}*/
+
+int	get_tokens_nb(char *node)
+{
+	int	nb;
+	int	i;
+
+	nb = 0;
+	i = 0;
+	while (node[i])
+	{
+		if (node[i] != '\t' && node[i] != ' ')
+		{
+			while (node[i] != '\t' && node[i] != ' ')
+				i++;
+			nb++;
+		}
+		while (node[i] == '\t' || node[i] == ' ')
+			i++;
+	}
+	return (nb);
+}
+
+void	create_nodes(t_node *nodes, t_parsing *parstruct, char **raw_nodes)
+{
+	int	i;
+	t_token	*token;
+
+	i = -1;
+	while (raw_nodes && *raw_nodes)
+	{
+		token = malloc(sizeof(t_token) * get_tokens_nb(*raw_nodes));
+		if (!token)
+			ft_exit();
+		// printf("%s\n", *raw_nodes);
+		raw_nodes++;
+	}
 }
 
 void	parse(t_parsing *parstruct)
 {
-	t_node	node;
+	t_node	*nodes;
 
 	check_quotes_for_pipe_split(parstruct);
 	parstruct->nodes = ft_split(parstruct->prompt, '|');
 	parstruct->pipe_nb = arr_len(parstruct->nodes) - 1;
 	if (!parstruct->nodes)
 		ft_exit();
-	while (parstruct->nodes && *parstruct->nodes)
-	{
-		tokenize(&node, parstruct, *parstruct->nodes);
-		// printf("%s\n", *parstruct->nodes);
-		parstruct->nodes++;
-	}
-}	
+	nodes = malloc(sizeof(t_node) * parstruct->pipe_nb);
+	if (!nodes)
+		ft_exit();
+	create_nodes(nodes, parstruct, parstruct->nodes);
+}
+
+int main()
+{
+	printf("%d\n", get_tokens_nb("					 	"));
+}
