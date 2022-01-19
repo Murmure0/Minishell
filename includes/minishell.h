@@ -41,8 +41,6 @@ typedef struct s_node
 
 typedef struct s_parsing
 {
-	t_token	*head_infiles;
-	t_token	*head_outfiles;
 	char 	*prompt;
 	char	**nodes; // ensemble des noeuds split par |
 	char	chevron;
@@ -78,7 +76,7 @@ void	ft_exit(void);
 /* ------------------------------------ parse.c ------------------------------------ */
 void	parse(t_parsing *parstruct);
 // void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node);
-void	create_nodes(t_node *nodes, t_parsing *parstruct, char **raw_nodes);
+void	create_nodes(t_node *nodes, char **raw_nodes);
 int		get_tokens_nb(char *node);
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
