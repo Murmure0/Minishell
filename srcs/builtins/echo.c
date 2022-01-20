@@ -1,5 +1,5 @@
-//#include "../../includes/minishell.h"
-#include <stddef.h>
+#include "../../includes/minishell.h"
+/*
 #include <unistd.h>
 #include <stdio.h>
 
@@ -28,36 +28,33 @@ size_t ft_strlen(char *str)
 		i++;
 	return (i);
 }
-/*
-int newline(char **str)
+*/
+int no_newline(char **str)
 {
-	while (str[0])
-	{
-		if (!ft_strncmp(str[0], "-n", 2)) //si on a le premier arg qui est -n
-			while(str[0])
-	}
-}*/
+	int	k;
 
-int echo(char **str)
+	k = 2;
+	while (str[0][k] == 'n')
+		k++;
+	if (k == ft_strlen(str[0]))
+		return (0);
+	else
+		return (1);
+}
+
+int	echo(char **str)
 {
-	int i;
-	int j;
-	int k;
+	int	i;
+	int	j;
 
 	i = -1;
 	j = 0;
-	k = 0;
-	if (!str)
-		return (-1);
-
-	/*
-	while (str[0][++i])
+	if (!str || !*str)
 	{
-		if (ft_strncmp(str[0][i], "n", 1))
-			k = 1;
+		write(1, "\n", 1);
+		return (-1);
 	}
-	i = -1;*/
-	if (!ft_strncmp(str[0], "-n", ft_strlen(str[0])))
+	if (!ft_strncmp(str[0], "-n", 2) && !no_newline(str))
 	{
 		i++;
 		j++;
@@ -68,21 +65,25 @@ int echo(char **str)
 		if (str[++j] != NULL)
 			write(1, " ", 1);
 	}
-	if (ft_strncmp(str[0], "-n", ft_strlen(str[0])))
+	if (!ft_strncmp(str[0], "-n", 2) && !no_newline(str))
+		write(1, "\n", 1);
+	else if (ft_strncmp(str[0], "-n", 2))
 		write(1, "\n", 1);
 	return(0);
 }
 
+/*
 int main()
 {
-	char *str[4] = {"-n", "hello", "bla", NULL};
-	char *str2[4] = {"BONJOUR", "CA", "VA", NULL};
-	char *str3[3] = {"Bof", "bif", NULL};
-	// printf("longueur de la str : |%zu|", ft_strlen(str[1]));
-	// write(1, str[1], ft_strlen(str[1]));
+	char *str[4] = {"         ", NULL};
+	char *str2[4] = {"-n-nnnn", "CA", "VA", NULL};
+	char *str3[3] = {"-nnnnnnnn", "bif", NULL};
+	char*str4[3] = {"debut", "str4", NULL};
 	echo(str);
 	echo(str2);
 	echo(str3);
+	echo(str4);
+	echo(str4);
 	return(0);
 }
-
+*/

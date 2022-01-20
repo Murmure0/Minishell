@@ -21,19 +21,19 @@
 
 typedef struct s_token
 {
-	int redir; // 0 si no redir, 1 si simple <, 2 si >, 3 si >>
-	char *name;
-	int	pos;
-}	t_token;
+    int     redir;
+    int     pos;
+    char     *name;
+}    t_token;
 
 /* --Maillon de la lst chainée des commandes : un maillon = une commande, separateur de cmd : |-- */
 
 typedef struct s_node
 {
-	t_token *infiles; //tout les infile precedents la cmd sont stockés la dedans dans 
-	t_token *outfiles; // tous les outfile suivant la cmd 
-	t_token *cmd; // tous les outfile suivant la cmd 
-} 	t_node;
+    t_token     *infiles; 
+    t_token     *outfiles;
+    t_token     *cmd;
+}     t_node;
 
 /* Parsing */
 
@@ -55,7 +55,6 @@ typedef struct s_shell
 	char **path;
 }	t_shell;
 
-t_shell g_shell;
 
 /* ------------------------------------ init_struct.c ------------------------------------ */
 void    init_struct(t_shell *g_shell, char **env);
@@ -66,8 +65,8 @@ char	**get_env_paths(char **envp);
 char	**get_env(char **env);
 
 /* ------------------------------------ main.c -------------------------------------------- */
-void	ft_free(void);
-void	ft_exit(void);
+void	ft_free(t_shell shell);
+void	ft_exit(t_shell shell);
 
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ PARSING ------------------------------------ */
@@ -95,8 +94,8 @@ t_node *create_lst_node(t_token *lst_infiles, t_token *lst_outfiles, char **node
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ exec_clean.c ------------------------------- */
-int		exec(t_node *node);
-void	child_process(pid_t child_pid/*, int fd_in*/, t_node *node/*, int *fds*/);
+int		exec(t_node *node, t_shell g_shell);
+void	child_process(pid_t child_pid/*, int fd_in*/, t_node *node/*, int *fds*/, t_shell t_shell);
 
 /* ------------------------------------ exec_lst.c ------------------------------- */
 int		find_fd_in(t_node *node);

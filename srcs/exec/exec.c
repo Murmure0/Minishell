@@ -1,45 +1,45 @@
 #include "../../includes/minishell.h"
 
-static int	path_finder(t_node *first_node)
+static int	path_finder(t_node *first_node, t_shell shell)
 {
 	char	*tmp;
 	int		i;
 
 	i = -1;
-	tmp = first_node->cmd[0];
-	while (g_shell.path[++i])
+	tmp = first_node[0].cmd[0].name;
+	while (shell.path[++i])
 	{
-		first_node->cmd[0] = ft_strjoin(g_shell.path[i], tmp);
+		first_node[0].cmd[0].name = ft_strjoin(shell.path[i], tmp);
 		//printf("path+cmd = |%s| next = |%s|\n", first_node->cmd[0], first_node->cmd[1]);
-		//printf("g_shell.env : |%s|\n", g_shell.env[i]);
-		if (!first_node->cmd[0])
+		//printf("shell.env : |%s|\n", shell.env[i]);
+		if (!(first_node[0].cmd[0].name))
 			return (-1);
-		execve(first_node->cmd[0], first_node->cmd, g_shell.env);
-		free(first_node->cmd[0]);
+		execve(first_node[0].cmd[0].name, first_node->cmd, shell.env);
+		free(first_node[0].cmd[0].name);
 	}
-	first_node->cmd[0] = tmp;
-	//execve(first_node->cmd[0], first_node->cmd, g_shell.env);
+	first_node[0].cmd[0].name = tmp;
+	//execve(first_node->cmd[0], first_node->cmd, shell.env);
 	free(tmp);
 	return (0);
 }
 
-void	free_all(t_node *first_node)
+void	free_all(t_node *first_node, t_shell shell)
 {
 	int i = -1;
-	while (g_shell.env[++i])
-		free(g_shell.env[i]);
+	while (shell.env[++i])
+		free(shell.env[i]);
 	i = -1;
-	while (g_shell.path[++i])
-		free(g_shell.path[i]);
+	while (shell.path[++i])
+		free(shell.path[i]);
 	i = -1;
-	while(first_node->cmd[++i])
-		free(first_node->cmd[i]);
+	/*while(first_node[0].cmd[++i].name)
+		free(first_node[0].cmd[i].name);*/
 	//fct qui free les lst infile et outfile
 }
 
-int	exec_cmd(t_node *first_node)
+int	exec_cmd(t_node *first_node, t_shell shell)
 {
-	if (!path_finder(first_node))
+	if (!path_finder(first_node, shell))
 	{
 		//free_all(first_node);
 		return (-1);
@@ -48,7 +48,7 @@ int	exec_cmd(t_node *first_node)
 	return (0);
 }
 
-void child_process(pid_t child_pid/*, int fd_in*/, t_node *first_node/*, int *fds*/)
+void child_process(pid_t child_pid/*, int fd_in*/, t_node *first_node/*, int *fds*/, t_shell shell)
 {
 	if (child_pid == 0)
 	{
@@ -65,7 +65,7 @@ void child_process(pid_t child_pid/*, int fd_in*/, t_node *first_node/*, int *fd
 		close(fds[0]);
 		close(fds[1]);
 		//close(fd_in);*/
-		exec_cmd(first_node);
+		exec_cmd(first_node, shell);
 		//write(2, &first_node->cmd[0], ft_strlen(first_node->cmd[0]));
 		write(2, "Erreur post execution", 22);
 		perror(": ");
@@ -74,8 +74,7 @@ void child_process(pid_t child_pid/*, int fd_in*/, t_node *first_node/*, int *fd
 	}
 }
 
-
-int exec(t_node *first_node)
+int exec(t_node *first_node, t_shell shell)
 {
 	
 	//int		fd_in;
@@ -100,7 +99,66 @@ int exec(t_node *first_node)
 	// 	perror(": ");
 	// 	exit(EXIT_FAILURE);
 	// }
-	child_process(child_pid/*, fd_in,*/, first_node/*,fds*/);
+	child_process(child_pid/*, fd_in,*/, first_node/*,fds*/, shell);
 	waitpid(child_pid, &status, 0);
 	return(0);
+}
+
+int main(int argc, char **argv, char **env)
+{
+	//Initialisation de la struct nodes
+
+	/*char     input[50] = {"< infile cat -e | ls > output"};*/
+    t_node     *nodes;
+	t_shell		shell;
+	t_parsing	parstruct;
+
+    nodes = malloc(sizeof(t_token) * 2);
+    
+/*     1er node = "< infile cat"    */
+/*     infiles du 1er node :         */
+    nodes[0].infiles = malloc(sizeof(t_token) * 1);
+    nodes[0].infiles[0].name = ft_strdup("infile");
+    nodes[0].infiles[0].redir = 1;
+    nodes[0].infiles[0].pos = 2;
+
+/*     cmd du 1er node :         */
+    nodes[0].cmd = malloc(sizeof(t_token) * 2);
+    nodes[0].cmd[0].name = ft_strdup("cat");
+    nodes[0].cmd[0].redir = 0;
+    nodes[0].cmd[0].pos = 9;
+    
+/*     argument de cmd du 1er node :         */
+    nodes[0].cmd[1].name = ft_strdup("-e");
+    nodes[0].cmd[1].redir = 0;
+    nodes[0].cmd[1].pos = 13;
+
+/*     2e node = "ls > output"    */
+/*     cmd du 2e node :         */
+    nodes[1].cmd = malloc(sizeof(t_token) * 1);
+    nodes[1].cmd[0].name = ft_strdup("ls");
+    nodes[1].cmd[0].redir = 0;
+    nodes[1].cmd[0].pos = 18;
+
+/*     outfiles du 2e node :         */
+    nodes[1].outfiles = malloc(sizeof(t_token) * 1);
+    nodes[1].outfiles[0].name = ft_strdup("output");
+    nodes[1].outfiles[0].redir = 2;
+    nodes[1].outfiles[0].pos = 23;
+
+    printf("%s\n", nodes[0].infiles[0].name);
+    printf("%s\n", nodes[0].cmd[0].name);
+    printf("%s\n", nodes[0].cmd[1].name);
+	//
+
+	init_struct(&shell, env); /*fonction qui va initialiser notre structure globale*/
+	while (1)
+	{
+		// ! free prompt
+		parstruct.prompt = readline("minishell$ ");
+		add_history(parstruct.prompt);
+		exec(nodes, shell);
+	}
+	ft_free(shell);
+	return (0);
 }
