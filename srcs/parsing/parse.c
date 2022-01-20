@@ -144,11 +144,11 @@ char	*get_file_name(t_node *node, char *raw_node, int *j)
 	char	*name;
 
 	name = NULL;
-	(void)node;
-	while (raw_node && raw_node[*j])
-	{
+	// while (raw_node && raw_node[*j])
+	// {
 
-	}
+	// }
+	node->cmd = ft_strdup(raw_node);
 	return (name);
 }
 
@@ -176,12 +176,16 @@ void	add_file(t_node *node, char *raw_node, int redir, int *j)
 		node->outfiles[pos_outfiles].pos = *j;
 		pos_outfiles++;
 	}
+	node->cmd = get_file_name(node, raw_node, j);
 }
 
 void	add_files_redir(t_node *nodes, t_parsing *ps)
 {
 	int	i;
-	int	j;
+	t_token	*token;
+	t_shell	g_shell;
+	int	nb_token;
+	int j;
 
 	i = -1;
 	while (ps->nodes && ps->nodes[++i])
@@ -189,48 +193,59 @@ void	add_files_redir(t_node *nodes, t_parsing *ps)
 		j = -1;
 		while (ps->nodes[i][++j])
 		{
-			if (ps->nodes[i][j] == '<')
-			{
-				if (ps->nodes[i][j + 1] == '<')
-				{
-					// here doc
-					j++;
-				}
-				else if (ps->nodes[i][j + 1])
-				{
-					// on ajoute comme infile la prochaine str (skippe les espaces et go jusque espace / fin)
-					add_file(&nodes[i], ps->nodes[i], 1, &j);
-				}
-			}
-			else if (ps->nodes[i][j] == '>')
-			{
-				if (ps->nodes[i][j + 1] == '>')
-				{
-					// on ajoute comme outfile + APPEND
-					add_file(&nodes[i], ps->nodes[i], 3, &j);
-					j++;
-				}
-				else if (ps->nodes[i][j + 1])
-				{
-					add_file(&nodes[i], ps->nodes[i], 2, &j);
-					// on ajoute comme outfile
-				}
-			}
+			// if (ps->nodes[i][j] == '<')
+			// {
+			// 	if (ps->nodes[i][j + 1] == '<')
+			// 	{
+			// 		// here doc
+			// 		j++;
+			// 	}
+			// 	else if (ps->nodes[i][j + 1])
+			// 	{
+			// 		// on ajoute comme infile la prochaine str (skippe les espaces et go jusque espace / fin)
+			// 		add_file(&nodes[i], ps->nodes[i], 1, &j);
+			// 	}
+			// }
+			// else if (ps->nodes[i][j] == '>')
+			// {
+			// 	if (ps->nodes[i][j + 1] == '>')
+			// 	{
+			// 		// on ajoute comme outfile + APPEND
+			// 		add_file(&nodes[i], ps->nodes[i], 3, &j);
+			// 		j++;
+			// 	}
+			// 	else if (ps->nodes[i][j + 1])
+			// 	{
+			// 		add_file(&nodes[i], ps->nodes[i], 2, &j);
+			// 		// on ajoute comme outfile
+			// 	}
+			// }
+			add_file(&nodes[i], ps->nodes[i], 2, &j);
 		}
 	}	
 }
 
-void	parse(t_node *nodes, t_parsing *parstruct)
+t_node	*parse(t_node *nodes, t_parsing *parstruct)
 {
+	t_shell	g_shell;
+	int i;
+
 	check_quotes_for_pipe_split(parstruct);
 	parstruct->nodes = ft_split(parstruct->prompt, '|');
 	parstruct->pipe_nb = arr_len(parstruct->nodes) - 1;
 	if (!parstruct->nodes)
-		ft_exit();
+		ft_exit(g_shell);
 	nodes = malloc(sizeof(t_node) * (parstruct->pipe_nb + 1));
 	if (!nodes)
-		ft_exit();
-	nodes[0].infiles[0].name = ft_strdup("infile");
-	printf("haaaaaa\n");
-	add_files_redir(nodes, parstruct);
+		ft_exit(g_shell);
+	i = -1;
+	while(parstruct->nodes[++i])
+	{
+		nodes[i].cmd = malloc(sizeof(char *) * 2);
+		nodes[i].cmd[0] = ft_strdup(parstruct->nodes[i]);
+		nodes[i].cmd[1] = NULL;
+	}
+	return (nodes);
+	// nodes[0].infiles[0].name = ft_strdup("infile");
+	// add_files_redir(nodes, parstruct);
 }

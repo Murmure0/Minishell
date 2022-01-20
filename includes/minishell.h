@@ -11,6 +11,8 @@
 # include <sys/errno.h>
 # include <stdio.h>
 # include <readline/readline.h>
+# include <readline/history.h>
+# include <wait.h>
 
 # define no_redir	0
 # define redir_l	1
@@ -28,7 +30,7 @@ typedef struct s_node
 {
     t_token     *infiles; 
     t_token     *outfiles;
-    t_token     *cmd;
+    char		**cmd;
 }     t_node;
 
 typedef struct s_parsing
@@ -62,7 +64,7 @@ void	ft_exit(t_shell shell);
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ parse.c ------------------------------------ */
-void	parse(t_node *node, t_parsing *parstruct);
+t_node	*parse(t_node *node, t_parsing *parstruct);
 // void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node);
 int		get_tokens_nb(char *node);
 void	add_files_redir(t_node *nodes, t_parsing *ps);
