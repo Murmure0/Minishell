@@ -17,16 +17,12 @@
 # define redir_r_s	2
 # define redir_r_d	3
 
-/* --Maillon des lst chainees des infiles/outfile--*/
-
 typedef struct s_token
 {
-    int     redir;
-    int     pos;
-    char     *name;
-}    t_token;
-
-/* --Maillon de la lst chainée des commandes : un maillon = une commande, separateur de cmd : |-- */
+	int 	redir; // 0 si no redir, 1 si simple <, 2 si >, 3 si >>
+	int		pos;
+	char 	*name;
+}	t_token;
 
 typedef struct s_node
 {
@@ -35,19 +31,13 @@ typedef struct s_node
     t_token     *cmd;
 }     t_node;
 
-/* Parsing */
-
 typedef struct s_parsing
 {
-	t_token	*head_infiles;
-	t_token	*head_outfiles;
 	char 	*prompt;
-	char	**nodes; // ensemble des noeuds split par |
+	char	**nodes;
 	char	chevron;
 	int		pipe_nb;
 }	t_parsing;
-
-/* --Declaration de notre structure globale-- */
 
 typedef struct s_shell
 {
@@ -73,10 +63,10 @@ void	ft_exit(t_shell shell);
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ parse.c ------------------------------------ */
-//void	parse(t_parsing *parstruct); //modif
-t_node	*parse(t_parsing *parstruct); //
-//void	tokenize(t_node *first_node, t_parsing *parstruct, char *raw_node);
-t_node	*tokenize(t_parsing *parstruct, char *raw_node);
+void	parse(t_node *node, t_parsing *parstruct);
+// void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node);
+void	create_nodes(t_node *nodes, char **raw_nodes);
+int		get_tokens_nb(char *node);
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
 int		get_quote_pos(t_parsing *parstruct, int start);

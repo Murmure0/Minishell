@@ -3,12 +3,13 @@ NAME = minishell
 CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror
+
 # CFLAGS += -g
 
 MAIN = 	srcs/main.c			\
 		srcs/init_struct.c	\
 		srcs/env.c			\
-		srcs/parsing/lst_cmd.c \
+		srcs/exec/here_doc.c \
 		srcs/parsing/parse.c \
 		srcs/parsing/parse_quotes.c \
 		srcs/exec/exec_clean.c \
