@@ -8,7 +8,7 @@ char	**get_env(char **env)
 	i = -1;
 	while (env && env[++i])
 		continue ;
-	env_cpy = malloc(sizeof(char *) * i);
+	env_cpy = malloc(sizeof(char *) * i + 1);
 	if (!env_cpy)
 		return (NULL);
 	i = -1;
@@ -18,6 +18,7 @@ char	**get_env(char **env)
 		if (!env_cpy[i])
 			return (NULL);
 	}
+	env_cpy[i] = NULL;
 	return (env_cpy);
 }
 

@@ -10,14 +10,15 @@ static int	path_finder(t_node *first_node)
 	while (g_shell.path[++i])
 	{
 		first_node->cmd[0] = ft_strjoin(g_shell.path[i], tmp);
-		// printf("path+cmd = |%s| next = |%s|\n", first_node->cmd[0], first_node->cmd[1]);
+		//printf("path+cmd = |%s| next = |%s|\n", first_node->cmd[0], first_node->cmd[1]);
+		//printf("g_shell.env : |%s|\n", g_shell.env[i]);
 		if (!first_node->cmd[0])
 			return (-1);
 		execve(first_node->cmd[0], first_node->cmd, g_shell.env);
 		free(first_node->cmd[0]);
 	}
 	first_node->cmd[0] = tmp;
-	execve(first_node->cmd[0], first_node->cmd, g_shell.env);
+	//execve(first_node->cmd[0], first_node->cmd, g_shell.env);
 	free(tmp);
 	return (0);
 }
@@ -58,12 +59,12 @@ void child_process(pid_t child_pid/*, int fd_in*/, t_node *first_node/*, int *fd
 			perror(": ");
 			exit (errno);
 			}
-		}*/
-		/*if (dup2(fds[1], STDOUT_FILENO) < 0)
+		}
+		if (dup2(fds[1], STDOUT_FILENO) < 0)
 			error_message(7);
 		close(fds[0]);
-		close(fds[1]);*/
-		//close(fd_in);
+		close(fds[1]);
+		//close(fd_in);*/
 		exec_cmd(first_node);
 		//write(2, &first_node->cmd[0], ft_strlen(first_node->cmd[0]));
 		write(2, "Erreur post execution", 22);
@@ -93,7 +94,13 @@ int exec(t_node *first_node)
 		perror(": ");
 		exit (errno);
 	}
+	// if (child_pid == 0)
+	// {
+	// 	exec_cmd(first_node);
+	// 	perror(": ");
+	// 	exit(EXIT_FAILURE);
+	// }
 	child_process(child_pid/*, fd_in,*/, first_node/*,fds*/);
-	waitpid(-1, &status, 0);
+	waitpid(child_pid, &status, 0);
 	return(0);
 }
