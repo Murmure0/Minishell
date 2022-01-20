@@ -23,7 +23,7 @@ typedef struct s_token
 {
 	int redir; // 0 si no redir, 1 si simple <, 2 si >, 3 si >>
 	char *name;
-	struct s_token *next;
+	int	pos;
 }	t_token;
 
 /* --Maillon de la lst chainée des commandes : un maillon = une commande, separateur de cmd : |-- */
@@ -32,8 +32,7 @@ typedef struct s_node
 {
 	t_token *infiles; //tout les infile precedents la cmd sont stockés la dedans dans 
 	t_token *outfiles; // tous les outfile suivant la cmd 
-	char **cmd; //la cmd du pipe actuel
-	struct s_node *next; // la commande du prochain pipe
+	t_token *cmd; // tous les outfile suivant la cmd 
 } 	t_node;
 
 /* Parsing */
@@ -102,4 +101,9 @@ void	child_process(pid_t child_pid/*, int fd_in*/, t_node *node/*, int *fds*/);
 /* ------------------------------------ exec_lst.c ------------------------------- */
 int		find_fd_in(t_node *node);
 
+/* --------------------------------------------------------------------------------- */
+/* ------------------------------------ BUILTINS ----------------------------------- */
+/* --------------------------------------------------------------------------------- */
+
+//int echo(char **str);
 #endif
