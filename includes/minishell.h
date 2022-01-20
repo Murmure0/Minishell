@@ -24,17 +24,15 @@ typedef struct s_token
 	int redir; // 0 si no redir, 1 si simple <, 2 si >, 3 si >>
 	int pos; // 0 si no redir, 1 si simple <, 2 si >, 3 si >>
 	char *name;
-	struct s_token *next;
 }	t_token;
 
 /* --Maillon de la lst chainée des commandes : un maillon = une commande, separateur de cmd : |-- */
 
 typedef struct s_node
 {
-	t_token *infiles; //tout les infile precedents la cmd sont stockés la dedans dans 
-	t_token *outfiles; // tous les outfile suivant la cmd 
-	char **cmd; //la cmd du pipe actuel
-	struct s_node *next; // la commande du prochain pipe
+	t_token 	*infiles; 
+	t_token 	*outfiles;
+	t_token 	*cmd;
 } 	t_node;
 
 /* Parsing */
