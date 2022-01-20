@@ -26,9 +26,9 @@ typedef struct s_token
 
 typedef struct s_node
 {
-	t_token 	*infiles; 
-	t_token 	*outfiles;
-	t_token 	*cmd;
+	t_token 	infiles; 
+	t_token 	outfiles;
+	t_token 	cmd;
 } 	t_node;
 
 typedef struct s_parsing
@@ -44,8 +44,6 @@ typedef struct s_shell
 	char **env;
 	char **path;
 }	t_shell;
-
-t_shell g_shell;
 
 /* ------------------------------------ init_struct.c ------------------------------------ */
 void    init_struct(t_shell *g_shell, char **env);
@@ -66,8 +64,10 @@ void	ft_exit(void);
 /* ------------------------------------ parse.c ------------------------------------ */
 void	parse(t_node *node, t_parsing *parstruct);
 // void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node);
-void	create_nodes(t_node *nodes, char **raw_nodes);
 int		get_tokens_nb(char *node);
+void	add_files_redir(t_node *nodes, t_parsing *ps);
+char	*get_file_name(t_node *node, char *raw_node, int *j);
+void	add_file(t_node *node, char *raw_node, int redir, int *j);
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
 int		get_quote_pos(t_parsing *parstruct, int start);
