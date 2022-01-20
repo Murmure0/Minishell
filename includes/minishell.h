@@ -45,7 +45,6 @@ typedef struct s_shell
 	char **path;
 }	t_shell;
 
-
 /* ------------------------------------ init_struct.c ------------------------------------ */
 void    init_struct(t_shell *g_shell, char **env);
 
@@ -65,8 +64,10 @@ void	ft_exit(t_shell shell);
 /* ------------------------------------ parse.c ------------------------------------ */
 void	parse(t_node *node, t_parsing *parstruct);
 // void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node);
-void	create_nodes(t_node *nodes, char **raw_nodes);
 int		get_tokens_nb(char *node);
+void	add_files_redir(t_node *nodes, t_parsing *ps);
+char	*get_file_name(t_node *node, char *raw_node, int *j);
+void	add_file(t_node *node, char *raw_node, int redir, int *j);
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
 int		get_quote_pos(t_parsing *parstruct, int start);

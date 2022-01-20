@@ -118,7 +118,6 @@ char	*ft_slice(char *src, int start, int stop)
 	return (string);
 }
 
-
 int	get_tokens_nb(char *node)
 {
 	int	nb;
@@ -140,48 +139,98 @@ int	get_tokens_nb(char *node)
 	return (nb);
 }
 
-void	create_nodes(t_node *nodes, char **raw_nodes)
+char	*get_file_name(t_node *node, char *raw_node, int *j)
 {
-	int	i;
-	t_token	*token;
-	int	nb_token;
+	char	*name;
 
-	while (raw_nodes && *raw_nodes)
+	name = NULL;
+	(void)node;
+	while (raw_node && raw_node[*j])
 	{
-		nb_token = get_tokens_nb(*raw_nodes);
-		token = malloc(sizeof(t_token) * nb_token);
-		if (!token)
-			ft_exit();
-		i = -1;
-		while (*raw_nodes[++i])
-		{
-			if (*raw_nodes[i] != '\t' && *raw_nodes[i] != ' ')
-			{
-				token[i].pos = i;
-				while (*raw_nodes[i] != '\t' && *raw_nodes[i] != ' ')
-					i++;
-				token[i].name = ft_slice(*raw_nodes, token[i].pos, i);
-				if (!token[i].name)
-					ft_exit();
-			}
-			while (*raw_nodes[i] == '\t' || *raw_nodes[i] == ' ')
-				i++;
-		}
-		raw_nodes++;
-		// ajouter dans le node infiles et outfiles
-		(void)nodes;
+
+	}
+	return (name);
+}
+
+void	add_file(t_node *node, char *raw_node, int redir, int *j)
+{
+	static int	pos_infiles;
+	static int	pos_outfiles;
+
+	pos_infiles = 0;
+	pos_outfiles = 0;
+	if (redir == 1)
+	{
+		node->infiles = malloc(100);
+		node->infiles[pos_infiles].redir = redir;
+		// printf("here\n");
+		// node->infiles[pos_infiles].name = get_file_name(node, raw_node, j);
+		node->infiles[pos_infiles].pos = *j;
+		// printf("%d\n", node->infiles[pos_infiles].pos);
+		pos_infiles++;
+	}
+	else if (redir == 2 || redir == 3)
+	{
+		node->outfiles[pos_outfiles].redir = redir;
+		// node->outfiles[pos_outfiles].name = get_file_name(node, raw_node, j);
+		node->outfiles[pos_outfiles].pos = *j;
+		pos_outfiles++;
 	}
 }
 
-void	parse(t_node	*nodes, t_parsing *parstruct)
+void	add_files_redir(t_node *nodes, t_parsing *ps)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while (ps->nodes && ps->nodes[++i])
+	{
+		j = -1;
+		while (ps->nodes[i][++j])
+		{
+			if (ps->nodes[i][j] == '<')
+			{
+				if (ps->nodes[i][j + 1] == '<')
+				{
+					// here doc
+					j++;
+				}
+				else if (ps->nodes[i][j + 1])
+				{
+					// on ajoute comme infile la prochaine str (skippe les espaces et go jusque espace / fin)
+					add_file(&nodes[i], ps->nodes[i], 1, &j);
+				}
+			}
+			else if (ps->nodes[i][j] == '>')
+			{
+				if (ps->nodes[i][j + 1] == '>')
+				{
+					// on ajoute comme outfile + APPEND
+					add_file(&nodes[i], ps->nodes[i], 3, &j);
+					j++;
+				}
+				else if (ps->nodes[i][j + 1])
+				{
+					add_file(&nodes[i], ps->nodes[i], 2, &j);
+					// on ajoute comme outfile
+				}
+			}
+		}
+	}	
+}
+
+void	parse(t_node *nodes, t_parsing *parstruct)
 {
 	check_quotes_for_pipe_split(parstruct);
 	parstruct->nodes = ft_split(parstruct->prompt, '|');
-	parstruct->pipe_nb = arr_len(parstruct->nodes) - 1; //obsolete
+	parstruct->pipe_nb = arr_len(parstruct->nodes) - 1;
 	if (!parstruct->nodes)
 		ft_exit();
-	nodes = malloc(sizeof(t_node) * parstruct->pipe_nb);
+	nodes = malloc(sizeof(t_node) * (parstruct->pipe_nb + 1));
 	if (!nodes)
 		ft_exit();
-	// create_nodes(nodes, parstruct->nodes);
+	nodes[0].infiles[0].name = ft_strdup("infile");
+	printf("haaaaaa\n");
+	add_files_redir(nodes, parstruct);
 }
