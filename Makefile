@@ -12,7 +12,9 @@ MAIN = 	srcs/main.c			\
 		srcs/exec/here_doc.c \
 		srcs/parsing/parse.c \
 		srcs/parsing/parse_quotes.c \
-		# srcs/exec/exec.c \
+		srcs/exec/exec_clean.c \
+		srcs/exec/exec_lst.c \
+
 
 SOURCES = $(MAIN)
 

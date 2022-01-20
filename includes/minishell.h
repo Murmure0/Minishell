@@ -17,16 +17,12 @@
 # define redir_r_s	2
 # define redir_r_d	3
 
-/* --Maillon des lst chainees des infiles/outfile--*/
-
 typedef struct s_token
 {
-	int redir; // 0 si no redir, 1 si simple <, 2 si >, 3 si >>
-	int pos; // 0 si no redir, 1 si simple <, 2 si >, 3 si >>
-	char *name;
+	int 	redir; // 0 si no redir, 1 si simple <, 2 si >, 3 si >>
+	int		pos;
+	char 	*name;
 }	t_token;
-
-/* --Maillon de la lst chainée des commandes : un maillon = une commande, separateur de cmd : |-- */
 
 typedef struct s_node
 {
@@ -35,17 +31,13 @@ typedef struct s_node
 	t_token 	*cmd;
 } 	t_node;
 
-/* Parsing */
-
 typedef struct s_parsing
 {
 	char 	*prompt;
-	char	**nodes; // ensemble des noeuds split par |
+	char	**nodes;
 	char	chevron;
 	int		pipe_nb;
 }	t_parsing;
-
-/* --Declaration de notre structure globale-- */
 
 typedef struct s_shell
 {
@@ -72,7 +64,7 @@ void	ft_exit(void);
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ parse.c ------------------------------------ */
-void	parse(t_parsing *parstruct);
+void	parse(t_node *node, t_parsing *parstruct);
 // void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node);
 void	create_nodes(t_node *nodes, char **raw_nodes);
 int		get_tokens_nb(char *node);
@@ -88,4 +80,20 @@ void	token_add_back(t_parsing *parstruct, t_token **token, int redir, char *name
 t_node *new_node(t_token *lst_infiles, t_token *lst_outfiles, char **node);
 t_node *create_lst_node(t_token *lst_infiles, t_token *lst_outfiles, char **node, int pipe_nb);
 
+/* --------------------------------------------------------------------------------- */
+/* ------------------------------------ EXEC --------------------------------------- */
+/* --------------------------------------------------------------------------------- */
+
+/* ------------------------------------ exec_clean.c ------------------------------- */
+int		exec(t_node node);
+void	child_process(pid_t child_pid/*, int fd_in*/, t_node *node/*, int *fds*/);
+
+/* ------------------------------------ exec_lst.c ------------------------------- */
+int		find_fd_in(t_node *node);
+
+/* --------------------------------------------------------------------------------- */
+/* ------------------------------------ BUILTINS ----------------------------------- */
+/* --------------------------------------------------------------------------------- */
+
+//int echo(char **str);
 #endif

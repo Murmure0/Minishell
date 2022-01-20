@@ -16,8 +16,8 @@ void	ft_free(void)
 
 int main(int argc, char **argv, char **env)
 {
-	// t_command lst_cmd;
 	t_parsing	parstruct;
+	t_node		nodes;
 
 	(void)argc;
 	(void)argv;
@@ -27,8 +27,8 @@ int main(int argc, char **argv, char **env)
 		// ! free prompt
 		parstruct.prompt = readline("minishell$ ");
 		add_history(parstruct.prompt);
-		parse(&parstruct);
-		// exec(g_shell, lst_cmd);
+		parse(&nodes, &parstruct);
+		exec(nodes);
 	}
 	ft_free();
 	return (0);

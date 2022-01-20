@@ -17,6 +17,7 @@ int	arr_len(char **arr)
 	int	i;
 	char	**tokens;
 	// t_token	*token;
+	t_node *first_node;
 
 	// faire un split special avec non printable chars ? (ascii entre 9 et 13)
 	tokens = ft_split(raw_node, ' ');
@@ -90,7 +91,7 @@ int	arr_len(char **arr)
 		// une fois les tokens crees, on peut creer les nodes
 		// printf("%s\n", tokens[i]);
 	}
-	(void)node;
+	//(void)node;
 	(void)parstruct;
 }*/
 
@@ -172,13 +173,11 @@ void	create_nodes(t_node *nodes, char **raw_nodes)
 	}
 }
 
-void	parse(t_parsing *parstruct)
+void	parse(t_node	*nodes, t_parsing *parstruct)
 {
-	t_node	*nodes;
-
 	check_quotes_for_pipe_split(parstruct);
 	parstruct->nodes = ft_split(parstruct->prompt, '|');
-	parstruct->pipe_nb = arr_len(parstruct->nodes) - 1;
+	parstruct->pipe_nb = arr_len(parstruct->nodes) - 1; //obsolete
 	if (!parstruct->nodes)
 		ft_exit();
 	nodes = malloc(sizeof(t_node) * parstruct->pipe_nb);
