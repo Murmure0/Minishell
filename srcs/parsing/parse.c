@@ -144,11 +144,12 @@ char	*get_file_name(t_node *node, char *raw_node, int *j)
 	char	*name;
 
 	name = NULL;
+	(void)j;
 	// while (raw_node && raw_node[*j])
 	// {
 
 	// }
-	node->cmd = ft_strdup(raw_node);
+	node->cmd[0] = ft_strdup(raw_node);
 	return (name);
 }
 
@@ -176,15 +177,17 @@ void	add_file(t_node *node, char *raw_node, int redir, int *j)
 		node->outfiles[pos_outfiles].pos = *j;
 		pos_outfiles++;
 	}
-	node->cmd = get_file_name(node, raw_node, j);
+	node->cmd[0] = get_file_name(node, raw_node, j);
+	if (!node->cmd[0])
+		return ;
 }
 
 void	add_files_redir(t_node *nodes, t_parsing *ps)
 {
 	int	i;
-	t_token	*token;
-	t_shell	g_shell;
-	int	nb_token;
+	// t_token	*token;
+	// t_shell	g_shell;
+	// int	nb_token;
 	int j;
 
 	i = -1;

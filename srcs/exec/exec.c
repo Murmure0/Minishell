@@ -8,12 +8,15 @@ static int	path_finder(t_node *first_node, t_shell shell)
 	i = -1;
 	while (shell.path[++i])
 	{
-		printf("command %s\n", first_node[0].cmd[0]);
+		// printf("command %s\n", first_node[0].cmd[0]);
+		if (first_node[0].cmd[0][0] == ' ')
+			return (-1);
 		tmp = ft_strjoin(shell.path[i], first_node[0].cmd[0]);
 		//printf("path+cmd = |%s| next = |%s|\n", first_node->cmd[0], first_node->cmd[1]);
 		//printf("shell.env : |%s|\n", shell.env[i]);
-		if (!(tmp))
+		if (!tmp)
 			return (-1);
+		printf("%s %s\n", first_node->cmd[0], first_node->cmd[1]);
 		execve(tmp, first_node->cmd, shell.env);
 		free(tmp);
 	}
@@ -51,8 +54,6 @@ int	exec_cmd(t_node *first_node, t_shell shell)
 
 void child_process(pid_t child_pid/*, int fd_in*/, t_node *first_node/*, int *fds*/, t_shell shell)
 {
-	t_shell	g_shell;
-
 	if (child_pid == 0)
 	{
 		/*if (fd_in > 0)
@@ -73,7 +74,7 @@ void child_process(pid_t child_pid/*, int fd_in*/, t_node *first_node/*, int *fd
 		write(2, "Erreur post execution", 22);
 		perror(": ");
 		//close(STDOUT_FILENO);
-		ft_exit(g_shell);
+		ft_exit(shell);
 	}
 }
 

@@ -12,27 +12,28 @@ void	ft_free(t_shell shell)
 	/* reflechir sur quel check faire pour eviter les free non mallocs */
 	// free(g_shell.path);
 	// free(g_shell.env);
-	printf("i'm freeeee\n");
+	// printf("i'm freeeee\n");
 }
 
 int main(int argc, char **argv, char **env)
 {
 	t_parsing	parstruct;
 	t_node		*nodes;
-	t_shell		g_shell;
+	t_shell		shell;
 
 	(void)argc;
 	(void)argv;
-	init_struct(&g_shell, env); /*fonction qui va initialiser notre structure globale*/
+	nodes = NULL;
+	init_struct(&shell, env); /*fonction qui va initialiser notre structure globale*/
 	while (1)
 	{
 		// ! free prompt
 		parstruct.prompt = readline("minishell$ ");
 		add_history(parstruct.prompt);
 		nodes = parse(nodes, &parstruct);
-		printf("command %s\n", nodes[0].cmd[0]);
-		exec(nodes, g_shell);
+		// printf("command %s\n", nodes[0].cmd[0]);
+		exec(nodes, shell);
 	}
-	ft_free(g_shell);
+	ft_free(shell);
 	return (0);
 }
