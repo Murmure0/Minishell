@@ -12,119 +12,161 @@ int	arr_len(char **arr)
 	return (i);
 }
 
-void	check_after_chevron()
+char	*ft_slice(char *src, int start, int stop)
 {
+	char	*string;
+	int		src_size;
+	int		i;
 
+	if (!src)
+		return (NULL);
+	src_size = stop - start;
+	string = malloc(sizeof(char) * (src_size + 1));
+	if (!string)
+		return (NULL);
+	i = 0;
+	while (start < stop)
+	{
+		string[i] = src[start];
+		i++;
+		start++;
+	}
+	string[src_size] = '\0';
+	return (string);
 }
 
-//void	tokenize(t_node *first_node, t_parsing *parstruct, char *raw_node)
-t_node	*tokenize(t_parsing *parstruct, char *raw_node)
+int	get_tokens_nb(char *node)
+{
+	int	nb;
+	int	i;
+
+	nb = 0;
+	i = 0;
+	while (node[i])
+	{
+		if (node[i] != '\t' && node[i] != ' ')
+		{
+			while (node[i] != '\t' && node[i] != ' ')
+				i++;
+			nb++;
+		}
+		while (node[i] == '\t' || node[i] == ' ')
+			i++;
+	}
+	return (nb);
+}
+
+char	*get_file_name(t_node *node, char *raw_node, int *j)
+{
+	char	*name;
+
+	name = NULL;
+	(void)j;
+	// while (raw_node && raw_node[*j])
+	// {
+
+	// }
+	node->cmd[0] = ft_strdup(raw_node);
+	return (name);
+}
+
+void	add_file(t_node *node, char *raw_node, int redir, int *j)
+{
+	static int	pos_infiles;
+	static int	pos_outfiles;
+
+	pos_infiles = 0;
+	pos_outfiles = 0;
+	if (redir == 1)
+	{
+		node->infiles = malloc(100);
+		node->infiles[pos_infiles].redir = redir;
+		// node->infiles[pos_infiles].name = get_file_name(node, raw_node, j);
+		node->infiles[pos_infiles].pos = *j;
+		pos_infiles++;
+	}
+	else if (redir == 2 || redir == 3)
+	{
+		node->outfiles[pos_outfiles].redir = redir;
+		// node->outfiles[pos_outfiles].name = get_file_name(node, raw_node, j);
+		node->outfiles[pos_outfiles].pos = *j;
+		pos_outfiles++;
+	}
+	node->cmd[0] = get_file_name(node, raw_node, j);
+	if (!node->cmd[0])
+		return ;
+}
+
+void	add_files_redir(t_node *nodes, t_parsing *ps)
 {
 	int	i;
-	char	**tokens;
 	// t_token	*token;
-	t_node *first_node;
+	// t_shell	g_shell;
+	// int	nb_token;
+	int j;
 
-	// faire un split special avec non printable chars ? (ascii entre 9 et 13)
-	tokens = ft_split(raw_node, ' ');
-	if (!tokens)
-		ft_exit();
 	i = -1;
-	/*
-	if (tokens[0][0] == '<')
+	while (ps->nodes && ps->nodes[++i])
 	{
-		parstruct->chevron = '<';
-		if (tokens[0][1] == parstruct->chevron)
+		j = -1;
+		while (ps->nodes[i][++j])
 		{
-			// checker si il a autre chose dans la string
-			if (tokens[0][2] && (tokens[0][2] != '<' && tokens[0][2] != '>'))
-			{
-				token = new_token(redir_l, tokens[0]); // tokens[0] = copie sans les >>
-			}
-			token = new_token(redir_l, tokens[1]); // le prochain token sera le heredoc
-			// lancer la fonction heredoc
+			// if (ps->nodes[i][j] == '<')
+			// {
+			// 	if (ps->nodes[i][j + 1] == '<')
+			// 	{
+			// 		// here doc
+			// 		j++;
+			// 	}
+			// 	else if (ps->nodes[i][j + 1])
+			// 	{
+			// 		// on ajoute comme infile la prochaine str (skippe les espaces et go jusque espace / fin)
+			// 		add_file(&nodes[i], ps->nodes[i], 1, &j);
+			// 	}
+			// }
+			// else if (ps->nodes[i][j] == '>')
+			// {
+			// 	if (ps->nodes[i][j + 1] == '>')
+			// 	{
+			// 		// on ajoute comme outfile + APPEND
+			// 		add_file(&nodes[i], ps->nodes[i], 3, &j);
+			// 		j++;
+			// 	}
+			// 	else if (ps->nodes[i][j + 1])
+			// 	{
+			// 		add_file(&nodes[i], ps->nodes[i], 2, &j);
+			// 		// on ajoute comme outfile
+			// 	}
+			// }
+			add_file(&nodes[i], ps->nodes[i], 2, &j);
 		}
-		else if (tokens[0][1])
-		{
-			// si on a autre chose quun char alphanumerique apres => err
-			// if (!ft_isalnum(tokens[0][2]))
-			//		ft_exit();
-			// copier tokens[0] (qui contient infile) sans le < 
-			// i++;
-		}
-	}
-	else if (tokens[0][0] == '>')
-	{
-		parstruct->chevron = '>';
-		if (tokens[0][1] == parstruct->chevron)
-		{
-			// si on a autre chose quun char alphanumerique apres => err
-			if (tokens[0][2])
-			{
-				//  if (!ft_isalnum(tokens[0][2]))
-				//		ft_exit();
-				// copier tokens[0] (qui contient infile) sans le < 
-				token = new_token(redir_r_d, tokens[0]); // tokens[0] = copie sans les >>
-			}
-			else
-			{
-				token = new_token(redir_r_d, tokens[1]); // le prochain token sera le file
-			}
-		}
-		else if (tokens[0][1] && ft_isalnum(tokens[0][1]))
-		{
-			// si on a un chevron, on check
-		}
-	}
-	else
-	{
-		token = new_token(no_redir, tokens[0]);
-	}
-	*/
-	//node = create_lst_node(NULL, NULL, &tokens[0], parstruct->pipe_nb);
-	first_node = new_node(NULL, NULL, tokens); //pour le premier node
-	// printf("%s\n", first_node->cmd[0]);
-	// printf("%s\n", first_node->cmd[1]);
-	// printf("%s\n", first_node->cmd[2]);
-	// printf("%s\n", first_node->cmd[3]);
-	//pour les nodes suivants on utilisera :
-	//node_add_back(first_node, lst_infile, lst_outfile, cmd);
-	while (tokens[++i])
-	{
-		// if (tokens[i] == '<' || tokens[i] == '>')
-		// 	check_after_chevron();
-
-		// commencer par les tokens
-		// si tokens[0] est un chevron sans rien qui suit, tokens[1] sera un file
-		// si tokens[0][0] est un chevron, verifier ce quil y a apres 
-		// 		si cest un autre chevron, 
-		//			si il y a un autre chevron ou un char special => err
-		//		sinon on aura un file apres
-		// une fois les tokens crees, on peut creer les nodes
-		// printf("%s\n", tokens[i]);
-	}
-	//(void)node;
-	(void)parstruct;
-	return(first_node);
+	}	
 }
 
-//void	parse(t_parsing *parstruct)
-t_node	*parse(t_parsing *parstruct)
+t_node	*parse(t_node *nodes, t_parsing *parstruct)
 {
-	t_node *first_node;
+	int i;
 
-	first_node = NULL;
-	check_quotes_for_pipe_split(parstruct);
+	if (!check_quotes_for_pipe_split(parstruct))
+		return (NULL);
 	parstruct->nodes = ft_split(parstruct->prompt, '|');
-	parstruct->pipe_nb = arr_len(parstruct->nodes) - 1; //obsolete
 	if (!parstruct->nodes)
-		ft_exit(shell);
-	while (parstruct->nodes && *parstruct->nodes)
+		// return (ret_err(NULL, "Parsing error : couldn't malloc to create nodes"));
+		return (NULL);
+	parstruct->pipe_nb = arr_len(parstruct->nodes) - 1;
+	nodes = malloc(sizeof(t_node) * (parstruct->pipe_nb + 1));
+	if (!nodes)
+		// return (ret_err(NULL, "Parsing error : couldn't malloc to create nodes"));
+		return (NULL);
+	// temporaire juste pour passer la commande
+	i = -1;
+	while(parstruct->nodes[++i])
 	{
-		//tokenize(&first_node, parstruct, *parstruct->nodes); 
-		first_node = tokenize(parstruct, *parstruct->nodes);
-		// printf("%s\n", *parstruct->nodes);
-		parstruct->nodes++;
+		nodes[i].cmd = malloc(sizeof(char *) * 2);
+		nodes[i].cmd[0] = ft_strdup(parstruct->nodes[i]);
+		nodes[i].cmd[1] = NULL;
 	}
-	return (first_node);
-}	
+	return (nodes);
+	// nodes[0].infiles[0].name = ft_strdup("infile");
+	// add_files_redir(nodes, parstruct);
+}

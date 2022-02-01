@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 18:43:23 by vmasse            #+#    #+#             */
-/*   Updated: 2022/01/17 10:58:21 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/01 10:50:00 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,14 @@ int	get_matching_quote_pos(t_parsing *parstruct, int start)
 	return (0);
 }
 
-void	check_quotes_for_pipe_split(t_parsing *parstruct)
+int	check_quotes_for_pipe_split(t_parsing *parstruct)
 {
 	int		pos_quote;
 	int		has_to_match;
 
 	pos_quote = get_quote_pos(parstruct, -1);
 	if (pos_quote == -1)
-		return ;
+		return (1);
 	has_to_match = 1;
 	while (pos_quote > -1 && parstruct->prompt[pos_quote])
 	{
@@ -54,7 +54,7 @@ void	check_quotes_for_pipe_split(t_parsing *parstruct)
 		{
 			pos_quote = get_matching_quote_pos(parstruct, pos_quote);
 			if (!pos_quote)
-				ft_exit();
+				return (0);
 			has_to_match = 0;
 		}
 		else
@@ -63,4 +63,5 @@ void	check_quotes_for_pipe_split(t_parsing *parstruct)
 			has_to_match = 1;
 		}
 	}
+	return (1);
 }

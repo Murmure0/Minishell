@@ -6,26 +6,26 @@ static int	path_finder(t_node *first_node, t_shell shell)
 	int		i;
 
 	i = -1;
-	tmp = first_node[0].cmd[0].name;
 	while (shell.path[++i])
 	{
-		first_node[0].cmd[0].name = ft_strjoin(shell.path[i], tmp);
+		tmp = ft_strjoin(shell.path[i], first_node[0].cmd[0]);
 		//printf("path+cmd = |%s| next = |%s|\n", first_node->cmd[0], first_node->cmd[1]);
 		//printf("shell.env : |%s|\n", shell.env[i]);
-		if (!(first_node[0].cmd[0].name))
+		if (!tmp)
 			return (-1);
-		execve(first_node[0].cmd[0].name, first_node->cmd, shell.env);
-		free(first_node[0].cmd[0].name);
+		execve(tmp, first_node->cmd, shell.env);
+		free(tmp);
 	}
-	first_node[0].cmd[0].name = tmp;
+	// first_node[0].cmd = tmp;
 	//execve(first_node->cmd[0], first_node->cmd, shell.env);
-	free(tmp);
+	// free(tmp);
 	return (0);
 }
 
 void	free_all(t_node *first_node, t_shell shell)
 {
 	int i = -1;
+	(void)first_node;
 	while (shell.env[++i])
 		free(shell.env[i]);
 	i = -1;
@@ -70,7 +70,7 @@ void child_process(pid_t child_pid/*, int fd_in*/, t_node *first_node/*, int *fd
 		write(2, "Erreur post execution", 22);
 		perror(": ");
 		//close(STDOUT_FILENO);
-		//ft_exit();
+		exit (errno);
 	}
 }
 
@@ -99,7 +99,9 @@ int exec(t_node *first_node, t_shell shell)
 	// 	perror(": ");
 	// 	exit(EXIT_FAILURE);
 	// }
-	child_process(child_pid/*, fd_in,*/, first_node/*,fds*/, shell);
-	waitpid(child_pid, &status, 0);
+	if (child_pid == 0)
+		child_process(child_pid/*, fd_in,*/, first_node/*,fds*/, shell);
+	else
+		waitpid(child_pid, &status, 0);
 	return(0);
 }
