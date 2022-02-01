@@ -5,7 +5,7 @@ static int	path_finder(t_node *first_node, t_shell shell)
 	char	*tmp;
 	int		i;
 
-	tmp = first_node[0].cmd[0];
+	tmp = first_node[0].cmd[0]; //dup ?
 	i = -1;
 	while (shell.path[++i])
 	{
@@ -15,7 +15,7 @@ static int	path_finder(t_node *first_node, t_shell shell)
 		execve(first_node[0].cmd[0], first_node->cmd, shell.env);
 		free(first_node[0].cmd[0]);
 	}
-	first_node[0].cmd[0] = tmp;
+	first_node[0].cmd[0] = tmp; //dupdup ?
 	execve(first_node->cmd[0], first_node->cmd, shell.env);
 	free(tmp);
 	return (0);
@@ -73,33 +73,48 @@ void child_process(pid_t child_pid/*, int fd_in*/, t_node *first_node/*, int *fd
 	}
 }
 
-// int	find_fd_in(t_node *first_node)
-// {
-// 	int	fd_in;
-// 	int	i;
+int	find_fd_in(t_node *first_node)
+{
+	int	fd_in;
+	int	i;
 
-// 	i = -1;
-// 	fd_in = 0;
-// 	while (first_node->infiles[++i])
-// 	{
-
-// 	}
-// 	return (fd_in);
-// }
+	i = -1;
+	fd_in = 0;
+	if (!first_node[0].infiles[0].name)
+		return (fd_in);
+	while (first_node[0].infiles[++i].name)
+	{
+		// printf("FIND IN\n");
+		// printf("valeur de i : %d\n", i);
+		fd_in = open(first_node[0].infiles[i].name, O_RDONLY);
+		// printf("ouverture : %s\n",first_node[0].infiles[i].name);
+		if (fd_in < 0)
+			return (-1);
+		if (first_node[0].infiles[i + 1].name != NULL)
+		{
+			// printf("fermeture : %s\n",first_node[0].infiles[i].name);
+			close(fd_in);
+		}
+		// printf("valeur de i : %d\n", i);
+	}
+	return (fd_in);
+}
 
 int exec(t_node *first_node, t_shell shell)
 {
 	
-	// int		fd_in;
+	int		fd_in;
 	pid_t	child_pid;
 	int		status;
 	// t_exec *exec_st;
 
 	// exec_st = malloc(sizeof(t_exec));
 	// exec_st->fd_in = find_fd_in(first_node);
-	//fd_in = find_fd_in(first_node);
-	//printf("valeur fd_in : %d\n",fd_in);
 	// printf("contenu |%s|\n", first_node->cmd[0]);
+	fd_in = find_fd_in(first_node);
+	// printf("contenu name infile1 |%s|\n", first_node->infiles[0].name);
+	// printf("contenu name infile2 |%s|\n", first_node->infiles[1].name);
+	// printf("resultat fd_in : |%d|\n", fd_in);
 	status = 0;
 	child_pid = fork();
 	if (child_pid < 0)
