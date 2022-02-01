@@ -67,8 +67,8 @@ void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
 t_node	*parse(t_node *node, t_parsing *parstruct);
 int		get_tokens_nb(char *node);
 void	add_files_redir(t_node *nodes, t_parsing *ps);
-char	*get_file_name(t_node *node, char *raw_node, int *j);
 void	add_file(t_node *node, char *raw_node, int redir, int *j);
+char	*get_file_name(char *raw_node, int *j);
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
 int		get_quote_pos(t_parsing *parstruct, int start);
