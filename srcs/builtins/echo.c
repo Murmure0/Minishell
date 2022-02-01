@@ -29,6 +29,7 @@ size_t ft_strlen(char *str)
 	return (i);
 }
 */
+
 int no_newline(char **str)
 {
 	int	k;

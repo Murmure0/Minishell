@@ -12,7 +12,13 @@ int	arr_len(char **arr)
 	return (i);
 }
 
-/*void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node)
+void	check_after_chevron()
+{
+
+}
+
+//void	tokenize(t_node *first_node, t_parsing *parstruct, char *raw_node)
+t_node	*tokenize(t_parsing *parstruct, char *raw_node)
 {
 	int	i;
 	char	**tokens;
@@ -24,7 +30,7 @@ int	arr_len(char **arr)
 	if (!tokens)
 		ft_exit();
 	i = -1;
-	
+	/*
 	if (tokens[0][0] == '<')
 	{
 		parstruct->chevron = '<';
@@ -74,9 +80,15 @@ int	arr_len(char **arr)
 	{
 		token = new_token(no_redir, tokens[0]);
 	}
-
-	node = create_lst_node(NULL, NULL, &tokens[0], parstruct->pipe_nb);
-	// printf("%s\n", node->cmd[0]);
+	*/
+	//node = create_lst_node(NULL, NULL, &tokens[0], parstruct->pipe_nb);
+	first_node = new_node(NULL, NULL, tokens); //pour le premier node
+	// printf("%s\n", first_node->cmd[0]);
+	// printf("%s\n", first_node->cmd[1]);
+	// printf("%s\n", first_node->cmd[2]);
+	// printf("%s\n", first_node->cmd[3]);
+	//pour les nodes suivants on utilisera :
+	//node_add_back(first_node, lst_infile, lst_outfile, cmd);
 	while (tokens[++i])
 	{
 		// if (tokens[i] == '<' || tokens[i] == '>')
@@ -93,95 +105,26 @@ int	arr_len(char **arr)
 	}
 	//(void)node;
 	(void)parstruct;
-}*/
-
-char	*ft_slice(char *src, int start, int stop)
-{
-	char	*string;
-	int		src_size;
-	int		i;
-
-	if (!src)
-		return (NULL);
-	src_size = stop - start;
-	string = malloc(sizeof(char) * (src_size + 1));
-	if (!string)
-		return (NULL);
-	i = 0;
-	while (start < stop)
-	{
-		string[i] = src[start];
-		i++;
-		start++;
-	}
-	string[src_size] = '\0';
-	return (string);
+	return(first_node);
 }
 
-
-int	get_tokens_nb(char *node)
+//void	parse(t_parsing *parstruct)
+t_node	*parse(t_parsing *parstruct)
 {
-	int	nb;
-	int	i;
+	t_node *first_node;
 
-	nb = 0;
-	i = 0;
-	while (node[i])
-	{
-		if (node[i] != '\t' && node[i] != ' ')
-		{
-			while (node[i] != '\t' && node[i] != ' ')
-				i++;
-			nb++;
-		}
-		while (node[i] == '\t' || node[i] == ' ')
-			i++;
-	}
-	return (nb);
-}
-
-void	create_nodes(t_node *nodes, char **raw_nodes)
-{
-	int	i;
-	t_token	*token;
-	int	nb_token;
-
-	while (raw_nodes && *raw_nodes)
-	{
-		nb_token = get_tokens_nb(*raw_nodes);
-		token = malloc(sizeof(t_token) * nb_token);
-		if (!token)
-			ft_exit();
-		i = -1;
-		while (*raw_nodes[++i])
-		{
-			if (*raw_nodes[i] != '\t' && *raw_nodes[i] != ' ')
-			{
-				token[i].pos = i;
-				while (*raw_nodes[i] != '\t' && *raw_nodes[i] != ' ')
-					i++;
-				token[i].name = ft_slice(*raw_nodes, token[i].pos, i);
-				if (!token[i].name)
-					ft_exit();
-			}
-			while (*raw_nodes[i] == '\t' || *raw_nodes[i] == ' ')
-				i++;
-		}
-		raw_nodes++;
-		// ajouter dans le node infiles et outfiles
-		(void)nodes;
-	}
-}
-
-void	parse(t_node	*nodes, t_parsing *parstruct)
-{
+	first_node = NULL;
 	check_quotes_for_pipe_split(parstruct);
 	parstruct->nodes = ft_split(parstruct->prompt, '|');
 	parstruct->pipe_nb = arr_len(parstruct->nodes) - 1; //obsolete
 	if (!parstruct->nodes)
-		ft_exit();
-	nodes = malloc(sizeof(t_node) * parstruct->pipe_nb);
-	if (!nodes)
-		ft_exit();
-	// create_nodes(nodes, parstruct->nodes);
-}
+		ft_exit(shell);
+	while (parstruct->nodes && *parstruct->nodes)
+	{
+		//tokenize(&first_node, parstruct, *parstruct->nodes); 
+		first_node = tokenize(parstruct, *parstruct->nodes);
+		// printf("%s\n", *parstruct->nodes);
+		parstruct->nodes++;
+	}
+	return (first_node);
+}	

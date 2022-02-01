@@ -70,7 +70,7 @@ void child_process(pid_t child_pid/*, int fd_in*/, t_node *first_node/*, int *fd
 		write(2, "Erreur post execution", 22);
 		perror(": ");
 		//close(STDOUT_FILENO);
-		ft_exit();
+		//ft_exit();
 	}
 }
 
@@ -102,63 +102,4 @@ int exec(t_node *first_node, t_shell shell)
 	child_process(child_pid/*, fd_in,*/, first_node/*,fds*/, shell);
 	waitpid(child_pid, &status, 0);
 	return(0);
-}
-
-int main(int argc, char **argv, char **env)
-{
-	//Initialisation de la struct nodes
-
-	/*char     input[50] = {"< infile cat -e | ls > output"};*/
-    t_node     *nodes;
-	t_shell		shell;
-	t_parsing	parstruct;
-
-    nodes = malloc(sizeof(t_token) * 2);
-    
-/*     1er node = "< infile cat"    */
-/*     infiles du 1er node :         */
-    nodes[0].infiles = malloc(sizeof(t_token) * 1);
-    nodes[0].infiles[0].name = ft_strdup("infile");
-    nodes[0].infiles[0].redir = 1;
-    nodes[0].infiles[0].pos = 2;
-
-/*     cmd du 1er node :         */
-    nodes[0].cmd = malloc(sizeof(t_token) * 2);
-    nodes[0].cmd[0].name = ft_strdup("cat");
-    nodes[0].cmd[0].redir = 0;
-    nodes[0].cmd[0].pos = 9;
-    
-/*     argument de cmd du 1er node :         */
-    nodes[0].cmd[1].name = ft_strdup("-e");
-    nodes[0].cmd[1].redir = 0;
-    nodes[0].cmd[1].pos = 13;
-
-/*     2e node = "ls > output"    */
-/*     cmd du 2e node :         */
-    nodes[1].cmd = malloc(sizeof(t_token) * 1);
-    nodes[1].cmd[0].name = ft_strdup("ls");
-    nodes[1].cmd[0].redir = 0;
-    nodes[1].cmd[0].pos = 18;
-
-/*     outfiles du 2e node :         */
-    nodes[1].outfiles = malloc(sizeof(t_token) * 1);
-    nodes[1].outfiles[0].name = ft_strdup("output");
-    nodes[1].outfiles[0].redir = 2;
-    nodes[1].outfiles[0].pos = 23;
-
-    printf("%s\n", nodes[0].infiles[0].name);
-    printf("%s\n", nodes[0].cmd[0].name);
-    printf("%s\n", nodes[0].cmd[1].name);
-	//
-
-	init_struct(&shell, env); /*fonction qui va initialiser notre structure globale*/
-	while (1)
-	{
-		// ! free prompt
-		parstruct.prompt = readline("minishell$ ");
-		add_history(parstruct.prompt);
-		exec(nodes, shell);
-	}
-	ft_free(shell);
-	return (0);
 }
