@@ -56,8 +56,8 @@ char	**get_env_paths(char **envp);
 char	**get_env(char **env);
 
 /* ------------------------------------ main.c -------------------------------------------- */
-void	ft_free(t_shell shell);
-void	ft_exit(t_shell shell);
+int		ret_err(int ret, char *msg);
+void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
 
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ PARSING ------------------------------------ */
@@ -65,7 +65,6 @@ void	ft_exit(t_shell shell);
 
 /* ------------------------------------ parse.c ------------------------------------ */
 t_node	*parse(t_node *node, t_parsing *parstruct);
-// void	tokenize(t_node *node, t_parsing *parstruct, char *raw_node);
 int		get_tokens_nb(char *node);
 void	add_files_redir(t_node *nodes, t_parsing *ps);
 char	*get_file_name(t_node *node, char *raw_node, int *j);
@@ -74,7 +73,7 @@ void	add_file(t_node *node, char *raw_node, int redir, int *j);
 /* ------------------------------------ parse_quotes.c ------------------------------ */
 int		get_quote_pos(t_parsing *parstruct, int start);
 int		get_matching_quote_pos(t_parsing *parstruct, int start);
-void	check_quotes_for_pipe_split(t_parsing *parstruct);
+int		check_quotes_for_pipe_split(t_parsing *parstruct);
 
 /* ------------------------------------ lst_cmd.c ----------------------------------- */
 t_token *new_token(t_parsing *parstruct, int redir, char *name);

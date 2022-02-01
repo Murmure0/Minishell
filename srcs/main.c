@@ -1,18 +1,43 @@
 #include "../includes/minishell.h"
 
-void	ft_exit(t_shell shell)
+int	ret_err(int ret, char *msg)
 {
-	ft_free(shell);
 	/* exit temporaire en attendant de faire un truc propre avec errno */
-	exit(EXIT_FAILURE);
+	printf("%s\n", msg);
+	return (ret);
 }
 
-void	ft_free(t_shell shell)
+void	final_free(t_shell *sh, t_parsing *ps, t_node *n)
 {
-	/* reflechir sur quel check faire pour eviter les free non mallocs */
-	// free(g_shell.path);
-	// free(g_shell.env);
-	// printf("i'm freeeee\n");
+	int	i;
+
+	i = -1;
+	if (sh)
+	{
+		free(sh->env);
+		free(sh->path);
+		free(sh);
+	}
+	if (ps)
+	{
+		free(ps->prompt);
+		while (ps->nodes[++i])
+			free(ps->nodes[i]);
+		free(ps->nodes);
+		free(ps);
+	}
+	if (n)
+	{
+		i = -1;
+		while (n->cmd[++i])
+			free(n->cmd[i]);
+		free(n->cmd);
+		free(n->infiles->name);
+		free(n->infiles);
+		free(n->outfiles->name);
+		free(n->outfiles);
+		free(n);
+	}
 }
 
 int main(int argc, char **argv, char **env)
@@ -24,16 +49,14 @@ int main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	nodes = NULL;
-	init_struct(&shell, env); /*fonction qui va initialiser notre structure globale*/
+	init_struct(&shell, env);
 	while (1)
 	{
-		// ! free prompt
 		parstruct.prompt = readline("minishell$ ");
 		add_history(parstruct.prompt);
 		nodes = parse(nodes, &parstruct);
-		// printf("command %s\n", nodes[0].cmd[0]);
 		exec(nodes, shell);
 	}
-	ft_free(shell);
+	final_free(&shell, &parstruct, nodes);
 	return (0);
 }
