@@ -5,20 +5,19 @@ static int	path_finder(t_node *first_node, t_shell shell)
 	char	*tmp;
 	int		i;
 
+	tmp = first_node[0].cmd[0];
 	i = -1;
 	while (shell.path[++i])
 	{
-		tmp = ft_strjoin(shell.path[i], first_node[0].cmd[0]);
-		//printf("path+cmd = |%s| next = |%s|\n", first_node->cmd[0], first_node->cmd[1]);
-		//printf("shell.env : |%s|\n", shell.env[i]);
+		first_node[0].cmd[0] = ft_strjoin(shell.path[i], tmp);
 		if (!tmp)
 			return (-1);
-		execve(tmp, first_node->cmd, shell.env);
-		free(tmp);
+		execve(first_node[0].cmd[0], first_node->cmd, shell.env);
+		free(first_node[0].cmd[0]);
 	}
-	// first_node[0].cmd = tmp;
-	//execve(first_node->cmd[0], first_node->cmd, shell.env);
-	// free(tmp);
+	first_node[0].cmd[0] = tmp;
+	execve(first_node->cmd[0], first_node->cmd, shell.env);
+	free(tmp);
 	return (0);
 }
 
@@ -74,14 +73,30 @@ void child_process(pid_t child_pid/*, int fd_in*/, t_node *first_node/*, int *fd
 	}
 }
 
+// int	find_fd_in(t_node *first_node)
+// {
+// 	int	fd_in;
+// 	int	i;
+
+// 	i = -1;
+// 	fd_in = 0;
+// 	while (first_node->infiles[++i])
+// 	{
+
+// 	}
+// 	return (fd_in);
+// }
+
 int exec(t_node *first_node, t_shell shell)
 {
 	
-	//int		fd_in;
+	// int		fd_in;
 	pid_t	child_pid;
 	int		status;
+	// t_exec *exec_st;
 
-	//fd_in = 0;
+	// exec_st = malloc(sizeof(t_exec));
+	// exec_st->fd_in = find_fd_in(first_node);
 	//fd_in = find_fd_in(first_node);
 	//printf("valeur fd_in : %d\n",fd_in);
 	// printf("contenu |%s|\n", first_node->cmd[0]);
@@ -93,14 +108,8 @@ int exec(t_node *first_node, t_shell shell)
 		perror(": ");
 		exit (errno);
 	}
-	// if (child_pid == 0)
-	// {
-	// 	exec_cmd(first_node);
-	// 	perror(": ");
-	// 	exit(EXIT_FAILURE);
-	// }
 	if (child_pid == 0)
-		child_process(child_pid/*, fd_in,*/, first_node/*,fds*/, shell);
+		child_process(child_pid,/* fd_in,*/ first_node, /*,fds*/ shell);
 	else
 		waitpid(child_pid, &status, 0);
 	return(0);
