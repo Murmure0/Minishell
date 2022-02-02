@@ -67,7 +67,7 @@ int	get_files_nb(char *node, char chevron)
 	{
 		if (node[i] == chevron)
 		{
-			while (node[i] == chevron)
+			while (node[i] && node[i] == chevron)
 				i++;
 			nb++;
 		}

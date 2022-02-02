@@ -35,6 +35,8 @@ typedef struct s_node
 
 typedef struct s_parsing
 {
+	int		i;
+	int		j;
 	char 	*prompt;
 	char	**nodes;
 	char	chevron;
@@ -65,10 +67,16 @@ void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
 
 /* ------------------------------------ parse.c ------------------------------------ */
 t_node	*parse(t_node *node, t_parsing *parstruct);
-int		get_tokens_nb(char *node);
 void	add_files_redir(t_node *nodes, t_parsing *ps);
-void	add_file(t_node *node, char *raw_node, int redir, int *j);
-char	*get_file_name(char *raw_node, int *j);
+void	add_file(t_node *nodes, t_parsing *ps, int redir);
+char	*get_file_name(t_parsing *ps);
+
+/* ------------------------------------ parse_utils.c ------------------------------- */
+int		get_tokens_nb(char *node);
+int		arr_len(char **arr);
+char	*str_slice(char *src, int start, int stop);
+int		get_files_nb(char *node, char chevron);
+
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
 int		get_quote_pos(t_parsing *parstruct, int start);

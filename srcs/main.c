@@ -55,6 +55,7 @@ int main(int argc, char **argv, char **env)
 		parstruct.prompt = readline("minishell$ ");
 		add_history(parstruct.prompt);
 		nodes = parse(nodes, &parstruct);
+		printf("%s\n", nodes[0].infiles[0].name);
 		// exec(nodes, shell);
 	}
 	final_free(&shell, &parstruct, nodes);
