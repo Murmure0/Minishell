@@ -28,7 +28,7 @@ typedef struct s_token
 
 typedef struct s_node
 {
-    t_token     *infiles; 
+    t_token     *infiles;
     t_token     *outfiles;
     char		**cmd;
 }     t_node;
@@ -37,6 +37,8 @@ typedef struct s_parsing
 {
 	int		i;
 	int		j;
+	int		pos_infiles;
+	int		pos_outfiles;
 	char 	*prompt;
 	char	**nodes;
 	char	chevron;
