@@ -166,7 +166,40 @@ t_node	*parse(t_node *nodes, t_parsing *parstruct)
 		nodes[i].cmd[0] = ft_strdup(parstruct->nodes[i]);
 		nodes[i].cmd[1] = NULL;
 	}
+	
+	/*partie experimentale pour test les infiles dans exec*/
+	nodes[0].infiles = malloc(sizeof(t_token) * 4);
+	nodes[0].infiles[0].redir = 1;
+	nodes[0].infiles[0].pos = 0;
+	nodes[0].infiles[0].name = ft_strdup("pouette");
+
+	nodes[0].infiles[1].redir = 1;
+	nodes[0].infiles[1].pos = 0;
+	nodes[0].infiles[1].name = ft_strdup("infile2");
+	
+	nodes[0].infiles[2].redir = 1;
+	nodes[0].infiles[2].pos = 0;
+	nodes[0].infiles[2].name = ft_strdup("infile3");
+	
+	nodes[0].infiles[3].redir = 0;
+	nodes[0].infiles[3].pos = 0;
+	nodes[0].infiles[3].name = NULL;
+
+
+	nodes[0].outfiles = malloc(sizeof(t_token) * 3);
+	nodes[0].outfiles[0].redir = 2;
+	nodes[0].outfiles[0].pos = 0;
+	nodes[0].outfiles[0].name = ft_strdup("out1");
+
+	nodes[0].outfiles[1].redir = 2;
+	nodes[0].outfiles[1].pos = 0;
+	nodes[0].outfiles[1].name = ft_strdup("out2");
+	
+	nodes[0].outfiles[2].redir = 0;
+	nodes[0].outfiles[2].pos = 0;
+	nodes[0].outfiles[2].name = NULL;
+	/* fin de la partie experimentale, deso */
+
 	return (nodes);
-	// nodes[0].infiles[0].name = ft_strdup("infile");
 	// add_files_redir(nodes, parstruct);
 }

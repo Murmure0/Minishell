@@ -47,6 +47,12 @@ typedef struct s_shell
 	char **path;
 }	t_shell;
 
+typedef struct s_exec
+{
+	int	fd_in;
+	int	fd_out; //si plusieurs cmd fd_out = fds;
+}	t_exec;
+
 /* ------------------------------------ init_struct.c ------------------------------------ */
 void    init_struct(t_shell *g_shell, char **env);
 
@@ -85,16 +91,23 @@ t_node *create_lst_node(t_token *lst_infiles, t_token *lst_outfiles, char **node
 /* ------------------------------------ EXEC --------------------------------------- */
 /* --------------------------------------------------------------------------------- */
 
-/* ------------------------------------ exec_clean.c ------------------------------- */
+/* ------------------------------------ exec.c ------------------------------- */
 int		exec(t_node *node, t_shell g_shell);
-void	child_process(pid_t child_pid/*, int fd_in*/, t_node *node/*, int *fds*/, t_shell t_shell);
 
-/* ------------------------------------ exec_lst.c ------------------------------- */
-int		find_fd_in(t_node *node);
+/* ------------------------------------ exec_utils.c ------------------------------- */
+int		path_finder(t_node *first_node, t_shell shell);
+int		exec_cmd(t_node *first_node, t_shell shell);
+void	free_all(t_node *first_node, t_shell shell);
 
+/* ---------------------------------- exec_process_child.c ------------------------- */
+void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell shell);
+int		find_fd_in(t_node *first_node);
+int		find_fd_out(t_node *first_node);
+t_exec	*init_exec_st(t_node *first_node);
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ BUILTINS ----------------------------------- */
 /* --------------------------------------------------------------------------------- */
 
-//int echo(char **str);
+int echo(char **str);
+
 #endif
