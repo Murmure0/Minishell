@@ -39,6 +39,7 @@ typedef struct s_parsing
 	int		j;
 	int		pos_infiles;
 	int		pos_outfiles;
+	int		pos_cmd;
 	char 	*prompt;
 	char	**nodes;
 	char	chevron;
@@ -78,6 +79,7 @@ int		get_tokens_nb(char *node);
 int		arr_len(char **arr);
 char	*str_slice(char *src, int start, int stop);
 int		get_files_nb(char *node, char chevron);
+int		get_cmds_nb(char *node, t_parsing *ps);
 
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */

@@ -74,3 +74,23 @@ int	get_files_nb(char *node, char chevron)
 	}
 	return (nb);
 }
+
+int	get_cmds_nb(char *node, t_parsing *ps)
+{
+	int	i;
+	int nb;
+
+	i = ps->j;
+	nb = 0;
+	while (node && node[i])
+	{
+		if (node[i] != ' ' && node[i] != '\t')
+		{
+			while (node[i] && (node[i] != ' ' && node[i] != '\t'))
+				i++;
+			nb++;
+		}
+		i++;
+	}
+	return (nb);
+}

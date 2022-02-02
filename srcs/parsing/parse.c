@@ -17,6 +17,46 @@ char	*get_file_name(t_parsing *ps)
 	return (str_slice(ps->nodes[ps->i], pos_start, ps->j));
 }
 
+void	add_command_args(t_node *nodes, t_parsing *ps)
+{
+	int		pos_start;
+
+	while (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j] != '<' && ps->nodes[ps->i][ps->j] != '>')
+	{
+		while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j] && (ps->nodes[ps->i][ps->j] == '\t' || ps->nodes[ps->i][ps->j] == ' '))
+			ps->j++;
+		pos_start = ps->j;
+		while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j] != '\t' && ps->nodes[ps->i][ps->j] != ' ' && ps->nodes[ps->i][ps->j] != '<' && ps->nodes[ps->i][ps->j] != '>')
+			ps->j++;
+		nodes[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i], pos_start, ps->j);
+		if (!nodes[ps->i].cmd[ps->pos_cmd++])
+			return ;
+		ps->j++;
+	}
+}
+
+void	add_command(t_node *nodes, t_parsing *ps)
+{
+	int		pos_start;
+
+	while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j] && (ps->nodes[ps->i][ps->j] == '\t' || ps->nodes[ps->i][ps->j] == ' '))
+		ps->j++;
+	pos_start = ps->j;
+	nodes[ps->i].cmd = malloc(sizeof(char *) * (get_cmds_nb(ps->nodes[ps->i], ps) + 1));
+	if (!nodes[ps->i].cmd)
+		return ;
+	while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j])
+	{
+		if (ps->nodes[ps->i][ps->j] == '\t' || ps->nodes[ps->i][ps->j] == ' ' || ps->nodes[ps->i][ps->j] == '<' || ps->nodes[ps->i][ps->j] == '>')
+			break ;
+		ps->j++;
+	}
+	nodes[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i], pos_start, ps->j);
+	if (!nodes[ps->i].cmd[ps->pos_cmd++])
+		return ;
+	add_command_args(nodes, ps);
+}
+
 void	add_file(t_node *nodes, t_parsing *ps, int redir)
 {
 	if (redir == 1)
@@ -24,7 +64,6 @@ void	add_file(t_node *nodes, t_parsing *ps, int redir)
 		nodes[ps->i].infiles[ps->pos_infiles].redir = redir;
 		nodes[ps->i].infiles[ps->pos_infiles].name = get_file_name(ps);
 		nodes[ps->i].infiles[ps->pos_infiles].pos = ps->j;
-		printf("%s\n", nodes[ps->i].infiles[ps->pos_infiles].name);
 		ps->pos_infiles++;
 	}
 	else if (redir == 2 || redir == 3)
@@ -32,9 +71,9 @@ void	add_file(t_node *nodes, t_parsing *ps, int redir)
 		nodes[ps->i].outfiles[ps->pos_outfiles].redir = redir;
 		nodes[ps->i].outfiles[ps->pos_outfiles].name = get_file_name(ps);
 		nodes[ps->i].outfiles[ps->pos_outfiles].pos = ps->j;
-		printf("%s\n", nodes[ps->i].outfiles[ps->pos_outfiles].name);
 		ps->pos_outfiles++;
 	}
+	add_command(nodes, ps);
 }
 
 t_node	*parse(t_node *nodes, t_parsing *ps)
@@ -48,11 +87,12 @@ t_node	*parse(t_node *nodes, t_parsing *ps)
 	nodes = malloc(sizeof(t_node) * (ps->pipe_nb + 1));
 	if (!nodes)
 		return (NULL);
-	ps->pos_infiles = 0;
-	ps->pos_outfiles = 0;
 	ps->i = -1;
 	while(ps->nodes[++(ps->i)])
 	{
+		ps->pos_infiles = 0;
+		ps->pos_outfiles = 0;
+		ps->pos_cmd = 0;
 		nodes[ps->i].infiles = malloc(sizeof(t_token) * get_files_nb(ps->nodes[ps->i], '<'));
 		if (!nodes[ps->i].infiles)
 			return (NULL);
@@ -62,6 +102,8 @@ t_node	*parse(t_node *nodes, t_parsing *ps)
 		ps->j = -1;
 		while (ps->nodes[ps->i][++(ps->j)])
 		{
+			while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j] && (ps->nodes[ps->i][ps->j] == '\t' || ps->nodes[ps->i][ps->j] == ' '))
+				ps->j++;
 			if (ps->nodes[ps->i][ps->j] == '<')
 			{
 				if (ps->nodes[ps->i][ps->j + 1] && ps->nodes[ps->i][ps->j + 1] == '<')
@@ -92,6 +134,10 @@ t_node	*parse(t_node *nodes, t_parsing *ps)
 				}
 				else
 					return (NULL); // erreur -> no outfile
+			}
+			else
+			{
+				add_command(nodes, ps);
 			}
 		}
 	}
