@@ -35,27 +35,6 @@ char	*str_slice(char *src, int start, int stop)
 	return (string);
 }
 
-int	get_tokens_nb(char *node)
-{
-	int	nb;
-	int	i;
-
-	nb = 0;
-	i = 0;
-	while (node[i])
-	{
-		if (node[i] != '\t' && node[i] != ' ')
-		{
-			while (node[i] != '\t' && node[i] != ' ')
-				i++;
-			nb++;
-		}
-		while (node[i] == '\t' || node[i] == ' ')
-			i++;
-	}
-	return (nb);
-}
-
 int	get_files_nb(char *node, char chevron)
 {
 	int	i;
@@ -75,20 +54,25 @@ int	get_files_nb(char *node, char chevron)
 	return (nb);
 }
 
-int	get_cmds_nb(char *node, t_parsing *ps)
+int	get_cmds_nb(char *node)
 {
 	int	i;
 	int nb;
 
-	i = ps->j;
+	i = 0;
 	nb = 0;
 	while (node && node[i])
 	{
-		if (node[i] != ' ' && node[i] != '\t')
+		if (node[i] != ' ' && node[i] != '\t' && node[i] != '<' && node[i] != '>')
 		{
 			while (node[i] && (node[i] != ' ' && node[i] != '\t'))
 				i++;
 			nb++;
+		}
+		else if (node[i] == '<' || node[i] == '>')
+		{
+			while (node[i] && (node[i] != ' ' && node[i] != '\t'))
+				i++;
 		}
 		i++;
 	}

@@ -14,6 +14,8 @@ MAIN = 	srcs/main.c			\
 		srcs/parsing/parse.c \
 		srcs/parsing/parse_utils.c \
 		srcs/parsing/parse_quotes.c \
+		srcs/parsing/parse_cmds.c \
+		srcs/parsing/parse_files.c \
 		srcs/exec/exec.c \
 		srcs/exec/exec_lst.c \
 

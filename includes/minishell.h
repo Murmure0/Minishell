@@ -69,29 +69,29 @@ void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ parse.c ------------------------------------ */
+int		init_global_struct(t_node *nodes, t_parsing *ps);
+int		init_local_struct(t_node *nodes, t_parsing *ps);
+int		process_parse(t_node *nodes, t_parsing *ps);
 t_node	*parse(t_node *node, t_parsing *parstruct);
-void	add_files_redir(t_node *nodes, t_parsing *ps);
-void	add_file(t_node *nodes, t_parsing *ps, int redir);
-char	*get_file_name(t_parsing *ps);
 
 /* ------------------------------------ parse_utils.c ------------------------------- */
-int		get_tokens_nb(char *node);
 int		arr_len(char **arr);
 char	*str_slice(char *src, int start, int stop);
 int		get_files_nb(char *node, char chevron);
-int		get_cmds_nb(char *node, t_parsing *ps);
+int		get_cmds_nb(char *node);
 
+/* ------------------------------------ parse_files.c ------------------------------ */
+char	*get_file_name(t_parsing *ps);
+void	add_file(t_node *nodes, t_parsing *ps, int redir);
+
+/* ------------------------------------ parse_cmds.c ------------------------------ */
+void	add_command_args(t_node *nodes, t_parsing *ps);
+void	add_command(t_node *nodes, t_parsing *ps);
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
 int		get_quote_pos(t_parsing *parstruct, int start);
 int		get_matching_quote_pos(t_parsing *parstruct, int start);
 int		check_quotes_for_pipe_split(t_parsing *parstruct);
-
-/* ------------------------------------ lst_cmd.c ----------------------------------- */
-t_token *new_token(t_parsing *parstruct, int redir, char *name);
-void	token_add_back(t_parsing *parstruct, t_token **token, int redir, char *name);
-t_node *new_node(t_token *lst_infiles, t_token *lst_outfiles, char **node);
-t_node *create_lst_node(t_token *lst_infiles, t_token *lst_outfiles, char **node, int pipe_nb);
 
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ EXEC --------------------------------------- */
