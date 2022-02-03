@@ -7,7 +7,6 @@ int exec(t_node *first_node, t_shell shell)
 	t_exec *exec_st;
 
 	exec_st = init_exec_st(first_node);
-	// printf("resultat fd_out : |%d|\n", exec_st->fd_out);
 	status = 0;
 	child_pid = fork();
 	if (child_pid < 0)
@@ -18,10 +17,14 @@ int exec(t_node *first_node, t_shell shell)
 	}
 	if (child_pid == 0)
 		child_process(child_pid, exec_st, first_node, shell);
+	//if (first_node + 1 == NULL)
 	waitpid(child_pid, &status, 0);
+
 	/*else if (first_node + 1 && first_node + 2)
-		brother_process();
+		printf("brother process\n");
+		//brother_process();
 	else
-		parent_process();*/
+		printf("parent process\n");
+		//parent_process();*/
 	return(0);
 }

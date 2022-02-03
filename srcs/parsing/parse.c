@@ -145,7 +145,7 @@ void	add_files_redir(t_node *nodes, t_parsing *ps)
 
 t_node	*parse(t_node *nodes, t_parsing *parstruct)
 {
-	int i;
+	
 
 	if (!check_quotes_for_pipe_split(parstruct))
 		return (NULL);
@@ -158,17 +158,34 @@ t_node	*parse(t_node *nodes, t_parsing *parstruct)
 	if (!nodes)
 		// return (ret_err(NULL, "Parsing error : couldn't malloc to create nodes"));
 		return (NULL);
-	// temporaire juste pour passer la commande
+	// temporaire juste pour passer la commande avec ses arguments :
+	int i;
+	int j;
+	int k;
+	char **cmd;
 	i = -1;
 	while(parstruct->nodes[++i])
 	{
-		nodes[i].cmd = malloc(sizeof(char *) * 2);
-		nodes[i].cmd[0] = ft_strdup(parstruct->nodes[i]);
-		nodes[i].cmd[1] = NULL;
+		j = 0;
+		cmd = ft_split(parstruct->nodes[i], ' ');
+		while (cmd[j])
+			j++;
+		nodes[i].cmd = malloc(sizeof(char *) * (j + 1));
+		k = 0;
+		while (cmd[k])
+		{
+			nodes[i].cmd[k] = ft_strdup(cmd[k]);
+			printf("Inside node %d, cmd %d : %s\n", i, k, nodes[i].cmd[k]);
+			k++;
+		}
+		nodes[i].cmd[k] = NULL;
+		free(cmd);
 	}
-	
+
 	/*partie experimentale pour test les infiles dans exec*/
-	nodes[0].infiles = malloc(sizeof(t_token) * 4);
+	
+	nodes[0].infiles = malloc(sizeof(t_token) * 5);
+
 	nodes[0].infiles[0].redir = 1;
 	nodes[0].infiles[0].pos = 0;
 	nodes[0].infiles[0].name = ft_strdup("pouette");
@@ -191,7 +208,7 @@ t_node	*parse(t_node *nodes, t_parsing *parstruct)
 	nodes[0].outfiles[0].pos = 0;
 	nodes[0].outfiles[0].name = ft_strdup("out1");
 
-	nodes[0].outfiles[1].redir = 2;
+	nodes[0].outfiles[1].redir = 3;
 	nodes[0].outfiles[1].pos = 0;
 	nodes[0].outfiles[1].name = ft_strdup("out2");
 	

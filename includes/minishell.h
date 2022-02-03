@@ -51,6 +51,8 @@ typedef struct s_exec
 {
 	int	fd_in;
 	int	fd_out; //si plusieurs cmd fd_out = fds;
+	int pfd_out;
+	int pfd_in;
 }	t_exec;
 
 /* ------------------------------------ init_struct.c ------------------------------------ */
@@ -102,12 +104,12 @@ void	free_all(t_node *first_node, t_shell shell);
 /* ---------------------------------- exec_process_child.c ------------------------- */
 void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell shell);
 int		find_fd_in(t_node *first_node);
-int		find_fd_out(t_node *first_node);
+int		find_fd_out(t_node *first_node, t_exec *exec_st);
 t_exec	*init_exec_st(t_node *first_node);
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ BUILTINS ----------------------------------- */
 /* --------------------------------------------------------------------------------- */
 
-int echo(char **str);
+int my_echo(char **str);
 
 #endif
