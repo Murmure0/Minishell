@@ -32,8 +32,6 @@ int	init_local_struct(t_node *nodes, t_parsing *ps)
 
 int	process_parse(t_node *nodes, t_parsing *ps)
 {
-	while (ps->nodes[ps->i][ps->j] && (ps->nodes[ps->i][ps->j] == '\t' || ps->nodes[ps->i][ps->j] == ' '))
-		ps->j++;
 	if (ps->nodes[ps->i][ps->j] == '<')
 	{
 		if (ps->nodes[ps->i][ps->j + 1] && ps->nodes[ps->i][ps->j + 1] == '<')
@@ -82,6 +80,7 @@ t_node	*parse(t_node *nodes, t_parsing *ps)
 			return (NULL);
 		while (ps->nodes[ps->i][ps->j])
 		{
+			skip_spaces(ps);
 			if (!process_parse(nodes, ps))
 				return (NULL);
 			if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1])

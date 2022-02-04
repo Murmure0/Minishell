@@ -1,5 +1,46 @@
 #include "../../includes/minishell.h"
 
+int	process_get_cmds_nb(char *node, int i, int *nb)
+{
+	if (node[i] != ' ' && node[i] != '\t' && node[i] != '<' && node[i] != '>')
+	{
+		while (node[i] && (node[i] != ' ' && node[i] != '\t'))
+			i++;
+		(*nb)++;
+	}
+	else if (node[i] == '<' || node[i] == '>')
+	{
+		if (node[i + 1] && (node[i + 1] == ' ' || node[i + 1] == '\t'))
+		{
+			i++;
+			while (node[i] && (node[i] == '\t' || node[i] == ' '))
+				if (node[i + 1])
+					i++;
+		}
+		while (node[i] && (node[i] != ' ' && node[i] != '\t'))
+			i++;
+	}
+	return (i);
+}
+
+int	get_cmds_nb(char *node)
+{
+	int	i;
+	int nb;
+
+	i = 0;
+	nb = 0;
+	while (node && node[i])
+	{
+		i = process_get_cmds_nb(node, i, &nb);
+		if (node[i] && node[i + 1])
+			i++;
+		else
+			break ;
+	}
+	return (nb);
+}
+
 void	add_command_args(t_node **nodes, t_parsing *ps)
 {
 	int		pos_start;

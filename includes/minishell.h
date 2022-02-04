@@ -86,6 +86,8 @@ char	*get_file_name(t_parsing *ps);
 void	add_file(t_node *nodes, t_parsing *ps, int redir);
 
 /* ------------------------------------ parse_cmds.c ------------------------------ */
+int		process_get_cmds_nb(char *node, int i, int *nb);
+int		get_cmds_nb(char *node);
 void	add_command_args(t_node **nodes, t_parsing *ps);
 void	add_command(t_node **nodes, t_parsing *ps);
 

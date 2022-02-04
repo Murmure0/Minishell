@@ -62,37 +62,3 @@ void	skip_spaces(t_parsing *ps)
 			ps->j++;
 	}
 }
-int	get_cmds_nb(char *node)
-{
-	int	i;
-	int nb;
-
-	i = 0;
-	nb = 0;
-	while (node && node[i])
-	{
-		if (node[i] != ' ' && node[i] != '\t' && node[i] != '<' && node[i] != '>')
-		{
-			while (node[i] && (node[i] != ' ' && node[i] != '\t'))
-				i++;
-			nb++;
-		}
-		else if (node[i] == '<' || node[i] == '>')
-		{
-			if (node[i + 1] && (node[i + 1] == ' ' || node[i + 1] == '\t'))
-			{
-				i++;
-				while (node[i] && (node[i] == '\t' || node[i] == ' '))
-					if (node[i + 1])
-						i++;
-			}
-			while (node[i] && (node[i] != ' ' && node[i] != '\t'))
-				i++;
-		}
-		if (node[i] && node[i + 1])
-			i++;
-		else
-			break ;
-	}
-	return (nb);
-}
