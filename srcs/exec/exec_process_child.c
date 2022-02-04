@@ -9,17 +9,21 @@ int	find_fd_in(t_node *first_node)
 	fd_in = 0;
 	if (first_node[0].infiles[0].name == NULL)
 	{
-		printf("pas d'infile\n");
+		printf("pas d'infile\n"); //a virer
 		return (fd_in);
 	}
 	if (first_node[0].infiles[0].name)
 	{
-		printf("infile found\n");
+		printf("infile found\n"); //a virer
 		while (first_node[0].infiles[++i].name)
 		{
 			fd_in = open(first_node[0].infiles[i].name, O_RDONLY);
 			if (fd_in < 0)
+			{
+				write(2, first_node[0].infiles[i].name, ft_strlen(first_node[0].infiles[i].name));
+				perror(": ");
 				return (-1);
+			}
 			if (first_node[0].infiles[i + 1].name != NULL)
 				close(fd_in);
 		}
@@ -33,7 +37,7 @@ int pipe_case(t_exec *exec_st)
 
 	if (pipe(pfd) < 0)
 		perror(": ");
-	exec_st->pfd_out = pfd[1];
+	exec_st->pfd_out = pfd[1]; //doit etre close egalement ?
 	exec_st->pfd_in = pfd[0];
 	close(pfd[0]); //close ici ou dans exec ? peut etre source de pb +tard
 	return(pfd[1]);
@@ -88,7 +92,11 @@ t_exec	*init_exec_st(t_node *first_node)
 	exec_st->pfd_in = 0;
 	exec_st->pfd_out = 0;
 	exec_st->fd_in = find_fd_in(first_node);
+	if(exec_st->fd_in < 0)
+		return (NULL);
 	exec_st->fd_out = find_fd_out(first_node, exec_st);
+	if(exec_st->fd_out < 0)
+		return (NULL);
 	return (exec_st);
 }
 
@@ -117,11 +125,15 @@ void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell
 			}
 			close(exec_st->fd_out);
 		}
-		exec_cmd(first_node, shell);
-		write(2, "Erreur post execution", 22);
-		perror(": ");
-		//free(exec_st);
-		//close(STDOUT_FILENO);
-		exit (errno);
+		if(!find_builtin(first_node))
+		{
+			exec_cmd(first_node, shell);
+			write(2, "Erreur post execution", 22);
+			perror(": ");
+			//free(exec_st);
+			//close(STDOUT_FILENO);
+			exit (errno);
+		}
+		exit(EXIT_SUCCESS);
 	}
 }

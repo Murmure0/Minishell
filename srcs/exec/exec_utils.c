@@ -20,45 +20,23 @@ int	path_finder(t_node *first_node, t_shell shell)
 	return (0);
 }
 
-// char **built_array_builtin(void)
-// {
-// 	char **array_builtin;
-
-// 	array_builtin = malloc(sizeof(char *) * 2);
-// 	array_builtin[1] = NULL;
-// 	array_builtin[0] = "echo";
-// 	return (array_builtin);
-// }
-
-int find_builtin(t_node *first_node)
+int	find_builtin(t_node *first_node)
 {
-	 //int i = -1;
-	// char **array_builtin;
-
-	// array_builtin = built_array_builtin();
-	// while (array_builtin[++i])
-	// {
-
 	if (!ft_strncmp(first_node[0].cmd[0], "echo", ft_strlen(first_node[0].cmd[0])))
 	{
-			my_echo(first_node[0].cmd + 1);
-			return(1);
+		my_echo(first_node[0].cmd + 1);
+		return (1);
 	}
-
 	return (0);
 }
 
 int	exec_cmd(t_node *first_node, t_shell shell)
 {
-	// if (!find_builtin(first_node))
-	// {
-	//printf("Contenu de cmd : %s",(first_node[0].cmd[0] + 1));
 	if (!path_finder(first_node, shell))
 	{
 		//free_all(first_node); faire une bonne fct free
 		return (-1);
 	}
-	//}
 	return (0);
 }
 

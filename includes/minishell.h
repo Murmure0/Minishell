@@ -100,6 +100,7 @@ int		exec(t_node *node, t_shell g_shell);
 int		path_finder(t_node *first_node, t_shell shell);
 int		exec_cmd(t_node *first_node, t_shell shell);
 void	free_all(t_node *first_node, t_shell shell);
+int		find_builtin(t_node *first_node);
 
 /* ---------------------------------- exec_process_child.c ------------------------- */
 void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell shell);
