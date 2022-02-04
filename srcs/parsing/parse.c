@@ -15,18 +15,18 @@ int	init_global_struct(t_node **nodes, t_parsing *ps)
 	return (1);
 }
 
-int	init_local_struct(t_node *nodes, t_parsing *ps)
+int	init_local_struct(t_node **nodes, t_parsing **ps)
 {
-	ps->pos_infiles = 0;
-	ps->pos_outfiles = 0;
-	ps->pos_cmd = 0;
-	nodes[ps->i].infiles = malloc(sizeof(t_token) * get_files_nb(ps->nodes[ps->i], '<'));
-	if (!nodes[ps->i].infiles)
+	(*ps)->pos_infiles = 0;
+	(*ps)->pos_outfiles = 0;
+	(*ps)->pos_cmd = 0;
+	(*ps)->j = 0;
+	(*nodes)[(*ps)->i].infiles = malloc(sizeof(t_token) * get_files_nb((*ps)->nodes[(*ps)->i], '<'));
+	if (!(*nodes)[(*ps)->i].infiles)
 		return (0);
-	nodes[ps->i].outfiles = malloc(sizeof(t_token) * get_files_nb(ps->nodes[ps->i], '>'));
-	if (!nodes[ps->i].outfiles)
+	(*nodes)[(*ps)->i].outfiles = malloc(sizeof(t_token) * get_files_nb((*ps)->nodes[(*ps)->i], '>'));
+	if (!(*nodes)[(*ps)->i].outfiles)
 		return (0);
-	ps->j = 0;
 	return (1);
 }
 
@@ -74,17 +74,21 @@ t_node	*parse(t_node *nodes, t_parsing *ps)
 {
 	if (!init_global_struct(&nodes, ps))
 		return (NULL);
+	ps->j = 0;
 	while(ps->nodes[ps->i])
 	{
-		if (!init_local_struct(nodes, ps))
+		if (!init_local_struct(&nodes, &ps))
 			return (NULL);
 		while (ps->nodes[ps->i][ps->j])
 		{
+			printf("%d %d\n", ps->i, ps->j);
 			skip_spaces(ps);
 			if (!process_parse(nodes, ps))
 				return (NULL);
 			if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1])
 				ps->j++;
+			else
+				break ;
 		}
 		ps->i++;
 	}

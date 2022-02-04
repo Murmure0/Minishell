@@ -70,7 +70,7 @@ void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
 
 /* ------------------------------------ parse.c ------------------------------------ */
 int		init_global_struct(t_node **nodes, t_parsing *ps);
-int		init_local_struct(t_node *nodes, t_parsing *ps);
+int		init_local_struct(t_node **nodes, t_parsing **ps);
 int		process_parse(t_node *nodes, t_parsing *ps);
 t_node	*parse(t_node *node, t_parsing *parstruct);
 

@@ -5,8 +5,7 @@ char	*get_file_name(t_parsing *ps)
 	int		pos_start;
 
 	ps->j++;
-	while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j] && (ps->nodes[ps->i][ps->j] == '\t' || ps->nodes[ps->i][ps->j] == ' '))
-		ps->j++;
+	skip_spaces(ps);
 	pos_start = ps->j;
 	while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j])
 	{

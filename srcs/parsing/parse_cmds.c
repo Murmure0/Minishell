@@ -49,8 +49,7 @@ void	add_command_args(t_node **nodes, t_parsing *ps)
 	stop = 0;
 	while (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j] != '<' && ps->nodes[ps->i][ps->j] != '>')
 	{
-		while (ps->nodes[ps->i][ps->j] && (ps->nodes[ps->i][ps->j] == '\t' || ps->nodes[ps->i][ps->j] == ' '))
-			ps->j++;
+		skip_spaces(ps);
 		pos_start = ps->j;
 		if (!ps->nodes[ps->i][ps->j])
 			return ;
@@ -79,8 +78,7 @@ void	add_command(t_node **nodes, t_parsing *ps)
 {
 	int		pos_start;
 
-	while (ps->nodes[ps->i][ps->j] && (ps->nodes[ps->i][ps->j] == '\t' || ps->nodes[ps->i][ps->j] == ' '))
-		ps->j++;
+	skip_spaces(ps);
 	pos_start = ps->j;
 	(*nodes[ps->i]).cmd = malloc(sizeof(char *) * (get_cmds_nb(ps->nodes[ps->i]) + 1));
 	if (!(*nodes[ps->i]).cmd)

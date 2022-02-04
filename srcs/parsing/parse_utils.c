@@ -60,5 +60,7 @@ void	skip_spaces(t_parsing *ps)
 	{
 		if (ps->nodes[ps->i][ps->j + 1])
 			ps->j++;
+		else
+			break ;
 	}
 }
