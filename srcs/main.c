@@ -55,10 +55,10 @@ int main(int argc, char **argv, char **env)
 		parstruct.prompt = readline("minishell$ ");
 		add_history(parstruct.prompt);
 		nodes = parse(nodes, &parstruct);
-		// printf("%s\n", nodes[0].cmd[0]);
-		// printf("%s\n", nodes[0].cmd[1]);
+		printf("%s\n", nodes[0].cmd[0]);
+		printf("%s\n", nodes[0].cmd[1]);
 		// printf("%s\n", nodes[0].cmd[2]);
-		// printf("%s\n", nodes[0].infiles[0].name);
+		printf("%s\n", nodes[0].infiles[0].name);
 		// printf("%d\n", nodes[0].infiles[0].redir);
 		// printf("%s\n", nodes[0].infiles[1].name);
 		// printf("%d\n", nodes[0].infiles[1].redir);
@@ -66,7 +66,7 @@ int main(int argc, char **argv, char **env)
 		// printf("%d\n", nodes[0].outfiles[0].redir);
 		// printf("%s\n", nodes[0].outfiles[1].name);
 		// printf("%d\n", nodes[0].outfiles[1].redir);
-		// exec(nodes, shell);
+		exec(nodes, shell);
 	}
 	final_free(&shell, &parstruct, nodes);
 	return (0);
