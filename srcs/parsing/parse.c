@@ -148,7 +148,7 @@
 // 	return (nodes);
 // }
 
-int	init_global_struct(t_node *nodes, t_parsing *ps)
+int	init_global_struct(t_node **nodes, t_parsing *ps)
 {
 	if (!check_quotes_for_pipe_split(ps))
 		return (0);
@@ -156,8 +156,8 @@ int	init_global_struct(t_node *nodes, t_parsing *ps)
 	if (!ps->nodes)
 		return (0);
 	ps->pipe_nb = arr_len(ps->nodes) - 1;
-	nodes = malloc(sizeof(t_node) * (ps->pipe_nb + 1));
-	if (!nodes)
+	*nodes = malloc(sizeof(t_node) * (ps->pipe_nb + 2));
+	if (!*nodes)
 		return (0);
 	ps->i = 0;
 	return (1);
@@ -195,7 +195,7 @@ int	process_parse(t_node *nodes, t_parsing *ps)
 			add_file(nodes, ps, 1);
 		}
 		else
-			return (NULL); // erreur -> no infile
+			return (0); // erreur -> no infile
 	}
 	else if (ps->nodes[ps->i][ps->j] == '>')
 	{
@@ -211,17 +211,18 @@ int	process_parse(t_node *nodes, t_parsing *ps)
 			printf("add outfile name\n");
 		}
 		else
-			return (NULL); // erreur -> no outfile
+			return (0); // erreur -> no outfile
 	}
 	else
 	{
-		// add_command(nodes, ps);
+		add_command(nodes, ps);
 	}
+	return (1);
 }
 
 t_node	*parse(t_node *nodes, t_parsing *ps)
-{	
-	if (!init_global_struct(nodes, ps))
+{
+	if (!init_global_struct(&nodes, ps))
 		return (NULL);
 	while(ps->nodes[ps->i])
 	{
@@ -231,7 +232,8 @@ t_node	*parse(t_node *nodes, t_parsing *ps)
 		{
 			if (!process_parse(nodes, ps))
 				return (NULL);
-			ps->j++;
+			if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1])
+				ps->j++;
 		}
 		ps->i++;
 	}

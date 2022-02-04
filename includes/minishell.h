@@ -69,7 +69,7 @@ void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ parse.c ------------------------------------ */
-int		init_global_struct(t_node *nodes, t_parsing *ps);
+int		init_global_struct(t_node **nodes, t_parsing *ps);
 int		init_local_struct(t_node *nodes, t_parsing *ps);
 int		process_parse(t_node *nodes, t_parsing *ps);
 t_node	*parse(t_node *node, t_parsing *parstruct);
@@ -79,6 +79,7 @@ int		arr_len(char **arr);
 char	*str_slice(char *src, int start, int stop);
 int		get_files_nb(char *node, char chevron);
 int		get_cmds_nb(char *node);
+void	skip_spaces(t_parsing *ps);
 
 /* ------------------------------------ parse_files.c ------------------------------ */
 char	*get_file_name(t_parsing *ps);
