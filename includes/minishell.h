@@ -94,8 +94,8 @@ char	*get_file_name(t_parsing *ps);
 void	add_file(t_node *nodes, t_parsing *ps, int redir);
 
 /* ------------------------------------ parse_cmds.c ------------------------------ */
-void	add_command_args(t_node *nodes, t_parsing *ps);
-void	add_command(t_node *nodes, t_parsing *ps);
+void	add_command_args(t_node **nodes, t_parsing *ps);
+void	add_command(t_node **nodes, t_parsing *ps);
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
 int		get_quote_pos(t_parsing *parstruct, int start);

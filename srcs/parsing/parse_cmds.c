@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-void	add_command_args(t_node *nodes, t_parsing *ps)
+void	add_command_args(t_node **nodes, t_parsing *ps)
 {
 	int		pos_start;
 	int		stop;
@@ -22,9 +22,8 @@ void	add_command_args(t_node *nodes, t_parsing *ps)
 			}
 			ps->j++;
 		}
-		nodes[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i], pos_start, ps->j);
-		printf("cmd %d : %s\n",ps->pos_cmd, nodes[ps->i].cmd[ps->pos_cmd]);
-		if (!nodes[ps->i].cmd[ps->pos_cmd] || stop)
+		(*nodes[ps->i]).cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i], pos_start, ps->j);
+		if (!(*nodes[ps->i]).cmd[ps->pos_cmd] || stop)
 			return ;
 		if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1])
 			ps->j++;
@@ -32,21 +31,18 @@ void	add_command_args(t_node *nodes, t_parsing *ps)
 			break ;
 		ps->pos_cmd++;
 	}
-	nodes[ps->i].cmd[ps->pos_cmd - 1] = 0;
+	(*nodes[ps->i]).cmd[get_cmds_nb(ps->nodes[ps->i])] = 0;
 }
 
-//      <<in cat -e -bbb>out 
-
-void	add_command(t_node *nodes, t_parsing *ps)
+void	add_command(t_node **nodes, t_parsing *ps)
 {
 	int		pos_start;
 
 	while (ps->nodes[ps->i][ps->j] && (ps->nodes[ps->i][ps->j] == '\t' || ps->nodes[ps->i][ps->j] == ' '))
 		ps->j++;
 	pos_start = ps->j;
-	printf("%d\n", get_cmds_nb(ps->nodes[ps->i]));
-	nodes[ps->i].cmd = malloc(sizeof(char *) * (get_cmds_nb(ps->nodes[ps->i]) + 1));
-	if (!nodes[ps->i].cmd)
+	(*nodes[ps->i]).cmd = malloc(sizeof(char *) * (get_cmds_nb(ps->nodes[ps->i]) + 1));
+	if (!(*nodes[ps->i]).cmd)
 		return ;
 	while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j])
 	{
@@ -54,8 +50,9 @@ void	add_command(t_node *nodes, t_parsing *ps)
 			break ;
 		ps->j++;
 	}
-	nodes[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i], pos_start, ps->j);
-	if (!nodes[ps->i].cmd[ps->pos_cmd++])
+	(*nodes[ps->i]).cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i], pos_start, ps->j);
+	if (!(*nodes[ps->i]).cmd[ps->pos_cmd])
 		return ;
+	ps->pos_cmd++;
 	add_command_args(nodes, ps);
 }

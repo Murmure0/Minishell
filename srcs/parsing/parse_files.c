@@ -33,5 +33,5 @@ void	add_file(t_node *nodes, t_parsing *ps, int redir)
 		nodes[ps->i].outfiles[ps->pos_outfiles].pos = ps->j;
 		ps->pos_outfiles++;
 	}
-	// add_command(nodes, ps);
+	add_command(&nodes, ps);
 }
