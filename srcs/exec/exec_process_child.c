@@ -127,6 +127,7 @@ void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell
 		}
 		if(!find_builtin(first_node))
 		{
+			write(2, "AH\n", 3); //permet que ca seg pas D:
 			exec_cmd(first_node, shell);
 			write(2, "Erreur post execution", 22);
 			perror(": ");

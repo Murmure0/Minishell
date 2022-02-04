@@ -18,7 +18,11 @@ int exec(t_node *first_node, t_shell shell)
 		exit (errno);
 	}
 	if (child_pid == 0)
-		child_process(child_pid, exec_st, first_node, shell);
+		{
+			//printf("valeur pid ; %d\n", child_pid);
+			child_process(child_pid, exec_st, first_node, shell);
+		}
+
 	waitpid(child_pid, &status, 0);
 	//if (first_node + 1 == NULL)
 
