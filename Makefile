@@ -3,6 +3,10 @@ NAME = minishell
 CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror
+<<<<<<< HEAD
+=======
+# CFLAGS += -g
+>>>>>>> Maelle
 
 CFLAGS += -g 
 CFLAGS += -fsanitize=address
@@ -10,14 +14,15 @@ CFLAGS += -fsanitize=address
 MAIN = 	srcs/main.c			\
 		srcs/init_struct.c	\
 		srcs/env.c			\
-		srcs/exec/pars_heredoc.c \
 		srcs/parsing/parse.c \
 		srcs/parsing/parse_utils.c \
 		srcs/parsing/parse_quotes.c \
 		srcs/parsing/parse_cmds.c \
 		srcs/parsing/parse_files.c \
 		srcs/exec/exec.c \
-		srcs/exec/exec_lst.c \
+		srcs/exec/exec_process_child.c \
+		srcs/exec/exec_utils.c \
+		srcs/builtins/echo.c \
 
 
 SOURCES = $(MAIN)
