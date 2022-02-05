@@ -3,29 +3,17 @@
 int	find_fd_in(t_node *first_node)
 {
 	int	fd_in;
-	int	i;
 
-	i = -1;
 	fd_in = 0;
-	if (first_node[0].infiles[0].name == NULL)
-	{
-		printf("pas d'infile\n"); //a virer
-		return (fd_in);
-	}
-	if (first_node[0].infiles[0].name)
+	if (first_node[0].infiles)
 	{
 		printf("infile found\n"); //a virer
-		while (first_node[0].infiles[++i].name)
+		fd_in = open(first_node[0].infiles, O_RDONLY);
+		if (fd_in < 0)
 		{
-			fd_in = open(first_node[0].infiles[i].name, O_RDONLY);
-			if (fd_in < 0)
-			{
-				write(2, first_node[0].infiles[i].name, ft_strlen(first_node[0].infiles[i].name));
-				perror(": ");
-				return (-1);
-			}
-			if (first_node[0].infiles[i + 1].name != NULL)
-				close(fd_in);
+			write(2, first_node[0].infiles, ft_strlen(first_node[0].infiles));
+			perror(": ");
+			return (-1);
 		}
 	}
 	return (fd_in);
@@ -56,25 +44,15 @@ int	find_fd_out(t_node *first_node, t_exec *exec_st)
 		fd_out = pipe_case(exec_st);
 		return(fd_out);
 	}
-	if (first_node[0].outfiles[0].name == NULL)
-	{
-		printf("outfile not found\n");
-		return (fd_out);
-	}
-	if (first_node[0].outfiles[0].name)
+	if (first_node[0].outfiles)
 	{
 		printf("outfile found\n");
-		while (first_node[0].outfiles[++i].name)
-		{
-			if (first_node[0].outfiles[i].redir == 2)
-				fd_out = open(first_node[0].outfiles[i].name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-			else if (first_node[0].outfiles[i].redir == 3)
-				fd_out = open(first_node[0].outfiles[i].name, O_WRONLY | O_APPEND | O_CREAT, 0644);
-			if (fd_out < 0)
-				return (-1);
-			if (first_node[0].outfiles[i + 1].name != NULL)
-				close(fd_out);
-		}
+		if (first_node[0].append == 2)
+			fd_out = open(first_node[0].outfiles, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+		else if (first_node[0].append == 3)
+			fd_out = open(first_node[0].outfiles, O_WRONLY | O_APPEND | O_CREAT, 0644);
+		if (fd_out < 0)
+			return (-1);
 	}
 	return (fd_out);
 }

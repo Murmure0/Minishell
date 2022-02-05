@@ -74,7 +74,6 @@ void	add_command(t_node **nodes, t_parsing *ps)
 
 	skip_spaces(ps);
 	pos_start = ps->j;
-	printf("ps i %d\n", ps->i);
 	(*nodes)[ps->i].cmd = malloc(sizeof(char *) * (100));
 	if (!(*nodes)[ps->i].cmd)
 		return ;

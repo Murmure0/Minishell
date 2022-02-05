@@ -34,7 +34,6 @@ int	find_builtin(t_node *first_node)
 
 int	exec_cmd(t_node *first_node, t_shell shell)
 {
-
 	if (!path_finder(first_node, shell))
 	{
 		//free_all(first_node); faire une bonne fct free

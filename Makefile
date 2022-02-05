@@ -3,13 +3,9 @@ NAME = minishell
 CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror
-<<<<<<< HEAD
-=======
-# CFLAGS += -g
->>>>>>> Maelle
 
 CFLAGS += -g 
-CFLAGS += -fsanitize=address
+# CFLAGS += -fsanitize=address
 
 MAIN = 	srcs/main.c			\
 		srcs/init_struct.c	\

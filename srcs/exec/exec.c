@@ -2,6 +2,7 @@
 
 int exec(t_node *first_node, t_shell shell)
 {
+	int i = -1;
 	pid_t	child_pid;
 	int		status;
 	t_exec *exec_st;
@@ -22,7 +23,6 @@ int exec(t_node *first_node, t_shell shell)
 			//printf("valeur pid ; %d\n", child_pid);
 			child_process(child_pid, exec_st, first_node, shell);
 		}
-
 	waitpid(child_pid, &status, 0);
 	//if (first_node + 1 == NULL)
 
