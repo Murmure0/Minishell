@@ -2,7 +2,6 @@
 
 int exec(t_node *first_node, t_shell shell)
 {
-	int i = -1;
 	pid_t	child_pid;
 	int		status;
 	t_exec *exec_st;

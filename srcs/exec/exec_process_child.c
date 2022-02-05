@@ -39,7 +39,7 @@ int	find_fd_out(t_node *first_node, t_exec *exec_st)
 	i = -1;
 	fd_out = 1;
 
-	if ((first_node + 1) != (void *)0 && first_node[0].outfiles[0].name == NULL)
+	if ((first_node + 1) != (void *)0 && first_node[0].outfiles == NULL)
 	{
 		fd_out = pipe_case(exec_st);
 		return(fd_out);
