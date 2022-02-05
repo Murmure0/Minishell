@@ -1,28 +1,5 @@
 #include "../../includes/minishell.h"
 
-int	process_get_cmds_nb(char *node, int i, int *nb)
-{
-	if (node[i] != ' ' && node[i] != '\t' && node[i] != '<' && node[i] != '>')
-	{
-		while (node[i] && (node[i] != ' ' && node[i] != '\t'))
-			i++;
-		(*nb)++;
-	}
-	else if (node[i] == '<' || node[i] == '>')
-	{
-		if (node[i + 1] && (node[i + 1] == ' ' || node[i + 1] == '\t'))
-		{
-			i++;
-			while (node[i] && (node[i] == '\t' || node[i] == ' '))
-				if (node[i + 1])
-					i++;
-		}
-		while (node[i] && (node[i] != ' ' && node[i] != '\t'))
-			i++;
-	}
-	return (i);
-}
-
 int	get_cmds_nb(char *node)
 {
 	int	i;
@@ -32,7 +9,24 @@ int	get_cmds_nb(char *node)
 	nb = 0;
 	while (node && node[i])
 	{
-		i = process_get_cmds_nb(node, i, &nb);
+		if (node[i] != ' ' && node[i] != '\t' && node[i] != '<' && node[i] != '>')
+		{
+			while (node[i] && (node[i] != ' ' && node[i] != '\t'))
+				i++;
+			nb++;
+		}
+		else if (node[i] == '<' || node[i] == '>')
+		{
+			if (node[i + 1] && (node[i + 1] == ' ' || node[i + 1] == '\t'))
+			{
+				i++;
+				while (node[i] && (node[i] == '\t' || node[i] == ' '))
+					if (node[i + 1])
+						i++;
+			}
+			while (node[i] && (node[i] != ' ' && node[i] != '\t'))
+				i++;
+		}
 		if (node[i] && node[i + 1])
 			i++;
 		else
@@ -55,15 +49,15 @@ void	add_command_args(t_node **nodes, t_parsing *ps)
 			return ;
 		while (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j] != '\t' && ps->nodes[ps->i][ps->j] != ' ')
 		{
-			if (ps->nodes[ps->i][ps->j] == '<' || ps->nodes[ps->i][ps->j] == '>')
+			if (is_chevron(ps->nodes[ps->i][ps->j]))
 			{
 				stop = 1;
 				break ;
 			}
 			ps->j++;
 		}
-		(*nodes[ps->i]).cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i], pos_start, ps->j);
-		if (!(*nodes[ps->i]).cmd[ps->pos_cmd] || stop)
+		(*nodes)[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i], pos_start, ps->j);
+		if (!(*nodes)[ps->i].cmd[ps->pos_cmd] || stop)
 			return ;
 		if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1])
 			ps->j++;
@@ -71,7 +65,7 @@ void	add_command_args(t_node **nodes, t_parsing *ps)
 			break ;
 		ps->pos_cmd++;
 	}
-	(*nodes[ps->i]).cmd[get_cmds_nb(ps->nodes[ps->i])] = 0;
+	(*nodes)[ps->i].cmd[get_cmds_nb(ps->nodes[ps->i])] = 0;
 }
 
 void	add_command(t_node **nodes, t_parsing *ps)
@@ -80,17 +74,18 @@ void	add_command(t_node **nodes, t_parsing *ps)
 
 	skip_spaces(ps);
 	pos_start = ps->j;
-	(*nodes[ps->i]).cmd = malloc(sizeof(char *) * (get_cmds_nb(ps->nodes[ps->i]) + 1));
-	if (!(*nodes[ps->i]).cmd)
+	printf("ps i %d\n", ps->i);
+	(*nodes)[ps->i].cmd = malloc(sizeof(char *) * (100));
+	if (!(*nodes)[ps->i].cmd)
 		return ;
-	while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j])
+	while (ps->nodes[ps->i][ps->j])
 	{
-		if (ps->nodes[ps->i][ps->j] == '\t' || ps->nodes[ps->i][ps->j] == ' ' || ps->nodes[ps->i][ps->j] == '<' || ps->nodes[ps->i][ps->j] == '>')
+		if (is_space(ps->nodes[ps->i][ps->j]) || is_chevron(ps->nodes[ps->i][ps->j]))
 			break ;
 		ps->j++;
 	}
-	(*nodes[ps->i]).cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i], pos_start, ps->j);
-	if (!(*nodes[ps->i]).cmd[ps->pos_cmd])
+	(*nodes)[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i], pos_start, ps->j);
+	if (!(*nodes)[ps->i].cmd[ps->pos_cmd])
 		return ;
 	ps->pos_cmd++;
 	add_command_args(nodes, ps);

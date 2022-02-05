@@ -8,6 +8,8 @@ SRCS =	ft_bzero.c	\
 		ft_substr.c	\
 		ft_strdup.c	\
 		ft_strchr_pos.c	\
+		is_space.c \
+		is_chevron.c \
 
 OBJS = $(SRCS:.c=.o)
 

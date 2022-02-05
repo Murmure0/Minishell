@@ -12,5 +12,7 @@ void	ft_bzero(void *s, size_t n);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(char *src);
 int		ft_strchr_pos(char *s, char c, int pos);
+int		is_space(char c);
+int		is_chevron(char c);
 
 #endif

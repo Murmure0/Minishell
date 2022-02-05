@@ -32,12 +32,27 @@ void	final_free(t_shell *sh, t_parsing *ps, t_node *n)
 		while (n->cmd[++i])
 			free(n->cmd[i]);
 		free(n->cmd);
-		free(n->infiles->name);
+		// free(n->infiles->name);
 		free(n->infiles);
-		free(n->outfiles->name);
+		// free(n->outfiles->name);
 		free(n->outfiles);
 		free(n);
 	}
+}
+
+int not_emptycmd(char *cmd)
+{
+	int i;
+
+	i = -1;
+	if (cmd == NULL)
+		return (1);
+	while (cmd[++i])
+	{
+		if (!is_space(cmd[i]))
+			return (1);
+	}
+	return (0);
 }
 
 int main(int argc, char **argv, char **env)
@@ -48,16 +63,24 @@ int main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	nodes = NULL;
 	init_struct(&shell, env);
 	while (1)
 	{
 		parstruct.prompt = readline("minishell$ ");
 		add_history(parstruct.prompt);
-		nodes = parse(nodes, &parstruct);
+		if (not_emptycmd(parstruct.prompt))
+		{
+		nodes = parse(&parstruct);
 
 			/*		PRINT CMDS		*/
 
+		int i = -1;
+		while (++i < parstruct.pipe_nb + 1)
+		{
+			int j = -1;
+			while (nodes[i].cmd[++j])
+				printf("%s\n", nodes[i].cmd[j]);
+		}
 		// printf("%s\n", nodes[0].cmd[0]);
 		// printf("%s\n", nodes[0].cmd[1]);
 		// printf("%s\n", nodes[0].cmd[2]);
@@ -74,6 +97,7 @@ int main(int argc, char **argv, char **env)
 		// printf("%s\n", nodes[0].outfiles[1].name);
 		
 		exec(nodes, shell);
+		}
 	}
 	final_free(&shell, &parstruct, nodes);
 	return (0);

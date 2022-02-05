@@ -35,28 +35,9 @@ char	*str_slice(char *src, int start, int stop)
 	return (string);
 }
 
-int	get_files_nb(char *node, char chevron)
-{
-	int	i;
-	int nb;
-
-	i = -1;
-	nb = 0;
-	while (node && node[++i])
-	{
-		if (node[i] == chevron)
-		{
-			while (node[i] && node[i] == chevron)
-				i++;
-			nb++;
-		}
-	}
-	return (nb);
-}
-
 void	skip_spaces(t_parsing *ps)
 {
-	while (ps->nodes[ps->i][ps->j] && (ps->nodes[ps->i][ps->j] == '\t' || ps->nodes[ps->i][ps->j] == ' '))
+	while (ps->nodes[ps->i][ps->j] && is_space(ps->nodes[ps->i][ps->j]))
 	{
 		if (ps->nodes[ps->i][ps->j + 1])
 			ps->j++;
