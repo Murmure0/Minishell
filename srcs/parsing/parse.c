@@ -17,6 +17,10 @@ int	init_local_struct(t_node **nodes, t_parsing **ps)
 	(void)nodes;
 	(*ps)->pos_cmd = 0;
 	(*ps)->j = 0;
+	(*nodes)[(*ps)->i].infiles = 0;
+	(*nodes)[(*ps)->i].outfiles = 0;
+	(*nodes)[(*ps)->i].append = 0;
+	(*nodes)[(*ps)->i].cmd = 0;
 	return (1);
 }
 
@@ -62,22 +66,13 @@ int	process_parse(t_node **nodes, t_parsing *ps)
 
 t_node	*parse(t_parsing *ps)
 {
-	int i;
 	t_node *nodes;
 
 	if (!init_global_struct(ps))
 		return (NULL);
 	nodes = malloc(sizeof(t_node) * (ps->pipe_nb + 1));
 	if (!nodes)
-		return (0);
-	i = -1;
-	while (++i < (ps->pipe_nb + 1))
-	{
-		nodes[i].infiles = 0;
-		nodes[i].outfiles = 0;
-		nodes[i].append = 0;
-		nodes[i].cmd = 0;
-	}
+		return (NULL);
 	while(ps->nodes[ps->i])
 	{
 		if (!init_local_struct(&nodes, &ps))

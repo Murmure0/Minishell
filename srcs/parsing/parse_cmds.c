@@ -74,7 +74,7 @@ void	add_command(t_node **nodes, t_parsing *ps)
 
 	skip_spaces(ps);
 	pos_start = ps->j;
-	(*nodes)[ps->i].cmd = malloc(sizeof(char *) * (100));
+	(*nodes)[ps->i].cmd = malloc(sizeof(char *) * (get_cmds_nb(ps->nodes[ps->i]) + 1));
 	if (!(*nodes)[ps->i].cmd)
 		return ;
 	while (ps->nodes[ps->i][ps->j])
@@ -82,7 +82,7 @@ void	add_command(t_node **nodes, t_parsing *ps)
 		if (is_space(ps->nodes[ps->i][ps->j]) || is_chevron(ps->nodes[ps->i][ps->j]))
 			break ;
 		ps->j++;
-	}
+	}		
 	(*nodes)[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i], pos_start, ps->j);
 	if (!(*nodes)[ps->i].cmd[ps->pos_cmd])
 		return ;
