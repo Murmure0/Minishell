@@ -12,7 +12,7 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-// # include <wait.h>
+# include <wait.h>
 
 # define no_redir	0
 # define redir_l	1
@@ -31,6 +31,7 @@ typedef struct s_node
     char     *infiles;
     char     *outfiles;
 	int		 append;
+	int		 invalid_infile;
     char		**cmd;
 }     t_node;
 
@@ -90,7 +91,7 @@ void	skip_spaces(t_parsing *ps);
 
 /* ------------------------------------ parse_files.c ------------------------------ */
 int		get_files_nb(char *node, char chevron);
-char	*get_file_name(t_parsing *ps);
+char	*get_file_name(t_parsing *ps, t_node *nodes);
 void	add_file(t_node *nodes, t_parsing *ps, int redir);
 
 /* ------------------------------------ parse_cmds.c ------------------------------ */
