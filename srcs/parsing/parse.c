@@ -14,12 +14,12 @@ int	init_global_struct(t_parsing *ps)
 
 int	init_local_struct(t_node **nodes, t_parsing **ps)
 {
-	(void)nodes;
 	(*ps)->pos_cmd = 0;
 	(*ps)->j = 0;
 	(*nodes)[(*ps)->i].infiles = 0;
 	(*nodes)[(*ps)->i].outfiles = 0;
 	(*nodes)[(*ps)->i].append = 0;
+	(*nodes)[(*ps)->i].invalid_infile = 0;
 	(*nodes)[(*ps)->i].cmd = 0;
 	return (1);
 }

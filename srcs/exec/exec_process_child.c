@@ -34,9 +34,9 @@ int pipe_case(t_exec *exec_st)
 int	find_fd_out(t_node *first_node, t_exec *exec_st)
 {
 	int	fd_out;
-	int	i;
+	// int	i;
 
-	i = -1;
+	// i = -1;
 	fd_out = 1;
 
 	if ((first_node + 1) != (void *)0 && first_node[0].outfiles == NULL)
