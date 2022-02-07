@@ -47,11 +47,13 @@ int	process_parse(t_node **nodes, t_parsing *ps)
 		{
 			printf("add outfile + append\n");
 			ps->j++;
-			add_file(*nodes, ps, 3);
+			if (!add_file(*nodes, ps, 3))
+				return (0);
 		}
 		else if (ps->nodes[ps->i][ps->j + 1])
 		{
-			add_file(*nodes, ps, 2);
+			if (!add_file(*nodes, ps, 2))
+				return (0);
 			printf("add outfile name\n");
 		}
 		else

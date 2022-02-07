@@ -12,19 +12,13 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <wait.h>
+# include <dirent.h>
+// # include <wait.h>
 
 # define no_redir	0
 # define redir_l	1
 # define redir_r_s	2
 # define redir_r_d	3
-
-typedef struct s_token
-{
-	int 	redir; // 0 si no redir, 1 si simple <, 2 si >, 3 si >>
-	int		pos;
-	char 	*name;
-}	t_token;
 
 typedef struct s_node
 {
@@ -91,8 +85,8 @@ void	skip_spaces(t_parsing *ps);
 
 /* ------------------------------------ parse_files.c ------------------------------ */
 int		get_files_nb(char *node, char chevron);
-char	*get_file_name(t_parsing *ps, t_node *nodes);
-void	add_file(t_node *nodes, t_parsing *ps, int redir);
+char	*get_file_name(t_parsing *ps, t_node *nodes, int redir);
+int		add_file(t_node *nodes, t_parsing *ps, int redir);
 
 /* ------------------------------------ parse_cmds.c ------------------------------ */
 int		process_get_cmds_nb(char *node, int i, int *nb);
