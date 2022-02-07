@@ -58,7 +58,6 @@ void	add_command_args(t_node **nodes, t_parsing *ps)
 			return ;
 		while (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j] != '\t' && ps->nodes[ps->i][ps->j] != ' ')
 		{
-			printf("|%c| pos : %d\n", ps->nodes[ps->i][ps->j], ps->j);
 			if (is_chevron(ps->nodes[ps->i][ps->j]))
 			{
 				stop = 1;

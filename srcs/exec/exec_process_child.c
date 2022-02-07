@@ -111,7 +111,7 @@ void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell
 			}
 			close(exec_st->fd_out);
 		}
-		if(!find_builtin(first_node))
+		if(!find_builtin(first_node, &shell))
 		{
 			//printf("Cmd :%s \n",first_node[0].cmd[0]);
 			exec_cmd(first_node, shell);

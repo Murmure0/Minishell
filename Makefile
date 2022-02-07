@@ -19,6 +19,7 @@ MAIN = 	srcs/main.c			\
 		srcs/exec/exec_process_child.c \
 		srcs/exec/exec_utils.c \
 		srcs/builtins/echo.c \
+		srcs/builtins/cd.c \
 
 
 SOURCES = $(MAIN)
