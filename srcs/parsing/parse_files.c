@@ -19,7 +19,7 @@ int	get_files_nb(char *node, char chevron)
 	return (nb);
 }
 
-char	*get_file_name(t_parsing *ps, t_node *nodes)
+char	*get_file_name(t_parsing *ps, t_node *nodes, int redir)
 {
 	int		pos_start;
 
@@ -32,16 +32,20 @@ char	*get_file_name(t_parsing *ps, t_node *nodes)
 			break ;
 		ps->j++;
 	}
-	if (nodes->invalid_infile)
+	if (redir == 1 && nodes->invalid_infile)
 		return (NULL);
+	printf("|%c| pos : %d\n", ps->nodes[ps->i][ps->j], ps->j);
 	return (str_slice(ps->nodes[ps->i], pos_start, ps->j));
 }
 
-void	add_file(t_node *nodes, t_parsing *ps, int redir)
+int	add_file(t_node *nodes, t_parsing *ps, int redir)
 {
+	int	try_open;
+
+	try_open = 0;
 	if (redir == 1 && !nodes->invalid_infile)
 	{
-		nodes[ps->i].infiles = get_file_name(ps, nodes);
+		nodes[ps->i].infiles = get_file_name(ps, nodes, 1);
 		if (access(nodes[ps->i].infiles, F_OK) != 0)
 		{
 			nodes->invalid_infile = 1;
@@ -49,11 +53,23 @@ void	add_file(t_node *nodes, t_parsing *ps, int redir)
 	}
 	else if (redir == 1 && nodes->invalid_infile)
 	{
-		get_file_name(ps, nodes);
+		get_file_name(ps, nodes, 1);
 	}
 	else if (redir == 2 || redir == 3)
 	{
-		nodes[ps->i].outfiles = get_file_name(ps, nodes);
+		if (nodes[ps->i].outfiles)
+			free(nodes[ps->i].outfiles);
+		nodes[ps->i].outfiles = get_file_name(ps, nodes, 2);
 		nodes[ps->i].append = redir;
+		if (redir == 2)
+		{
+			try_open = open(nodes[ps->i].outfiles, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+		}
+		else
+			try_open = open(nodes[ps->i].outfiles, O_WRONLY | O_APPEND | O_CREAT, 0644);
+		if (try_open < 0)
+			return (0); // perror : couldnt create file
+		close(try_open);
 	}
+	return (1);
 }

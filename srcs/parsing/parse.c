@@ -8,6 +8,7 @@ int	init_global_struct(t_parsing *ps)
 	if (!ps->nodes)
 		return (0);
 	ps->pipe_nb = arr_len(ps->nodes) - 1;
+	ps->stop_err = 0;
 	ps->i = 0;
 	return (1);
 }
@@ -16,11 +17,37 @@ int	init_local_struct(t_node **nodes, t_parsing **ps)
 {
 	(*ps)->pos_cmd = 0;
 	(*ps)->j = 0;
+	(*ps)->nodes[(*ps)->i] = ft_strtrim((*ps)->nodes[(*ps)->i], " ");
+	if (!(*ps)->nodes[(*ps)->i])
+		return (0);
+	(*ps)->nodes[(*ps)->i] = ft_strtrim((*ps)->nodes[(*ps)->i], "\t");
+	if (!(*ps)->nodes[(*ps)->i])
+		return (0);
 	(*nodes)[(*ps)->i].infiles = 0;
 	(*nodes)[(*ps)->i].outfiles = 0;
 	(*nodes)[(*ps)->i].append = 0;
 	(*nodes)[(*ps)->i].invalid_infile = 0;
-	(*nodes)[(*ps)->i].cmd = 0;
+	(*ps)->cmd_nb = get_cmds_nb((*ps)->nodes[(*ps)->i]);
+	(*nodes)[(*ps)->i].cmd = malloc(sizeof(char *) * ((*ps)->cmd_nb + 1));
+	if (!(*nodes)[(*ps)->i].cmd)
+		return (0);
+	if (!(*ps)->cmd_nb)
+		(*nodes)[(*ps)->i].cmd = 0;
+	return (1);
+}
+
+int	check_space_between_redirs(t_parsing *ps)
+{
+	if (ps->nodes[ps->i][ps->j + 1] && ps->nodes[ps->i][ps->j + 1] && is_space(ps->nodes[ps->i][ps->j + 1]))
+	{
+		ps->j++;
+		skip_spaces(ps);
+		if (ps->nodes[ps->i][ps->j] && is_chevron(ps->nodes[ps->i][ps->j]))
+		{
+			printf("minishell: syntax error near unexpected token `%c'\n", ps->nodes[ps->i][ps->j]);
+			return (0);
+		}
+	}
 	return (1);
 }
 
@@ -28,6 +55,11 @@ int	process_parse(t_node **nodes, t_parsing *ps)
 {
 	if (ps->nodes[ps->i][ps->j] == '<')
 	{
+		if (!check_space_between_redirs(ps))
+		{
+			ps->stop_err = 1;
+			return (0);
+		}
 		if (ps->nodes[ps->i][ps->j + 1] && ps->nodes[ps->i][ps->j + 1] == '<')
 		{
 			printf("add heredoc\n");
@@ -43,15 +75,22 @@ int	process_parse(t_node **nodes, t_parsing *ps)
 	}
 	else if (ps->nodes[ps->i][ps->j] == '>')
 	{
+		if (!check_space_between_redirs(ps))
+		{
+			ps->stop_err = 1;
+			return (0);
+		}
 		if (ps->nodes[ps->i][ps->j + 1] && ps->nodes[ps->i][ps->j + 1] == '>')
 		{
 			printf("add outfile + append\n");
 			ps->j++;
-			add_file(*nodes, ps, 3);
+			if (!add_file(*nodes, ps, 3))
+				return (0);
 		}
 		else if (ps->nodes[ps->i][ps->j + 1])
 		{
-			add_file(*nodes, ps, 2);
+			if (!add_file(*nodes, ps, 2))
+				return (0);
 			printf("add outfile name\n");
 		}
 		else
