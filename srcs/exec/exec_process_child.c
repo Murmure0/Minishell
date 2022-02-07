@@ -80,32 +80,34 @@ t_exec	*init_exec_st(t_node *first_node)
 
 void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell shell)
 {
+	(void)exec_st;
 	if (child_pid == 0)
 	{
-		if (exec_st->fd_in > 0)
-		{
-			if (dup2(exec_st->fd_in, STDIN_FILENO) < 0)
-			{
-				close(exec_st->fd_in);
-				perror(": ");
-				exit (errno);
-			}
-			close(exec_st->fd_in);
-		}
-		if(exec_st->fd_out > 1)
-		{
-			if (dup2(exec_st->fd_out, STDOUT_FILENO) < 0)
-			{
-				close(exec_st->fd_in);
-				close(exec_st->fd_out);
-				perror(": ");
-				exit (errno);
-			}
-			close(exec_st->fd_out);
-		}
+		// if (exec_st->fd_in > 0)
+		// {
+		// 	if (dup2(exec_st->fd_in, STDIN_FILENO) < 0)
+		// 	{
+		// 		close(exec_st->fd_in);
+		// 		perror(": ");
+		// 		exit (errno);
+		// 	}
+		// 	close(exec_st->fd_in);
+		// }
+		// printf("fd out : %d", exec_st->fd_out);
+		// if(exec_st->fd_out > 1)
+		// {
+		// 	if (dup2(exec_st->fd_out, STDOUT_FILENO) < 0)
+		// 	{
+		// 		close(exec_st->fd_in);
+		// 		close(exec_st->fd_out);
+		// 		perror(": ");
+		// 		exit (errno);
+		// 	}
+		// 	close(exec_st->fd_out);
+		// }
+		// printf("exec : %s\n", first_node[0].cmd[0]);
 		if(!find_builtin(first_node))
 		{
-			write(2, "AH\n", 3); //permet que ca seg pas D:
 			exec_cmd(first_node, shell);
 			write(2, "Erreur post execution", 22);
 			perror(": ");

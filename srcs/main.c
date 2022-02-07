@@ -74,13 +74,13 @@ int main(int argc, char **argv, char **env)
 
 			/*		PRINT CMDS		*/
 
-		int i = -1;
-		while (++i < parstruct.pipe_nb + 1)
-		{
-			int j = -1;
-			while (nodes[i].cmd[++j])
-				printf("%s\n", nodes[i].cmd[j]);
-		}
+		// int i = -1;
+		// while (++i < parstruct.pipe_nb + 1)
+		// {
+		// 	int j = -1;
+		// 	while (nodes[i].cmd[++j])
+		// 		printf("%s\n", nodes[i].cmd[j]);
+		// }
 		// printf("%s\n", nodes[0].cmd[0]);
 		// printf("%s\n", nodes[0].cmd[1]);
 		// printf("%s\n", nodes[0].cmd[2]);

@@ -8,8 +8,10 @@ int	path_finder(t_node *first_node, t_shell shell)
 	tmp = first_node[0].cmd[0];
 	i = -1;
 
+	printf("EXEXC cmd : %s\n", first_node[0].cmd[0]); //warning
 	while (shell.path[++i])
-	{
+	{	
+		
 		first_node[0].cmd[0] = ft_strjoin(shell.path[i], tmp);
 		printf("EXEXC cmd : %s\n", first_node[0].cmd[0]); //warning
 		if (!tmp)
@@ -25,7 +27,7 @@ int	path_finder(t_node *first_node, t_shell shell)
 int	find_builtin(t_node *first_node)
 {
 	if (!ft_strncmp(first_node[0].cmd[0], "echo", ft_strlen(first_node[0].cmd[0])))
-	{
+	{	write(1, "hey\n", 4);
 		my_echo(first_node[0].cmd + 1);
 		return (1);
 	}
