@@ -74,32 +74,34 @@ int main(int argc, char **argv, char **env)
 		if (not_emptycmd(parstruct.prompt))
 		{
 			nodes = parse(&parstruct);
-
+			if (parstruct.stop_err)
+				continue ;
 				/*		PRINT CMDS		*/
 
-			// int i = -1;
-			// while (++i < parstruct.pipe_nb + 1)
-			// {
-			// 	int j = -1;
-			// 	while (nodes[i].cmd[++j])
-			// 		printf("Node %d cmd % d : %s\n", i, j, nodes[i].cmd[j]);
-			// }
+			int i = -1;
+			while (++i < parstruct.pipe_nb + 1)
+			{
+				int j = -1;
+				if (nodes[i].cmd)
+					while (nodes[i].cmd[++j])
+						printf("Node %d cmd % d : |%s|\n", i, j, nodes[i].cmd[j]);
+			}
 
-			// 	/*		PRINT INFILES		*/
+				/*		PRINT INFILES		*/
 
-			// i = -1;
-			// while (++i < parstruct.pipe_nb + 1)
-			// {
-			// 	printf("Node %d infile : %s\n", i, nodes[i].infiles);
-			// }
+			i = -1;
+			while (++i < parstruct.pipe_nb + 1)
+			{
+				printf("Node %d infile : |%s|\n", i, nodes[i].infiles);
+			}
 
-			// // 	/*		PRINT OUTFILES		*/
+			// 	/*		PRINT OUTFILES		*/
 			
-			// i = -1;
-			// while (++i < parstruct.pipe_nb + 1)
-			// {
-			// 	printf("Node %d outfile : %s\n", i, nodes[i].outfiles);
-			// }	
+			i = -1;
+			while (++i < parstruct.pipe_nb + 1)
+			{
+				printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
+			}	
 			exec(nodes, shell);
 		}
 	}

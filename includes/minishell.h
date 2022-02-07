@@ -40,6 +40,8 @@ typedef struct s_parsing
 	char	**nodes;
 	char	chevron;
 	int		pipe_nb;
+	int		cmd_nb;
+	int		stop_err;
 }	t_parsing;
 
 typedef struct s_shell
@@ -77,6 +79,9 @@ int		init_global_struct(t_parsing *ps);
 int		init_local_struct(t_node **nodes, t_parsing **ps);
 int		process_parse(t_node **nodes, t_parsing *ps);
 t_node	*parse(t_parsing *parstruct);
+
+int	check_space_between_redirs(t_parsing *ps);
+
 
 /* ------------------------------------ parse_utils.c ------------------------------- */
 int		arr_len(char **arr);
