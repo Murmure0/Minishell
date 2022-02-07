@@ -33,26 +33,31 @@ int pipe_case(t_exec *exec_st)
 
 int	find_fd_out(t_node *first_node, t_exec *exec_st)
 {
+	(void)exec_st;
 	int	fd_out;
-	int	i;
+	// int	i;
 
-	i = -1;
+	// i = -1;
 	fd_out = 1;
 
-	if ((first_node + 1) != (void *)0 && first_node[0].outfiles == NULL)
-	{
-		fd_out = pipe_case(exec_st);
-		return(fd_out);
-	}
+	// if ((first_node + 1) != (void *)0 && first_node[0].outfiles == NULL)
+	// {
+	// 	fd_out = pipe_case(exec_st);
+	// 	return(fd_out);
+	// }
 	if (first_node[0].outfiles)
 	{
 		printf("outfile found\n");
 		if (first_node[0].append == 2)
-			fd_out = open(first_node[0].outfiles, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+			fd_out = open(first_node[0].outfiles, O_WRONLY | O_TRUNC);
 		else if (first_node[0].append == 3)
-			fd_out = open(first_node[0].outfiles, O_WRONLY | O_APPEND | O_CREAT, 0644);
+			fd_out = open(first_node[0].outfiles, O_WRONLY | O_APPEND);
 		if (fd_out < 0)
+		{
+			write(2, first_node[0].outfiles, ft_strlen(first_node[0].outfiles));
+			perror(": ");
 			return (-1);
+		}
 	}
 	return (fd_out);
 }
@@ -70,9 +75,11 @@ t_exec	*init_exec_st(t_node *first_node)
 	exec_st->pfd_in = 0;
 	exec_st->pfd_out = 0;
 	exec_st->fd_in = find_fd_in(first_node);
+	printf("exec fd in : %d\n",exec_st->fd_in);
 	if(exec_st->fd_in < 0)
 		return (NULL);
 	exec_st->fd_out = find_fd_out(first_node, exec_st);
+	printf("exec fd out : %d\n",exec_st->fd_out);
 	if(exec_st->fd_out < 0)
 		return (NULL);
 	return (exec_st);

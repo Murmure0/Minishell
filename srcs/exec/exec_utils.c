@@ -5,31 +5,38 @@ int	path_finder(t_node *first_node, t_shell shell)
 	char	*tmp;
 	int		i;
 
-	tmp = first_node[0].cmd[0];
-	i = -1;
-
-	printf("EXEXC cmd : %s\n", first_node[0].cmd[0]); //warning
-	while (shell.path[++i])
-	{	
-		
-		first_node[0].cmd[0] = ft_strjoin(shell.path[i], tmp);
-		printf("EXEXC cmd : %s\n", first_node[0].cmd[0]); //warning
-		if (!tmp)
-			return (-1);
-		execve(first_node[0].cmd[0], first_node->cmd, shell.env);
-		free(first_node[0].cmd[0]);
+	if(first_node[0].cmd)
+	{
+		tmp = first_node[0].cmd[0];
+		i = -1;
+		while (shell.path[++i])
+		{
+			first_node[0].cmd[0] = ft_strjoin(shell.path[i], tmp);
+			printf("EXEXC cmd : %s\n", first_node[0].cmd[0]); //warning
+			if (!tmp)
+				return (-1);
+			// printf("|%s|\n", first_node[0].cmd[0]);
+			// printf("|%s|\n", first_node[0].cmd[1]);
+			execve(first_node[0].cmd[0], first_node[0].cmd, shell.env);
+			free(first_node[0].cmd[0]);
+		}
+		first_node[0].cmd[0] = tmp;
+		execve(first_node->cmd[0], first_node->cmd, shell.env);
 	}
-	first_node[0].cmd[0] = tmp;
-	execve(first_node->cmd[0], first_node->cmd, shell.env);
 	return (0);
 }
 
 int	find_builtin(t_node *first_node)
 {
-	if (!ft_strncmp(first_node[0].cmd[0], "echo", ft_strlen(first_node[0].cmd[0])))
-	{	write(1, "hey\n", 4);
-		my_echo(first_node[0].cmd + 1);
-		return (1);
+	if(first_node[0].cmd)
+	{
+		if (!ft_strncmp(first_node[0].cmd[0], "echo", ft_strlen(first_node[0].cmd[0])))
+		{
+			printf("builtin detected\n");
+			my_echo(first_node[0].cmd + 1);
+			return (1);
+		}
+
 	}
 	return (0);
 }

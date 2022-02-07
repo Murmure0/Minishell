@@ -14,5 +14,6 @@ char	*ft_strdup(char *src);
 int		ft_strchr_pos(char *s, char c, int pos);
 int		is_space(char c);
 int		is_chevron(char c);
+char	*ft_strtrim(char const *s1, char const *set);
 
 #endif
