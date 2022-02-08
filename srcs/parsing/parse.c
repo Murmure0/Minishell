@@ -38,13 +38,22 @@ int	init_local_struct(t_node **nodes, t_parsing **ps)
 
 int	check_space_between_redirs(t_parsing *ps)
 {
-	if (ps->nodes[ps->i][ps->j + 1] && ps->nodes[ps->i][ps->j + 1] && is_space(ps->nodes[ps->i][ps->j + 1]))
+	int	j;
+
+	j = ps->j;
+	if (ps->nodes[ps->i][j + 1] && ps->nodes[ps->i][j + 1] && is_space(ps->nodes[ps->i][j + 1]))
 	{
-		ps->j++;
-		skip_spaces(ps);
-		if (ps->nodes[ps->i][ps->j] && is_chevron(ps->nodes[ps->i][ps->j]))
+		j++;
+		while (ps->nodes[ps->i][j] && is_space(ps->nodes[ps->i][j]))
 		{
-			printf("minishell: syntax error near unexpected token `%c'\n", ps->nodes[ps->i][ps->j]);
+			if (ps->nodes[ps->i][j + 1])
+				j++;
+			else
+				break ;
+		}
+		if (ps->nodes[ps->i][j] && is_chevron(ps->nodes[ps->i][j]))
+		{
+			printf("minishell: syntax error near unexpected token `%c'\n", ps->nodes[ps->i][j]);
 			return (0);
 		}
 	}

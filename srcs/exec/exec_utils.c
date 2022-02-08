@@ -16,7 +16,6 @@ int	path_finder(t_node *first_node, t_shell shell)
 			if (!tmp)
 				return (-1);
 			// printf("|%s|\n", first_node[0].cmd[0]);
-			// printf("|%s|\n", first_node[0].cmd[1]);
 			execve(first_node[0].cmd[0], first_node[0].cmd, shell.env);
 			free(first_node[0].cmd[0]);
 		}

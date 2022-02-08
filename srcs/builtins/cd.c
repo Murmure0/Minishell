@@ -41,18 +41,18 @@ static void update_env(char **env, char *dir, char *pwd, char *home)
 	i = -1;
 	if (dir && !ft_strncmp(dir, "./", 2))
 	{
-		dir = ft_substr(dir, 2, ft_strlen(dir) - 2);
-		if (!dir)
-			return ;
+		while (!ft_strncmp(dir, "./", 2))
+		{
+			dir = ft_substr(dir, 2, ft_strlen(dir) - 2);
+			if (!dir)
+				return ;
+		}
 	}
 	while (env[++i])
 	{
 		if (!ft_strncmp(env[i], "OLDPWD", 6))
 		{
-			printf("%s\n",pwd);
-			// peut changer si jamais PWD se trouve avant ...
 			free(env[i]);
-
 			env[i] = ft_strjoin("OLD", ft_strdup(pwd));
 			if (!env[i])
 				return ;
@@ -60,12 +60,12 @@ static void update_env(char **env, char *dir, char *pwd, char *home)
 		else if (!ft_strncmp(env[i], "PWD", 3))
 		{
 			free(env[i]);
-			if (dir)
+			if (dir && !ft_strncmp(dir, "/", 1))
+				env[i] = ft_strjoin("PWD=", dir);			
+			else if (dir)
 				env[i] = ft_strjoin(pwd, ft_strjoin("/", dir));
 			else if (home)
 				env[i] = ft_strjoin("PWD=", ft_substr(home, 5, ft_strlen(home) - 5));
-			else
-				env[i] = ft_strjoin("PWD=", getcwd(pwd, 2000));
 			if (!env[i])
 				return ;
 		}
@@ -88,6 +88,19 @@ int	my_cd(t_shell *shell, char *dir)
 	char	*pwd;
 	char	*home;
 
+	// TO DO 1
+	// checker si le home nest pas set
+	// bash: cd: HOME not set
+
+	// TO DO 2
+	// minishell$ cd ./
+	// builtin detected
+	// PWD=/Users/vmasse//
+	// OLDPWD=/Users/vmasse/
+
+	// TO DO 3
+	// ..
+
 	if (!get_pwds(shell, &old_pwd, &pwd, &home))
 		return (-1);
 	if (!dir)
@@ -100,9 +113,7 @@ int	my_cd(t_shell *shell, char *dir)
 	{
 		if (!try_chdir(dir))
 			return (-1);
-		printf("%s\n",pwd);
-		
-		update_env(shell->env, NULL, pwd, NULL);
+		update_env(shell->env, dir, pwd, NULL);
 	}
 	else if (dir)
 	{
