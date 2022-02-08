@@ -34,38 +34,52 @@ static int get_pwds(t_shell *s, char **old_pwd, char **pwd, char **home)
 
 // }
 
-static char	**update_env_relative(char **env, char *dir, char *pwd, char *home)
+static void update_env(char **env, char *dir, char *pwd, char *home)
 {
 	int	i;
 
-	if (!ft_strncmp(dir, "./", 2))
+	i = -1;
+	if (dir && !ft_strncmp(dir, "./", 2))
 	{
 		dir = ft_substr(dir, 2, ft_strlen(dir) - 2);
 		if (!dir)
-			return (NULL);
+			return ;
 	}
-	i = -1;
 	while (env[++i])
 	{
-		if (!ft_strncmp(env[i], "OLDPWD", 6) && dir)
+		if (!ft_strncmp(env[i], "OLDPWD", 6))
 		{
+			printf("%s\n",pwd);
+			// peut changer si jamais PWD se trouve avant ...
 			free(env[i]);
+
 			env[i] = ft_strjoin("OLD", ft_strdup(pwd));
 			if (!env[i])
-				return (NULL);
+				return ;
 		}
 		else if (!ft_strncmp(env[i], "PWD", 3))
 		{
 			free(env[i]);
 			if (dir)
 				env[i] = ft_strjoin(pwd, ft_strjoin("/", dir));
+			else if (home)
+				env[i] = ft_strjoin("PWD=", ft_substr(home, 5, ft_strlen(home) - 5));
 			else
-				env[i] = ft_strjoin("PWD", ft_substr(home, 4, ft_strlen(home) - 4));
+				env[i] = ft_strjoin("PWD=", getcwd(pwd, 2000));
 			if (!env[i])
-				return (NULL);
+				return ;
 		}
 	}
-	return (env);
+}
+
+static int	try_chdir(char *dir)
+{
+	if (chdir(dir) < 0)
+	{
+		perror(":");
+		return (0);
+	}
+	return (1);
 }
 
 int	my_cd(t_shell *shell, char *dir)
@@ -76,27 +90,38 @@ int	my_cd(t_shell *shell, char *dir)
 
 	if (!get_pwds(shell, &old_pwd, &pwd, &home))
 		return (-1);
-	if (!ft_strncmp(dir, "~/", 2) || !ft_strncmp(dir, "..", 2) || !ft_strncmp(dir, "/", 1))
+	if (!dir)
 	{
-		chdir(dir);
-		// a completer ...
+		if (!try_chdir(ft_substr(home, 5, ft_strlen(home) - 5)))
+			return (-1);
+		update_env(shell->env, NULL, pwd, home);
 	}
-	else
+	if (dir && (!ft_strncmp(dir, "~/", 2) || !ft_strncmp(dir, "..", 2) || !ft_strncmp(dir, "/", 1)))
 	{
-		if (!dir)
-		{
-			chdir(home);
-			update_env_relative(shell->env, NULL, pwd, home);
-		}
-		else
-		{
-			chdir(dir);
-			update_env_relative(shell->env, dir, pwd, NULL);
-		}
+		if (!try_chdir(dir))
+			return (-1);
+		printf("%s\n",pwd);
+		
+		update_env(shell->env, NULL, pwd, NULL);
+	}
+	else if (dir)
+	{
+		if (!try_chdir(dir))
+			return (-1);
+		update_env(shell->env, dir, pwd, NULL);
 	}
 	int i = -1;
 	while (shell->env[++i])
-		printf("%s\n", shell->env[i]);
+	{
+		if (!ft_strncmp(shell->env[i], "OLDPWD", 6))
+		{
+			printf("%s\n", shell->env[i]);
+		}
+		else if (!ft_strncmp(shell->env[i], "PWD", 3))
+		{
+			printf("%s\n", shell->env[i]);
+		}
+	}
 	free(old_pwd);
 	free(pwd);
 	free(home);

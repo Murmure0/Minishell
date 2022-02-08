@@ -109,7 +109,7 @@ int		check_quotes_for_pipe_split(t_parsing *parstruct);
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ exec.c ------------------------------- */
-int		exec(t_node *node, t_shell g_shell);
+int		exec(t_node *node, t_shell *shell);
 
 /* ------------------------------------ exec_utils.c ------------------------------- */
 int		path_finder(t_node *first_node, t_shell shell);
@@ -119,7 +119,7 @@ int		find_builtin(t_node *first_node, t_shell *shell);
 
 
 /* ---------------------------------- exec_process_child.c ------------------------- */
-void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell shell);
+void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell *shell);
 int		find_fd_in(t_node *first_node);
 int		find_fd_out(t_node *first_node, t_exec *exec_st);
 t_exec	*init_exec_st(t_node *first_node);
