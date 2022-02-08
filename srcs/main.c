@@ -74,7 +74,7 @@ int main(int argc, char **argv, char **env)
 		if (not_emptycmd(parstruct.prompt))
 		{
 			nodes = parse(&parstruct);
-			
+
 			// if (parstruct.stop_err)
 			// 	continue ;
 			// 	/*		PRINT CMDS		*/
