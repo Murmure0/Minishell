@@ -15,6 +15,7 @@ int	init_global_struct(t_parsing *ps)
 
 int	init_local_struct(t_node **nodes, t_parsing **ps)
 {
+	(*nodes)[(*ps)->i].node_nb = (*ps)->pipe_nb + 1;
 	(*ps)->pos_cmd = 0;
 	(*ps)->j = 0;
 	(*ps)->nodes[(*ps)->i] = ft_strtrim((*ps)->nodes[(*ps)->i], " ");

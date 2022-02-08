@@ -102,7 +102,7 @@ int main(int argc, char **argv, char **env)
 			// while (++i < parstruct.pipe_nb + 1)
 			// {
 			// 	printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
-			// }	
+			// }
 			exec(nodes, &shell);
 		}
 	}

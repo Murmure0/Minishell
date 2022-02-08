@@ -27,6 +27,7 @@ typedef struct s_node
 	int		 append;
 	int		 invalid_infile;
     char	**cmd;
+	int		node_nb;
 }     t_node;
 
 typedef struct s_parsing
