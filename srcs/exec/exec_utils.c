@@ -12,11 +12,10 @@ int	path_finder(t_node *first_node, t_shell shell)
 		while (shell.path[++i])
 		{
 			first_node[0].cmd[0] = ft_strjoin(shell.path[i], tmp);
-			printf("EXEXC cmd : %s\n", first_node[0].cmd[0]); //warning
+			// printf("EXEXC cmd : %s\n", first_node[0].cmd[0]); //warning
 			if (!tmp)
 				return (-1);
 			// printf("|%s|\n", first_node[0].cmd[0]);
-			// printf("|%s|\n", first_node[0].cmd[1]);
 			execve(first_node[0].cmd[0], first_node[0].cmd, shell.env);
 			free(first_node[0].cmd[0]);
 		}
@@ -30,6 +29,7 @@ int	find_builtin(t_node *first_node, t_shell *shell)
 {
 	if(first_node[0].cmd)
 	{
+		// !!! si on tape echo avec dautres chars => strncmp dit oui (ex : echooooo)
 		if (!ft_strncmp(first_node[0].cmd[0], "echo", 4))
 		{
 			printf("builtin detected\n");

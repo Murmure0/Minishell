@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-int exec(t_node *first_node, t_shell shell)
+int exec(t_node *first_node, t_shell *shell)
 {
 	// int i = -1;
 	pid_t	child_pid;
@@ -16,7 +16,7 @@ int exec(t_node *first_node, t_shell shell)
 	{
 		write(2, "Child fork failed", 18);
 		perror(": ");
-		exit (errno);
+		// exit (errno);
 	}
 	if (child_pid == 0)
 	{
