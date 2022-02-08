@@ -34,7 +34,6 @@ char	*get_file_name(t_parsing *ps, t_node *nodes, int redir)
 	}
 	if (redir == 1 && nodes->invalid_infile)
 		return (NULL);
-	printf("|%c| pos : %d\n", ps->nodes[ps->i][ps->j], ps->j);
 	return (str_slice(ps->nodes[ps->i], pos_start, ps->j));
 }
 

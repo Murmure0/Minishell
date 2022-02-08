@@ -26,17 +26,22 @@ int	path_finder(t_node *first_node, t_shell shell)
 	return (0);
 }
 
-int	find_builtin(t_node *first_node)
+int	find_builtin(t_node *first_node, t_shell *shell)
 {
 	if(first_node[0].cmd)
 	{
-		if (!ft_strncmp(first_node[0].cmd[0], "echo", ft_strlen(first_node[0].cmd[0])))
+		if (!ft_strncmp(first_node[0].cmd[0], "echo", 4))
 		{
 			printf("builtin detected\n");
 			my_echo(first_node[0].cmd + 1);
 			return (1);
 		}
-
+		if (!ft_strncmp(first_node[0].cmd[0], "cd", 2))
+		{
+			printf("builtin detected\n");
+			my_cd(shell, first_node[0].cmd[1]);
+			return (1);
+		}
 	}
 	return (0);
 }
