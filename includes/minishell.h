@@ -69,7 +69,9 @@ char	**get_env(char **env);
 char 	**add_slash(char **env_paths);
 void 	free_tab(char **env_paths);
 
-char	**update_env_str(char **env, char *str, char *new);
+char	**realloc_env(char **env);
+char	**update_env_var(char **env, char *str, char *new);
+char	**add_env_var(char **env, char *var);
 
 /* ------------------------------------ main.c -------------------------------------------- */
 int		ret_err(int ret, char *msg);
@@ -138,6 +140,6 @@ void parent_process(pid_t child_pid, t_exec *exec_st, t_node *second_node, t_she
 
 int 	my_echo(char **str);
 int		my_cd(t_shell *shell, char *dir);
-int		my_export(t_shell *shell, char *key);
+int		my_export(t_shell *shell, char **var);
 
 #endif
