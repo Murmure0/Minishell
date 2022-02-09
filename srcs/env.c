@@ -16,10 +16,9 @@ char	**get_env(char **env)
 	{
 		if (!ft_strncmp(env[i], "SHLVL=", 6))
 		{
-			printf("ENNNNNNV %s\n", env[i]);
-			// env_cpy[i] = ft_strdup(ft_strjoin("SHLVL=", ft_itoa(ft_atoi(ft_substr(env[i], 7, 1)) + 1)));
-			env_cpy[i] = ft_substr(env[i], 6, 0);
-			printf("ENNNNNNV %s\n", env_cpy[i]);
+			env[i] = ft_strdup(ft_strjoin("SHLVL=", ft_itoa(ft_atoi(ft_substr(env[i], 6, ft_strlen(env[i]) - 6)) + 1)));
+			if (!env[i])
+				return (NULL);			
 		}
 		env_cpy[i] = ft_strdup(env[i]);
 		if (!env_cpy[i])

@@ -103,7 +103,8 @@ int main(int argc, char **argv, char **env)
 			// {
 			// 	printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
 			// }
-			exec(nodes, &shell);
+			if (nodes)
+				exec(nodes, &shell);
 		}
 	}
 	final_free(&shell, &parstruct, nodes);
