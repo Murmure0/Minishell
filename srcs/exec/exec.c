@@ -37,7 +37,7 @@ int exec(t_node *first_node, t_shell *shell)
 	if (first_node[0].node_nb == 2)
 	{
 		printf("parent process\n");
-		parent_process(*child_pid, NULL, NULL, NULL);
+		parent_process(*child_pid, exec_st, first_node + 1, shell);
 	}
 	
 	/*else if (first_node[0].node_nb > 2)

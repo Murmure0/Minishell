@@ -179,7 +179,11 @@ char	**update_env_var(char **env, char *key, char *value)
 	i = -1;
 	while (env && env[++i])
 	{
+<<<<<<< HEAD
+		if (!ft_strncmp(env[i], str, ft_strlen(str)))
+=======
 		if (!strncmp(env[i], key, ft_strlen(key)))
+>>>>>>> ff7c745ee0529ba1e9d95f67e90667a4d849b73f
 		{
 			free(env[i]);
 			env[i] = ft_strdup(ft_strjoin(key, value));
