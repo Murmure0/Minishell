@@ -29,17 +29,22 @@ int	find_builtin(t_node *first_node, t_shell *shell)
 {
 	if(first_node[0].cmd)
 	{
-		// !!! si on tape echo avec dautres chars => strncmp dit oui (ex : echooooo)
-		if (!ft_strncmp(first_node[0].cmd[0], "echo", 4))
+		if (!ft_strcmp(first_node[0].cmd[0], "echo"))
 		{
 			printf("builtin detected\n");
 			my_echo(first_node[0].cmd + 1);
 			return (1);
 		}
-		if (!ft_strncmp(first_node[0].cmd[0], "cd", 2))
+		if (!ft_strcmp(first_node[0].cmd[0], "cd"))
 		{
 			printf("builtin detected\n");
 			my_cd(shell, first_node[0].cmd[1]);
+			return (1);
+		}
+		if (!ft_strcmp(first_node[0].cmd[0], "export"))
+		{
+			printf("builtin detected\n");
+			my_export(shell, first_node[0].cmd[1]);
 			return (1);
 		}
 	}

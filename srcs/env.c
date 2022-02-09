@@ -48,7 +48,7 @@ char	*find_env_paths(char **envp)
 	return (NULL);
 }
 
-char **add_slash(char **env_paths)
+char 	**add_slash(char **env_paths)
 {
 	char **tab_path;
 	int	i;
@@ -76,13 +76,14 @@ char **add_slash(char **env_paths)
 	return(tab_path);
 }
 
-void free_tab(char **env_paths)
+void 	free_tab(char **env_paths)
 {
 	int	i;
 	
 	i = 0;
-	while (env_paths[i])
-		i++;
+	// pq avancer i ici ?
+	// while (env_paths[i])
+	// 	i++;
 	i = -1;
 	while (env_paths[++i])
 		free(env_paths[i]);
@@ -105,4 +106,22 @@ char	**get_env_paths(char **envp)
 	tab_path = add_slash(env_paths);
 	free_tab(env_paths);
 	return (tab_path);
+}
+
+char	**update_env_str(char **env, char *str, char *new)
+{
+	int	i;
+
+	i = -1;
+	while (env && env[++i])
+	{
+		if (!strncmp(env[i], str, ft_strlen(str)))
+		{
+			free(env[i]);
+			env[i] = ft_strdup(new);
+			if (!env[i])
+				return (NULL);
+		}
+	}
+	return (env);
 }

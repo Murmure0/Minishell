@@ -20,6 +20,7 @@ MAIN = 	srcs/main.c			\
 		srcs/exec/exec_utils.c \
 		srcs/builtins/echo.c \
 		srcs/builtins/cd.c \
+		srcs/builtins/export.c \
 
 
 SOURCES = $(MAIN)
