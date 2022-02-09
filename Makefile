@@ -5,7 +5,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
 CFLAGS += -g 
-CFLAGS += -fsanitize=address
+# CFLAGS += -fsanitize=address
 
 MAIN = 	srcs/main.c			\
 		srcs/init_struct.c	\
@@ -21,6 +21,7 @@ MAIN = 	srcs/main.c			\
 		srcs/exec/exec_utils.c \
 		srcs/builtins/echo.c \
 		srcs/builtins/cd.c \
+		srcs/builtins/export.c \
 
 
 SOURCES = $(MAIN)

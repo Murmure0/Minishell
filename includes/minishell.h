@@ -13,7 +13,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <dirent.h>
-// # include <wait.h>
+//# include <wait.h>
 
 # define no_redir	0
 # define redir_l	1
@@ -66,6 +66,10 @@ void    init_struct(t_shell *g_shell, char **env);
 char	*find_env_paths(char **envp);
 char	**get_env_paths(char **envp);
 char	**get_env(char **env);
+char 	**add_slash(char **env_paths);
+void 	free_tab(char **env_paths);
+
+char	**update_env_str(char **env, char *str, char *new);
 
 /* ------------------------------------ main.c -------------------------------------------- */
 int		ret_err(int ret, char *msg);
@@ -132,7 +136,8 @@ void parent_process(pid_t child_pid, t_exec *exec_st, t_node *second_node, t_she
 /* ------------------------------------ BUILTINS ----------------------------------- */
 /* --------------------------------------------------------------------------------- */
 
-int my_echo(char **str);
-int	my_cd(t_shell *shell, char *dir);
+int 	my_echo(char **str);
+int		my_cd(t_shell *shell, char *dir);
+int		my_export(t_shell *shell, char *key);
 
 #endif
