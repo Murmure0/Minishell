@@ -69,7 +69,8 @@ char	**get_env(char **env);
 char 	**add_slash(char **env_paths);
 void 	free_tab(char **env_paths);
 
-char	**update_env_str(char **env, char *str, char *new);
+char	**realloc_env(char **env);
+char	**update_env_key(char **env, char *str, char *new);
 
 /* ------------------------------------ main.c -------------------------------------------- */
 int		ret_err(int ret, char *msg);
@@ -135,6 +136,6 @@ t_exec	*init_exec_st(t_node *first_node);
 
 int 	my_echo(char **str);
 int		my_cd(t_shell *shell, char *dir);
-int		my_export(t_shell *shell, char *key);
+int		my_export(t_shell *shell, char **var);
 
 #endif
