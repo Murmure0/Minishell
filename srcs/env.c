@@ -137,41 +137,41 @@ char	**realloc_env(char **env)
 			return (NULL);
 		free(env_cpy[i]);
 	}
-	// env[i] = ft_strdup("NOUVELLE VARIABLE !!!!!!!!!!!!!!!!!!!!");
 	env[i] = 0;
 	env[i + 1] = 0;
 	free(env_cpy);
 	// i = -1;
 	// while (env[++i])
-	// 	printf("%s\n", env[i]);
+	// 	printf("%s\n", env[i]);a
 	return (env);
 }
 
-char	**update_env_key(char **env, char *key, char *value)
+char	**add_env_var(char **env, char *var)
 {
 	int	i;
 
 	i = 0;
-	if (!key)
-	{
-		env = realloc_env(env);
-		while (env[i])
-			i++;
-		free(env[i]);
-		env[i] = ft_strdup(value);
-		if (!env[i])
-			return (NULL);
-		i = -1;
-		while (env[++i])
-			printf("%s\n", env[i]);
-		return (env);
-	}
+	env = realloc_env(env);
+	while (env[i])
+		i++;
+	free(env[i]);
+	env[i] = ft_strdup(var);
+	if (!env[i])
+		return (NULL);
+	return (env);
+}
+
+char	**update_env_var(char **env, char *key, char *value)
+{
+	int	i;
+
+	i = -1;
 	while (env && env[++i])
 	{
 		if (!strncmp(env[i], key, ft_strlen(key)))
 		{
 			free(env[i]);
-			env[i] = ft_strdup(value);
+			env[i] = ft_strdup(ft_strjoin(key, value));
 			if (!env[i])
 				return (NULL);
 		}

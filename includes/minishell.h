@@ -70,7 +70,8 @@ char 	**add_slash(char **env_paths);
 void 	free_tab(char **env_paths);
 
 char	**realloc_env(char **env);
-char	**update_env_key(char **env, char *str, char *new);
+char	**update_env_var(char **env, char *str, char *new);
+char	**add_env_var(char **env, char *var);
 
 /* ------------------------------------ main.c -------------------------------------------- */
 int		ret_err(int ret, char *msg);

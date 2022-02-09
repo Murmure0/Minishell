@@ -1,19 +1,92 @@
 #include "../../includes/minishell.h"
 
+static char	*get_env_var_value(char *cmd)
+{
+	int	i;
+
+	i = -1;
+	while (cmd[++i])
+	{
+		if (cmd[i] == '=')
+			return (str_slice(cmd, i + 1, ft_strlen(cmd)));
+	}
+	return (NULL);
+}
+
+static char	*get_env_var_key(char *cmd)
+{
+	int	i;
+
+	i = -1;
+	while (cmd[++i])
+	{
+		if (cmd[i] == '=')
+			return (str_slice(cmd, 0, i + 1));
+	}
+	return (NULL);
+}
+
+static int	validate_var(char *key, char *value, char *cmd)
+{
+	int	i;
+
+	i = -1;
+	(void)value;
+	if (!ft_strncmp(key, "=", 1))
+	{
+		printf("minishell: export: « %s » : not a valid identifier\n", cmd);
+		return (0);
+	}
+	while (key && key[++i])
+	{
+		if (!isalnum(key[i]) && key[i] != '=')
+		{
+			printf("minishell: export: « %s » : not a valid identifier\n", key);
+			return (0);
+		}
+	}
+	return (1);
+}
+
+static int	check_has_key(char **env, char *key)
+{
+	int	i;
+
+	i = -1;
+	while (env && env[++i])
+	{
+		if (!strncmp(env[i], key, ft_strlen(key)))
+			return (1);
+	}
+	return (0);
+}
+
 int	my_export(t_shell *sh, char **cmd)
 {
-	int	cmd_pos;
-	
-	// ne doit pas export mais update si on a déjà une key
-	// if wrong key, n'export pas mais ne renvoit pas d'err
+	int		cmd_pos;
+	char	*key;
+	char	*value;
+
 	cmd_pos = 0;
 	while (cmd[++cmd_pos])
 	{
-		printf("adding %s\n", cmd[cmd_pos]);
-		sh->env = update_env_key(sh->env, NULL, cmd[cmd_pos]);
+		key = get_env_var_key(cmd[cmd_pos]);
+		if (!key)
+			return (-1);
+		value = get_env_var_value(cmd[cmd_pos]);
+		if (!validate_var(key, value, cmd[cmd_pos]))
+			return (-1);
+		if (check_has_key(sh->env, key))
+			sh->env = update_env_var(sh->env, key, value);
+		else
+			sh->env = add_env_var(sh->env, cmd[cmd_pos]);
+		if (!sh->env)
+			return (-1);
 	}
-	cmd_pos = -1;
-	while (sh->env[++cmd_pos])
-		printf("%s\n", sh->env[cmd_pos]);
+	if (cmd[1])
+	{
+		free(key);
+		free(value);
+	}
 	return (0);
 }
