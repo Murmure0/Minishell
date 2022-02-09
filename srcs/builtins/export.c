@@ -75,7 +75,7 @@ int	my_export(t_shell *sh, char **cmd)
 			return (-1);
 		value = get_env_var_value(cmd[cmd_pos]);
 		if (!validate_var(key, value, cmd[cmd_pos]))
-			return (-1);
+			continue ;
 		if (check_has_key(sh->env, key))
 			sh->env = update_env_var(sh->env, key, value);
 		else
