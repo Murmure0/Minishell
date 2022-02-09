@@ -27,7 +27,8 @@ int pipe_case(t_exec *exec_st)
 		perror(": ");
 	exec_st->pfd_out = pfd[1]; //doit etre close egalement ?
 	exec_st->pfd_in = pfd[0];
-	close(pfd[0]); //close ici ou dans exec ? peut etre source de pb +tard
+	printf("Valeur de PFDIN dans pipe case : %d\n", pfd[0]);
+	//close(pfd[0]); //close ici ou dans exec ? peut etre source de pb +tard
 	return(pfd[1]);
 }
 
@@ -35,27 +36,26 @@ int	find_fd_out(t_node *first_node, t_exec *exec_st)
 {
 	(void)exec_st;
 	int	fd_out;
-	// int	i;
 
-	// i = -1;
 	fd_out = 1;
 
-
 	// printf("find fd outnb nodes : %d\n",first_node[0].node_nb);
-	// if (first_node[0].node_nb > 1 && !first_node->outfiles)
-	// {
-	// 	fd_out = pipe_case(exec_st);
-	// 	return(fd_out);
-	// }
+	if (first_node[0].node_nb > 1 && !first_node->outfiles)
+	{
+		fd_out = pipe_case(exec_st);
+		printf("FD out PFD : %d\n", fd_out);
+		printf("FD in PFD : %d\n", exec_st->pfd_in);
+		return(fd_out);
+	}
 
-
-	if (first_node[0].outfiles)
+	else if (first_node[0].outfiles)
 	{
 		// printf("outfile found\n");
 		if (first_node[0].append == 2)
 			fd_out = open(first_node[0].outfiles, O_WRONLY | O_TRUNC);
 		else if (first_node[0].append == 3)
 			fd_out = open(first_node[0].outfiles, O_WRONLY | O_APPEND);
+		printf("FD out outfiles process child : %d\n", fd_out);
 		if (fd_out < 0)
 		{
 			write(2, first_node[0].outfiles, ft_strlen(first_node[0].outfiles));
@@ -104,7 +104,7 @@ void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell
 			}
 			close(exec_st->fd_in);
 		}
-		printf("fd out : %d", exec_st->fd_out);
+		printf("child process fd out : %d\n", exec_st->fd_out);
 		if(exec_st->fd_out > 1)
 		{
 			if (dup2(exec_st->fd_out, STDOUT_FILENO) < 0)
@@ -120,7 +120,7 @@ void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell
 		if(!find_builtin(first_node, shell))
 		{
 			exec_cmd(first_node, *shell);
-			write(2, "Erreur post execution", 22);
+			write(2, "Erreur post execution child ", 29);
 			perror(": ");
 			//free(exec_st);
 			//close(STDOUT_FILENO);

@@ -66,7 +66,7 @@ int main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	init_struct(&shell, env);
+	init_struct(&shell, env); //faire un check sur le shell pendant l'init
 	while (1)
 	{
 		parstruct.prompt = readline("minishell$ ");

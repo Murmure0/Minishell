@@ -115,7 +115,7 @@ char	**update_env_str(char **env, char *str, char *new)
 	i = -1;
 	while (env && env[++i])
 	{
-		if (!strncmp(env[i], str, ft_strlen(str)))
+		if (!ft_strncmp(env[i], str, ft_strlen(str)))
 		{
 			free(env[i]);
 			env[i] = ft_strdup(new);
