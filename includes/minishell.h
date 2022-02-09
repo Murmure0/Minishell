@@ -125,6 +125,9 @@ int		find_fd_in(t_node *first_node);
 int		find_fd_out(t_node *first_node, t_exec *exec_st);
 t_exec	*init_exec_st(t_node *first_node);
 
+/* ---------------------------------- exec_process_parent.c ------------------------- */
+void parent_process(pid_t child_pid, t_exec *exec_st, t_node *second_node, t_shell *shell);
+
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ BUILTINS ----------------------------------- */
 /* --------------------------------------------------------------------------------- */

@@ -96,13 +96,13 @@ int main(int argc, char **argv, char **env)
 			// 	printf("Node %d infile : |%s|\n", i, nodes[i].infiles);
 			// }
 
-			// // 	/*		PRINT OUTFILES		*/
-			
-			// i = -1;
-			// while (++i < parstruct.pipe_nb + 1)
-			// {
-			// 	printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
-			// }
+			// 	/*		PRINT OUTFILES		*/
+			int i;
+			i = -1;
+			while (++i < parstruct.pipe_nb + 1)
+			{
+				printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
+			}
 			exec(nodes, &shell);
 		}
 	}
