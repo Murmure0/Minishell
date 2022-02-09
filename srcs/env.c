@@ -108,17 +108,74 @@ char	**get_env_paths(char **envp)
 	return (tab_path);
 }
 
-char	**update_env_str(char **env, char *str, char *new)
+char	**realloc_env(char **env)
+{
+	char	**env_cpy;
+	int		i;
+
+	i = -1;
+	env_cpy = malloc(sizeof(char *) * (arr_len(env) + 1 + 1));
+	if (!env_cpy)
+		return (NULL);
+	while (env[++i])
+	{
+		env_cpy[i] = ft_strdup(env[i]);
+		if (!env_cpy[i])
+			return (NULL);
+		free(env[i]);
+	}
+	env_cpy[i] = 0;
+	free(env);
+	env = malloc(sizeof(char *) * (arr_len(env_cpy) + 2 + 1));
+	if (!env)
+		return (NULL);
+	i = -1;
+	while (env_cpy[++i])
+	{
+		env[i] = ft_strdup(env_cpy[i]);
+		if (!env[i])
+			return (NULL);
+		free(env_cpy[i]);
+	}
+	env[i] = 0;
+	env[i + 1] = 0;
+	free(env_cpy);
+	// i = -1;
+	// while (env[++i])
+	// 	printf("%s\n", env[i]);a
+	return (env);
+}
+
+char	**add_env_var(char **env, char *var)
+{
+	int	i;
+
+	i = 0;
+	env = realloc_env(env);
+	while (env[i])
+		i++;
+	free(env[i]);
+	env[i] = ft_strdup(var);
+	if (!env[i])
+		return (NULL);
+	return (env);
+}
+
+char	**update_env_var(char **env, char *key, char *value)
 {
 	int	i;
 
 	i = -1;
 	while (env && env[++i])
 	{
+<<<<<<< HEAD
 		if (!ft_strncmp(env[i], str, ft_strlen(str)))
+=======
+		if (!strncmp(env[i], key, ft_strlen(key)))
+>>>>>>> ff7c745ee0529ba1e9d95f67e90667a4d849b73f
 		{
 			free(env[i]);
-			env[i] = ft_strdup(new);
+			env[i] = ft_strdup(ft_strjoin(key, value));
 			if (!env[i])
 				return (NULL);
 		}

@@ -20,5 +20,6 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_itoa(int n);
 int		ft_atoi(const char *str);
 int		ft_strcmp(char *s1, char *s2);
+int		ft_isalnum(int c);
 
 #endif

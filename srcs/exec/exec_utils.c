@@ -43,8 +43,7 @@ int	find_builtin(t_node *first_node, t_shell *shell)
 		}
 		if (!ft_strcmp(first_node[0].cmd[0], "export"))
 		{
-			printf("builtin detected\n");
-			my_export(shell, first_node[0].cmd[1]);
+			my_export(shell, first_node[0].cmd);
 			return (1);
 		}
 	}
