@@ -69,6 +69,7 @@ int main(int argc, char **argv, char **env)
 	init_struct(&shell, env);
 	while (1)
 	{
+		// reinit struct pour le unset PATH
 		parstruct.prompt = readline("minishell$ ");
 		add_history(parstruct.prompt);
 		if (not_emptycmd(parstruct.prompt))

@@ -19,7 +19,7 @@ int exec(t_node *first_node, t_shell *shell)
 		printf("exec\n");
 		status = 0;
 		*child_pid = fork();
-		if (child_pid < 0)
+		if (*child_pid < 0)
 		{
 			write(2, "Child fork failed", 18);
 			perror(": ");

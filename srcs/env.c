@@ -1,5 +1,20 @@
 #include "../includes/minishell.h"
 
+char	*update_shell_lvl(char *env)
+{
+	char	*lvl;
+	char	*lvl_char;
+	
+	lvl = ft_substr(env, 6, ft_strlen(env) - 6);
+	lvl_char = ft_itoa(ft_atoi(lvl) + 1);
+	env = ft_strjoin("SHLVL=", lvl_char);
+	free(lvl);
+	free(lvl_char);
+	if (!env)
+		return (NULL);
+	return (env);
+}
+
 char	**get_env(char **env)
 {
 	int		i;
@@ -15,11 +30,7 @@ char	**get_env(char **env)
 	while (env && env[++i])
 	{
 		if (!ft_strncmp(env[i], "SHLVL=", 6))
-		{
-			env[i] = ft_strdup(ft_strjoin("SHLVL=", ft_itoa(ft_atoi(ft_substr(env[i], 6, ft_strlen(env[i]) - 6)) + 1)));
-			if (!env[i])
-				return (NULL);			
-		}
+			env[i] = update_shell_lvl(env[i]);
 		env_cpy[i] = ft_strdup(env[i]);
 		if (!env_cpy[i])
 			return (NULL);
