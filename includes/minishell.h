@@ -13,7 +13,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <dirent.h>
-# include <wait.h>
+//# include <wait.h>
 
 # define no_redir	0
 # define redir_l	1

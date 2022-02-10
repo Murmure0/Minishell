@@ -1,35 +1,31 @@
 #include "../../includes/minishell.h"
 
-int	path_finder_parent(t_node *first_node, t_shell shell)
+int	path_finder_parent(t_node *last_node, t_shell shell)
 {
 	char	*tmp;
 	int		i;
 
-	
-		
-	if(first_node[0].cmd)
+	if(last_node[0].cmd)
 	{
-		tmp = first_node[0].cmd[0];
+		tmp = last_node[0].cmd[0];
 		i = -1;
 		while (shell.path[++i])
 		{
-			first_node[0].cmd[0] = ft_strjoin(shell.path[i], tmp);
-			printf("EXEXC cmd : %s\n", first_node[0].cmd[0]); //warning
+			last_node[0].cmd[0] = ft_strjoin(shell.path[i], tmp);
+			// printf("EXEXC cmd : %s\n", last_node[0].cmd[0]); //warning
 			if (!tmp)
 				return (-1);
-			// printf("|%s|\n", first_node[0].cmd[0]);
-			execve(first_node[0].cmd[0], first_node[0].cmd, shell.env);
-			free(first_node[0].cmd[0]);
+			execve(last_node[0].cmd[0], last_node[0].cmd, shell.env);
+			free(last_node[0].cmd[0]);
 		}
-		first_node[0].cmd[0] = tmp;
-		execve(first_node->cmd[0], first_node->cmd, shell.env);
+		last_node[0].cmd[0] = tmp;
+		execve(last_node->cmd[0], last_node->cmd, shell.env);
 	}
 	return (0);
 }
 
 int	exec_cmd_parent(t_node *last_node, t_shell shell)
 {
-	printf("COMMAND 2eme node : %s\n", last_node->cmd[0]);
 	if (!path_finder_parent(last_node, shell))
 	{
 		//free_all(first_node); faire une bonne fct free
@@ -52,10 +48,39 @@ int	find_fd_in_parent(t_node *last_node, t_exec *exec_st)
 			perror(": ");
 			return (-1);
 		}
+		printf("fdin du 2m nodes : %d\n", fd_in);
 	}
 	else if (exec_st->pfd_in)
+	{
+
 		fd_in = exec_st->pfd_in;
+		printf("PFDIN du 2m nodes : %d\n", fd_in);
+	}
 	return (fd_in);
+}
+
+int	find_fd_out_parent(t_node *last_node)
+{
+	int	fd_out;
+
+	fd_out = 1;
+
+	if (last_node[0].outfiles)
+	{
+		// // printf("outfile found\n");
+		if (last_node[0].append == 2)
+			fd_out = open(last_node[0].outfiles, O_WRONLY | O_TRUNC);
+		else if (last_node[0].append == 3)
+			fd_out = open(last_node[0].outfiles, O_WRONLY | O_APPEND);
+		// printf("FD out outfiles process parent : %d\n", fd_out);
+		if (fd_out < 0)
+		{
+			write(2, last_node[0].outfiles, ft_strlen(last_node[0].outfiles));
+			perror(": ");
+			return (-1);
+		}
+	}
+	return (fd_out);
 }
 
 t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st)
@@ -69,69 +94,52 @@ t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st)
 		perror(": ");
 	}
 	exec_st_parent->fd_in = find_fd_in_parent(last_node, exec_st);
-	// printf("exec fd in : %d\n",exec_st->fd_in);
+	printf("exec fd in : %d\n",exec_st_parent->fd_in);
 	if(exec_st_parent->fd_in < 0)
 		return (NULL);
 
 
-	// exec_st_parent->fd_out = find_fd_out_parent(last_node, exec_st);
+	exec_st_parent->fd_out = find_fd_out_parent(last_node);
 	// // printf("exec fd out : %d\n",exec_st->fd_out);
-	// if(exec_st_parent->fd_out < 0)
-	// 	return (NULL);
-	free(exec_st);
+	if(exec_st_parent->fd_out < 0)
+		return (NULL);
+
+	//free(exec_st);
+
 	return (exec_st_parent);
 }
 
-static void parent_fork_process(t_node *last_node, t_exec *exec_st_parent, t_shell *shell)
+static void parent_fork_process(t_node *last_node, t_exec *exec_st, t_exec *exec_st_parent, t_shell *shell)
 {
-	// char *tmp;
-	// int i;
-	if (exec_st_parent->fd_in)
+	if (exec_st_parent->fd_in > 0)
 	{
-		printf("xxx valeur fdin dans exec st parent : %d\n", exec_st_parent->fd_in);
-		//fd_in = open(exec_st_parent->fd_in, O_RDONLY);
 		if(dup2(exec_st_parent->fd_in, STDIN_FILENO) < 0)
 		{
-			write(2, "Dup2 in parent ", 30);
+			write(2, "Dup2 fdin parent ", 18);
 			perror(": ");
 			exit(EXIT_FAILURE);
 		}
 		close(exec_st_parent->fd_in);
 	}
-	/*close time*/
-	// if (!find_builtin(last_node, shell))
-	// {
-	// 	if(last_node[0].cmd)
-	// 	{
-	// 		write(1, "debut exec parent\n", 19);
-	// 		tmp = last_node[0].cmd[0];
-	// 		i = -1;
-			
-	// 		while (shell->path[++i])
-	// 		{
-	// 			last_node[0].cmd[0] = ft_strjoin(shell->path[i], tmp);
-	// 			printf("EXEC cmd : %s\n", last_node[0].cmd[0]); //warning
-	// 			// printf("|%s|\n", last_node[0].cmd[0]);
-	// 			execve(last_node[0].cmd[0], last_node[0].cmd, shell->env);
-	// 			free(last_node[0].cmd[0]);
-	// 		}
-	// 		last_node[0].cmd[0] = tmp;
-	// 		execve(last_node->cmd[0], last_node->cmd, shell->env);
-	// 	}
+	if (exec_st_parent->fd_out > 1)
+	{
+		if(dup2(exec_st_parent->fd_out, STDOUT_FILENO) < 0)
+		{
+			write(2, "Dup2 fdout parent ", 19);
+			perror(": ");
+			exit(EXIT_FAILURE);
+		}
+		close(exec_st_parent->fd_out);
+	}
+	close(exec_st->pfd_in);
+	close(exec_st->pfd_out);
+
 	if (!find_builtin(last_node, shell))
 	{
 		exec_cmd_parent(last_node, *shell);
 	}
-
-
-
-
-
 		write(2, "Erreur post execution parent ", 30);
 		perror(": ");
-	
-
-	//if (exec_st_parent->fd_out)
 }
 
 void parent_process(pid_t prev_pid, t_exec *exec_st, t_node *last_node, t_shell *shell)
@@ -145,13 +153,8 @@ void parent_process(pid_t prev_pid, t_exec *exec_st, t_node *last_node, t_shell 
 
 	status = 0;
 	waitpid(prev_pid, &status, 0); //on attend la fin du processus enfant 
-	
-	printf("infile PFDIN du last node : %d\n", exec_st->pfd_in);
-	printf("infile INFILE du last node : %s\n", last_node->infiles);
-	
 	exec_st_parent = init_exec_st_parent(last_node, exec_st); //recup des bon fd 
-	printf("infile INFILE du last node : %d\n", exec_st_parent->fd_in);
-	printf("contenu shell path parent : %s\n", shell->path[1]);
+
 	//on lance l'execution dans un fork :
 	parent_pid = fork();
 	if (parent_pid < 0)
@@ -160,10 +163,13 @@ void parent_process(pid_t prev_pid, t_exec *exec_st, t_node *last_node, t_shell 
 		exit(EXIT_FAILURE);
 	}
 	if (parent_pid == 0)
-		parent_fork_process(last_node, exec_st_parent, shell);
+		parent_fork_process(last_node, exec_st, exec_st_parent, shell);
 
 	/*close time*/
-
+	close(exec_st->pfd_in);
+	close(exec_st->pfd_out);
+	write(1, "pi\n",3);
 	waitpid(parent_pid, &status, 0);
+	write(1, "pa\n",3);
 	free(exec_st_parent);
 }
