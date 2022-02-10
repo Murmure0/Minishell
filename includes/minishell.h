@@ -96,15 +96,15 @@ void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ parse.c ------------------------------------ */
+int		parse_case_infile(t_node **nodes, t_parsing *ps, t_shell *sh);
+int		parse_case_outfile(t_node **nodes, t_parsing *ps, t_shell *sh);
 int		process_parse(t_node **nodes, t_parsing *ps, t_shell *sh);
 t_node	*parse(t_parsing *ps, t_shell *sh);
-
-int	check_space_between_redirs(t_parsing *ps);
-
 
 /* ------------------------------------ parse_utils.c ------------------------------- */
 int		arr_len(char **arr);
 char	*str_slice(char *src, int start, int stop);
+int		check_space_between_redirs(t_parsing *ps);
 void	skip_spaces(t_parsing *ps);
 
 /* ------------------------------------ parse_files.c ------------------------------ */
@@ -115,10 +115,11 @@ int		add_outfile(t_node *nodes, t_parsing *ps, int redir, t_shell *sh);
 int		add_file(t_node *nodes, t_parsing *ps, int redir, t_shell *sh);
 
 /* ------------------------------------ parse_cmds.c ------------------------------ */
-int		process_get_cmds_nb(char *node, int i, int *nb);
+void	get_cmds_nb_case_chevron(char *node, int *i);
 int		get_cmds_nb(char *node);
-void	add_command_args(t_node **nodes, t_parsing *ps);
-void	add_command(t_node **nodes, t_parsing *ps);
+int		check_for_command_args(t_parsing *ps, int *pos_start, int *stop);
+void	add_command_args(t_node **nodes, t_parsing *ps, t_shell *sh);
+void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh);
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
 int		get_quote_pos(t_parsing *parstruct, int start);

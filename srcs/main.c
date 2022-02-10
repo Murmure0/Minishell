@@ -102,8 +102,6 @@ int main(int argc, char **argv, char **env)
 }
 
 /* TESTS QUI LEAKS (sans exec)
-
-	> out => nodes->cmd
- 	> out ls < in => invalid free
+	$< >
 
 */

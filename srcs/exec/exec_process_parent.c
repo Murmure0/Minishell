@@ -134,6 +134,10 @@ static void parent_fork_process(t_node *last_node, t_exec *exec_st_parent, t_she
 	//if (exec_st_parent->fd_out)
 }
 
+// rval = (stqtus >> 8) & 0xff;
+// TEST A FAIRE : cat /dev/urandom | head
+
+
 void parent_process(pid_t prev_pid, t_exec *exec_st, t_node *last_node, t_shell *shell)
 {
 	(void)shell;
