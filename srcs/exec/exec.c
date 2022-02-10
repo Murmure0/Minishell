@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-int	exec(t_node *first_node, t_shell shell)
+int	exec(t_node *first_node, t_shell *shell)
 {
 	pid_t	child_pid;
 	t_exec	*exec_st;

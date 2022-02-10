@@ -89,7 +89,7 @@ void	fd_dup(int fd, int std)
 }
 
 void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node,
-		t_shell shell)
+		t_shell *shell)
 {
 	if (child_pid == 0)
 	{
@@ -110,7 +110,7 @@ void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node,
 	}
 }
 
-pid_t	exec_child_proc(t_node *first_node, t_shell shell, t_exec *exec_st)
+pid_t	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st)
 {
 	int		status;
 	pid_t	child_pid;

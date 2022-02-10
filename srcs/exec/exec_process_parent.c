@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-int	path_finder_parent(t_node *last_node, t_shell shell)
+int	path_finder_parent(t_node *last_node, t_shell *shell)
 {
 	char	*tmp;
 	int		i;
@@ -9,21 +9,21 @@ int	path_finder_parent(t_node *last_node, t_shell shell)
 	{
 		tmp = last_node[0].cmd[0];
 		i = -1;
-		while (shell.path[++i])
+		while (shell->path[++i])
 		{
-			last_node[0].cmd[0] = ft_strjoin(shell.path[i], tmp);
-			if (!tmp)
+			last_node[0].cmd[0] = ft_strjoin(shell->path[i], tmp);
+			if (!last_node[0].cmd[0])
 				return (-1);
-			execve(last_node[0].cmd[0], last_node[0].cmd, shell.env);
+			execve(last_node[0].cmd[0], last_node[0].cmd, shell->env);
 			free(last_node[0].cmd[0]);
 		}
 		last_node[0].cmd[0] = tmp;
-		execve(last_node->cmd[0], last_node->cmd, shell.env);
+		execve(last_node->cmd[0], last_node->cmd, shell->env);
 	}
 	return (0);
 }
 
-int	exec_cmd_parent(t_node *last_node, t_shell shell)
+int	exec_cmd_parent(t_node *last_node, t_shell *shell)
 {
 	if (!path_finder_parent(last_node, shell))
 	{
@@ -94,7 +94,7 @@ t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st)
 	return (exec_st_parent);
 }
 
-static void parent_fork_process(t_node *last_node, t_exec *exec_st, t_exec *exec_st_parent, t_shell shell)
+static void parent_fork_process(t_node *last_node, t_exec *exec_st, t_exec *exec_st_parent, t_shell *shell)
 {
 	if (exec_st_parent->fd_in > 0)
 	{
@@ -126,7 +126,7 @@ static void parent_fork_process(t_node *last_node, t_exec *exec_st, t_exec *exec
 		perror(": ");
 }
 
-void parent_process(pid_t prev_pid, t_exec *exec_st, t_node *last_node, t_shell shell)
+void parent_process(pid_t prev_pid, t_exec *exec_st, t_node *last_node, t_shell *shell)
 {
 	t_exec	*exec_st_parent;
 	int		status;

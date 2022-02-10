@@ -84,10 +84,9 @@ int main(int argc, char **argv, char **env)
 			if (parstruct.stop_err)
 				continue ;
 			print_debug(parstruct, nodes, shell);
-			exec(nodes, shell);
 			if (nodes)
 			{
-				// exec(nodes, &shell);
+				exec(nodes, &shell);
 				free_nodestruct(nodes);
 				free_parstruct(&parstruct);
 			}
