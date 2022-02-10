@@ -13,17 +13,23 @@ int	init_global_struct(t_parsing *ps, t_shell *sh)
 	return (1);
 }
 
-int	init_local_struct(t_node **nodes, t_parsing **ps)
+int	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh)
 {
+	char *tmp;
+
 	(*nodes)[(*ps)->i].node_nb = (*ps)->pipe_nb + 1;
 	(*ps)->pos_cmd = 0;
 	(*ps)->j = 0;
-	(*ps)->nodes[(*ps)->i] = ft_strtrim((*ps)->nodes[(*ps)->i], " ");
+	tmp = ft_strtrim((*ps)->nodes[(*ps)->i], " ");
+	free((*ps)->nodes[(*ps)->i]);
+	(*ps)->nodes[(*ps)->i] = tmp;
 	if (!(*ps)->nodes[(*ps)->i])
-		return (0);
-	(*ps)->nodes[(*ps)->i] = ft_strtrim((*ps)->nodes[(*ps)->i], "\t");
+		ft_exit(sh, *ps, *nodes);
+	tmp = ft_strtrim((*ps)->nodes[(*ps)->i], "\t");
+	free((*ps)->nodes[(*ps)->i]);
+	(*ps)->nodes[(*ps)->i] = tmp;
 	if (!(*ps)->nodes[(*ps)->i])
-		return (0);
+		ft_exit(sh, *ps, *nodes);
 	(*nodes)[(*ps)->i].infiles = 0;
 	(*nodes)[(*ps)->i].outfiles = 0;
 	(*nodes)[(*ps)->i].append = 0;
@@ -31,7 +37,7 @@ int	init_local_struct(t_node **nodes, t_parsing **ps)
 	(*ps)->cmd_nb = get_cmds_nb((*ps)->nodes[(*ps)->i]);
 	(*nodes)[(*ps)->i].cmd = malloc(sizeof(char *) * ((*ps)->cmd_nb + 1));
 	if (!(*nodes)[(*ps)->i].cmd)
-		return (0);
+		ft_exit(sh, *ps, *nodes);
 	if (!(*ps)->cmd_nb)
 		(*nodes)[(*ps)->i].cmd = 0;
 	return (1);
@@ -124,7 +130,7 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		return (NULL);
 	while(ps->nodes[ps->i])
 	{
-		if (!init_local_struct(&nodes, &ps))
+		if (!init_local_struct(&nodes, &ps, sh))
 			return (NULL);
 		while (ps->nodes[ps->i][ps->j])
 		{

@@ -66,21 +66,19 @@ int main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
+	nodes = NULL;
 	init_struct(&shell, env); //faire un check sur le shell pendant l'init
-	// while (1)
-	// {
+	while (1)
+	{
 		// reinit struct pour le unset PATH
 		parstruct.prompt = readline("minishell$ ");
 		add_history(parstruct.prompt);
 		if (not_emptycmd(parstruct.prompt))
 		{
 			nodes = parse(&parstruct, &shell);
-			
-			// if (parstruct.stop_err)
-			// 	continue ;
-
+			if (parstruct.stop_err)
+				continue ;
 			print_debug(parstruct, nodes, shell);
-			
 			if (nodes)
 			{
 				// exec(nodes, &shell);
@@ -93,7 +91,7 @@ int main(int argc, char **argv, char **env)
 			parstruct.prompt = NULL;
 			free(parstruct.prompt);
 		}
-	// }
+	}
 	free_shellstruct(&shell);
 	return (0);
 }
