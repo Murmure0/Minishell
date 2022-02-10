@@ -20,6 +20,11 @@
 # define redir_r_s	2
 # define redir_r_d	3
 
+/* ERROR MESSAGES */
+
+# define PERR		"minishell: " 
+# define NO_FILE	"minishell: syntax error near unexpected symbol « newline »"
+
 typedef struct s_node
 {
     char     *infiles;
@@ -60,7 +65,9 @@ typedef struct s_exec
 }	t_exec;
 
 /* ------------------------------------ init_struct.c ------------------------------------ */
-void    init_struct(t_shell *g_shell, char **env);
+void    init_shell_struct(t_shell *shell, char **env);
+int		init_global_struct(t_parsing *ps, t_shell *sh);
+void	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh);
 
 /* ------------------------------------ env.c -------------------------------------------- */
 char	*find_env_paths(char **envp);
@@ -75,7 +82,7 @@ char	**add_env_var(char **env, char *var);
 
 /* ------------------------------------ main.c -------------------------------------------- */
 int		ret_err(int ret, char *msg);
-void	ft_exit(t_shell *sh, t_parsing *ps, t_node *n);
+void	ft_exit(t_shell *sh, t_parsing *ps, t_node *n, char *err);
 
 /* ------------------------------------ free.c -------------------------------------------- */
 void	free_parstruct(t_parsing *ps);
@@ -88,9 +95,7 @@ void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ parse.c ------------------------------------ */
-int		init_global_struct(t_parsing *ps, t_shell *sh);
-int		init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh);
-int		process_parse(t_node **nodes, t_parsing *ps);
+int		process_parse(t_node **nodes, t_parsing *ps, t_shell *sh);
 t_node	*parse(t_parsing *ps, t_shell *sh);
 
 int	check_space_between_redirs(t_parsing *ps);
@@ -104,7 +109,9 @@ void	skip_spaces(t_parsing *ps);
 /* ------------------------------------ parse_files.c ------------------------------ */
 int		get_files_nb(char *node, char chevron);
 char	*get_file_name(t_parsing *ps, t_node *nodes, int redir);
-int		add_file(t_node *nodes, t_parsing *ps, int redir);
+void	add_infile(t_node *nodes, t_parsing *ps, t_shell *sh);
+int		add_outfile(t_node *nodes, t_parsing *ps, int redir);
+int		add_file(t_node *nodes, t_parsing *ps, int redir, t_shell *sh);
 
 /* ------------------------------------ parse_cmds.c ------------------------------ */
 int		process_get_cmds_nb(char *node, int i, int *nb);

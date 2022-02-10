@@ -2,12 +2,17 @@
 
 int	ret_err(int ret, char *msg)
 {
-	printf("%s\n", msg);
+	if (!msg)
+		perror(PERR);
+	else
+		printf("%s\n", msg);
 	return (ret);
 }
 
-void	ft_exit(t_shell *sh, t_parsing *ps, t_node *n)
+void	ft_exit(t_shell *sh, t_parsing *ps, t_node *n, char *err)
 {
+	if (err)
+		write(2, err, ft_strlen(err));
 	final_free(sh, ps, n);
 	exit(EXIT_FAILURE);
 }
@@ -67,7 +72,7 @@ int main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	nodes = NULL;
-	init_struct(&shell, env); //faire un check sur le shell pendant l'init
+	init_shell_struct(&shell, env); //faire un check sur le shell pendant l'init
 	while (1)
 	{
 		// reinit struct pour le unset PATH

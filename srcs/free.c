@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/10 13:14:52 by vmasse            #+#    #+#             */
+/*   Updated: 2022/02/10 13:33:50 by vmasse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	free_parstruct(t_parsing *ps)
@@ -41,7 +53,7 @@ void	free_nodestruct(t_node *n)
 {
 	int	i;
 	int	j;
-	int nodes;
+	int	nodes;
 
 	i = -1;
 	nodes = 0;
@@ -51,12 +63,15 @@ void	free_nodestruct(t_node *n)
 		while (++i < nodes)
 		{
 			j = -1;
-			while (n[i].cmd[++j])
+			if (n[i].cmd)
+			{
+				while (n[i].cmd[++j])
+					free(n[i].cmd[j]);
 				free(n[i].cmd[j]);
-			free(n[i].cmd[j]);
-			free(n[i].cmd);
-			free(n[i].infiles);
-			free(n[i].outfiles);
+				free(n[i].cmd);
+				free(n[i].infiles);
+				free(n[i].outfiles);
+			}
 		}
 		free(n);
 	}
@@ -71,4 +86,3 @@ void	final_free(t_shell *sh, t_parsing *ps, t_node *n)
 	if (sh)
 		free_shellstruct(sh);
 }
-
