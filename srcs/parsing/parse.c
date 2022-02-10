@@ -1,48 +1,5 @@
 #include "../../includes/minishell.h"
 
-int	init_global_struct(t_parsing *ps, t_shell *sh)
-{
-	if (!check_quotes_for_pipe_split(ps))
-		return (0);
-	ps->nodes = ft_split(ps->prompt, '|');
-	if (!ps->nodes)
-		ft_exit(sh, ps, NULL);
-	ps->pipe_nb = arr_len(ps->nodes) - 1;
-	ps->stop_err = 0;
-	ps->i = 0;
-	return (1);
-}
-
-int	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh)
-{
-	char *tmp;
-
-	(*nodes)[(*ps)->i].node_nb = (*ps)->pipe_nb + 1;
-	(*ps)->pos_cmd = 0;
-	(*ps)->j = 0;
-	tmp = ft_strtrim((*ps)->nodes[(*ps)->i], " ");
-	free((*ps)->nodes[(*ps)->i]);
-	(*ps)->nodes[(*ps)->i] = tmp;
-	if (!(*ps)->nodes[(*ps)->i])
-		ft_exit(sh, *ps, *nodes);
-	tmp = ft_strtrim((*ps)->nodes[(*ps)->i], "\t");
-	free((*ps)->nodes[(*ps)->i]);
-	(*ps)->nodes[(*ps)->i] = tmp;
-	if (!(*ps)->nodes[(*ps)->i])
-		ft_exit(sh, *ps, *nodes);
-	(*nodes)[(*ps)->i].infiles = 0;
-	(*nodes)[(*ps)->i].outfiles = 0;
-	(*nodes)[(*ps)->i].append = 0;
-	(*nodes)[(*ps)->i].invalid_infile = 0;
-	(*ps)->cmd_nb = get_cmds_nb((*ps)->nodes[(*ps)->i]);
-	(*nodes)[(*ps)->i].cmd = malloc(sizeof(char *) * ((*ps)->cmd_nb + 1));
-	if (!(*nodes)[(*ps)->i].cmd)
-		ft_exit(sh, *ps, *nodes);
-	if (!(*ps)->cmd_nb)
-		(*nodes)[(*ps)->i].cmd = 0;
-	return (1);
-}
-
 int	check_space_between_redirs(t_parsing *ps)
 {
 	int	j;
@@ -67,7 +24,7 @@ int	check_space_between_redirs(t_parsing *ps)
 	return (1);
 }
 
-int	process_parse(t_node **nodes, t_parsing *ps)
+int	process_parse(t_node **nodes, t_parsing *ps, t_shell *sh)
 {
 	if (ps->nodes[ps->i][ps->j] == '<')
 	{
@@ -84,10 +41,10 @@ int	process_parse(t_node **nodes, t_parsing *ps)
 		else if (ps->nodes[ps->i][ps->j + 1])
 		{
 			printf("add infile name\n");
-			add_file(*nodes, ps, 1);
+			add_file(*nodes, ps, 1, sh);
 		}
 		else
-			return (0); // erreur -> no infile
+			return (ret_err(0, NO_FILE));
 	}
 	else if (ps->nodes[ps->i][ps->j] == '>')
 	{
@@ -100,17 +57,17 @@ int	process_parse(t_node **nodes, t_parsing *ps)
 		{
 			printf("add outfile + append\n");
 			ps->j++;
-			if (!add_file(*nodes, ps, 3))
+			if (!add_file(*nodes, ps, 3, sh))
 				return (0);
 		}
 		else if (ps->nodes[ps->i][ps->j + 1])
 		{
-			if (!add_file(*nodes, ps, 2))
+			if (!add_file(*nodes, ps, 2, sh))
 				return (0);
 			printf("add outfile name\n");
 		}
 		else
-			return (0); // erreur -> no outfile
+			return (ret_err(0, NO_FILE));
 	}
 	else
 	{
@@ -127,15 +84,14 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		return (NULL);
 	nodes = malloc(sizeof(t_node) * (ps->pipe_nb + 1));
 	if (!nodes)
-		return (NULL);
+		ft_exit(sh, ps, NULL, "Fail to malloc nodes\n");
 	while(ps->nodes[ps->i])
 	{
-		if (!init_local_struct(&nodes, &ps, sh))
-			return (NULL);
+		init_local_struct(&nodes, &ps, sh);
 		while (ps->nodes[ps->i][ps->j])
 		{
 			skip_spaces(ps);
-			if (!process_parse(&nodes, ps))
+			if (!process_parse(&nodes, ps, sh))
 				return (NULL);
 			if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1] &&
 				ps->nodes[ps->i][ps->j] != '<' && ps->nodes[ps->i][ps->j] != '>')
