@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 18:43:23 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/02 10:53:18 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/10 10:29:42 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	check_quotes_for_pipe_split(t_parsing *parstruct)
 		{
 			pos_quote = get_matching_quote_pos(parstruct, pos_quote);
 			if (!pos_quote)
-				return (0);
+				return (ret_err(0, "minishell : error : Invalid syntax"));
 			has_to_match = 0;
 		}
 		else

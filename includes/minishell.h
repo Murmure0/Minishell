@@ -75,6 +75,12 @@ char	**add_env_var(char **env, char *var);
 
 /* ------------------------------------ main.c -------------------------------------------- */
 int		ret_err(int ret, char *msg);
+void	ft_exit(t_shell *sh, t_parsing *ps, t_node *n);
+
+/* ------------------------------------ free.c -------------------------------------------- */
+void	free_parstruct(t_parsing *ps);
+void	free_shellstruct(t_shell *sh);
+void	free_nodestruct(t_node *n);
 void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
 
 /* --------------------------------------------------------------------------------- */
@@ -82,10 +88,10 @@ void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ parse.c ------------------------------------ */
-int		init_global_struct(t_parsing *ps);
+int		init_global_struct(t_parsing *ps, t_shell *sh);
 int		init_local_struct(t_node **nodes, t_parsing **ps);
 int		process_parse(t_node **nodes, t_parsing *ps);
-t_node	*parse(t_parsing *parstruct);
+t_node	*parse(t_parsing *ps, t_shell *sh);
 
 int	check_space_between_redirs(t_parsing *ps);
 

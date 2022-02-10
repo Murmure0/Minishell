@@ -1,12 +1,12 @@
 #include "../../includes/minishell.h"
 
-int	init_global_struct(t_parsing *ps)
+int	init_global_struct(t_parsing *ps, t_shell *sh)
 {
 	if (!check_quotes_for_pipe_split(ps))
 		return (0);
 	ps->nodes = ft_split(ps->prompt, '|');
 	if (!ps->nodes)
-		return (0);
+		ft_exit(sh, ps, NULL);
 	ps->pipe_nb = arr_len(ps->nodes) - 1;
 	ps->stop_err = 0;
 	ps->i = 0;
@@ -113,11 +113,11 @@ int	process_parse(t_node **nodes, t_parsing *ps)
 	return (1);
 }
 
-t_node	*parse(t_parsing *ps)
+t_node	*parse(t_parsing *ps, t_shell *sh)
 {
 	t_node *nodes;
 
-	if (!init_global_struct(ps))
+	if (!init_global_struct(ps, sh))
 		return (NULL);
 	nodes = malloc(sizeof(t_node) * (ps->pipe_nb + 1));
 	if (!nodes)

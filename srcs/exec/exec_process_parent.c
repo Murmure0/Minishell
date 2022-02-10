@@ -92,7 +92,7 @@ static void parent_fork_process(t_node *last_node, t_exec *exec_st_parent, t_she
 		//fd_in = open(exec_st_parent->fd_in, O_RDONLY);
 		if(dup2(exec_st_parent->fd_in, STDIN_FILENO) < 0)
 		{
-			write(2, "Dup2 in parent ", 30);
+			write(2, "Dup2 in parent ", 16);
 			perror(": ");
 			exit(EXIT_FAILURE);
 		}

@@ -9,6 +9,7 @@ CFLAGS += -g
 
 MAIN = 	srcs/main.c			\
 		srcs/init_struct.c	\
+		srcs/free.c	\
 		srcs/env.c			\
 		srcs/parsing/parse.c \
 		srcs/parsing/parse_utils.c \
