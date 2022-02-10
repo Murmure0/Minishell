@@ -1,6 +1,27 @@
 #include "../../includes/minishell.h"
 
-int	path_finder(t_node *first_node, t_shell shell)
+t_exec	*init_exec_st(t_node *first_node)
+{
+	t_exec	*exec_st;
+
+	exec_st = malloc(sizeof(t_exec));
+	if (!exec_st)
+	{
+		write(2, "Mem. alloc. for execution struct initialisation failed.\n", 57);
+		perror(": ");
+	}
+	exec_st->pfd_in = 0;
+	exec_st->pfd_out = 0;
+	exec_st->fd_in = find_fd_in(first_node);
+	if (exec_st->fd_in < 0)
+		return (NULL);
+	exec_st->fd_out = find_fd_out(first_node, exec_st);
+	if (exec_st->fd_out < 0)
+		return (NULL);
+	return (exec_st);
+}
+
+int	path_finder(t_node *first_node, t_shell *shell)
 {
 	char	*tmp;
 	int		i;
@@ -9,18 +30,18 @@ int	path_finder(t_node *first_node, t_shell shell)
 	{
 		tmp = first_node[0].cmd[0];
 		i = -1;
-		while (shell.path[++i])
+		while (shell->path[++i])
 		{
-			first_node[0].cmd[0] = ft_strjoin(shell.path[i], tmp);
+			first_node[0].cmd[0] = ft_strjoin(shell->path[i], tmp);
 			printf("EXEXC cmd : %s\n", first_node[0].cmd[0]); //warning
 			if (!tmp)
 				return (-1);
 			// printf("|%s|\n", first_node[0].cmd[0]);
-			execve(first_node[0].cmd[0], first_node[0].cmd, shell.env);
+			execve(first_node[0].cmd[0], first_node[0].cmd, shell->env);
 			free(first_node[0].cmd[0]);
 		}
 		first_node[0].cmd[0] = tmp;
-		execve(first_node->cmd[0], first_node->cmd, shell.env);
+		execve(first_node->cmd[0], first_node->cmd, shell->env);
 	}
 	return (0);
 }
@@ -50,7 +71,7 @@ int	find_builtin(t_node *first_node, t_shell *shell)
 	return (0);
 }
 
-int	exec_cmd(t_node *first_node, t_shell shell)
+int	exec_cmd(t_node *first_node, t_shell *shell)
 {
 	if (!path_finder(first_node, shell))
 	{

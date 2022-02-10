@@ -190,7 +190,7 @@ char	**update_env_var(char **env, char *key, char *value)
 	i = -1;
 	while (env && env[++i])
 	{
-		if (!strncmp(env[i], key, ft_strlen(key)))
+		if (!ft_strncmp(env[i], key, ft_strlen(key)))
 		{
 			free(env[i]);
 			env[i] = ft_strdup(ft_strjoin(key, value));

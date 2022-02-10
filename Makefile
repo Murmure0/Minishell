@@ -18,6 +18,7 @@ MAIN = 	srcs/main.c			\
 		srcs/parsing/parse_files.c \
 		srcs/exec/exec.c \
 		srcs/exec/exec_process_child.c \
+		srcs/exec/exec_process_brother.c \
 		srcs/exec/exec_process_parent.c \
 		srcs/exec/exec_utils.c \
 		srcs/builtins/echo.c \

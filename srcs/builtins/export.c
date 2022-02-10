@@ -39,7 +39,7 @@ static int	validate_var(char *key, char *value, char *cmd)
 	}
 	while (key && key[++i])
 	{
-		if (!isalnum(key[i]) && key[i] != '=')
+		if (!ft_isalnum(key[i]) && key[i] != '=')
 		{
 			printf("minishell: export: « %s » : not a valid identifier\n", key);
 			return (0);
@@ -55,7 +55,7 @@ static int	check_has_key(char **env, char *key)
 	i = -1;
 	while (env && env[++i])
 	{
-		if (!strncmp(env[i], key, ft_strlen(key)))
+		if (!ft_strncmp(env[i], key, ft_strlen(key)))
 			return (1);
 	}
 	return (0);
