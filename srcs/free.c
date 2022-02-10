@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 13:14:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/10 13:33:50 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/10 15:27:16 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ void	free_nodestruct(t_node *n)
 					free(n[i].cmd[j]);
 				free(n[i].cmd[j]);
 				free(n[i].cmd);
-				free(n[i].infiles);
-				free(n[i].outfiles);
 			}
+			free(n[i].infiles);
+			free(n[i].outfiles);
 		}
 		free(n);
 	}

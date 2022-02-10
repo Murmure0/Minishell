@@ -100,3 +100,10 @@ int main(int argc, char **argv, char **env)
 	free_shellstruct(&shell);
 	return (0);
 }
+
+/* TESTS QUI LEAKS (sans exec)
+
+	> out => nodes->cmd
+ 	> out ls < in => invalid free
+
+*/

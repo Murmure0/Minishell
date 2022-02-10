@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 14:05:56 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/10 14:15:18 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/10 14:35:14 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	add_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 		nodes->invalid_infile = 1;
 }
 
-int	add_outfile(t_node *nodes, t_parsing *ps, int redir)
+int	add_outfile(t_node *nodes, t_parsing *ps, int redir, t_shell *sh)
 {
 	int		try_open;
 
@@ -67,6 +67,8 @@ int	add_outfile(t_node *nodes, t_parsing *ps, int redir)
 	if (nodes[ps->i].outfiles)
 		free(nodes[ps->i].outfiles);
 	nodes[ps->i].outfiles = get_file_name(ps, nodes, 2);
+	if (!nodes[ps->i].outfiles)
+		ft_exit(sh, ps, nodes, "Fail to malloc outfiles in add_outfiles\n");
 	nodes[ps->i].append = redir;
 	if (redir == 2)
 		try_open = open(nodes[ps->i].outfiles,
@@ -87,6 +89,6 @@ int	add_file(t_node *nodes, t_parsing *ps, int redir, t_shell *sh)
 	else if (redir == 1 && nodes->invalid_infile)
 		get_file_name(ps, nodes, 1);
 	else if (redir == 2 || redir == 3)
-		return (add_outfile(nodes, ps, redir));
+		return (add_outfile(nodes, ps, redir, sh));
 	return (1);
 }

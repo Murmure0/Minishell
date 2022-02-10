@@ -67,6 +67,7 @@ typedef struct s_exec
 /* ------------------------------------ init_struct.c ------------------------------------ */
 void    init_shell_struct(t_shell *shell, char **env);
 int		init_global_struct(t_parsing *ps, t_shell *sh);
+void	init_nodestruct(t_node **nodes, t_parsing **ps, t_shell *sh);
 void	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh);
 
 /* ------------------------------------ env.c -------------------------------------------- */
@@ -110,7 +111,7 @@ void	skip_spaces(t_parsing *ps);
 int		get_files_nb(char *node, char chevron);
 char	*get_file_name(t_parsing *ps, t_node *nodes, int redir);
 void	add_infile(t_node *nodes, t_parsing *ps, t_shell *sh);
-int		add_outfile(t_node *nodes, t_parsing *ps, int redir);
+int		add_outfile(t_node *nodes, t_parsing *ps, int redir, t_shell *sh);
 int		add_file(t_node *nodes, t_parsing *ps, int redir, t_shell *sh);
 
 /* ------------------------------------ parse_cmds.c ------------------------------ */
