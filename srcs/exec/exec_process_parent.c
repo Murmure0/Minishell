@@ -12,7 +12,6 @@ int	path_finder_parent(t_node *last_node, t_shell shell)
 		while (shell.path[++i])
 		{
 			last_node[0].cmd[0] = ft_strjoin(shell.path[i], tmp);
-			// printf("EXEXC cmd : %s\n", last_node[0].cmd[0]); //warning
 			if (!tmp)
 				return (-1);
 			execve(last_node[0].cmd[0], last_node[0].cmd, shell.env);
@@ -48,14 +47,9 @@ int	find_fd_in_parent(t_node *last_node, t_exec *exec_st)
 			perror(": ");
 			return (-1);
 		}
-		printf("fdin du 2m nodes : %d\n", fd_in);
 	}
 	else if (exec_st->pfd_in)
-	{
-
 		fd_in = exec_st->pfd_in;
-		printf("PFDIN du 2m nodes : %d\n", fd_in);
-	}
 	return (fd_in);
 }
 
@@ -67,12 +61,10 @@ int	find_fd_out_parent(t_node *last_node)
 
 	if (last_node[0].outfiles)
 	{
-		// // printf("outfile found\n");
 		if (last_node[0].append == 2)
 			fd_out = open(last_node[0].outfiles, O_WRONLY | O_TRUNC);
 		else if (last_node[0].append == 3)
 			fd_out = open(last_node[0].outfiles, O_WRONLY | O_APPEND);
-		// printf("FD out outfiles process parent : %d\n", fd_out);
 		if (fd_out < 0)
 		{
 			write(2, last_node[0].outfiles, ft_strlen(last_node[0].outfiles));
@@ -94,22 +86,15 @@ t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st)
 		perror(": ");
 	}
 	exec_st_parent->fd_in = find_fd_in_parent(last_node, exec_st);
-	printf("exec fd in : %d\n",exec_st_parent->fd_in);
 	if(exec_st_parent->fd_in < 0)
 		return (NULL);
-
-
 	exec_st_parent->fd_out = find_fd_out_parent(last_node);
-	// // printf("exec fd out : %d\n",exec_st->fd_out);
 	if(exec_st_parent->fd_out < 0)
 		return (NULL);
-
-	//free(exec_st);
-
 	return (exec_st_parent);
 }
 
-static void parent_fork_process(t_node *last_node, t_exec *exec_st, t_exec *exec_st_parent, t_shell *shell)
+static void parent_fork_process(t_node *last_node, t_exec *exec_st, t_exec *exec_st_parent, t_shell shell)
 {
 	if (exec_st_parent->fd_in > 0)
 	{
@@ -133,19 +118,16 @@ static void parent_fork_process(t_node *last_node, t_exec *exec_st, t_exec *exec
 	}
 	close(exec_st->pfd_in);
 	close(exec_st->pfd_out);
-
 	if (!find_builtin(last_node, shell))
 	{
-		exec_cmd_parent(last_node, *shell);
+		exec_cmd_parent(last_node, shell);
 	}
-		write(2, "Erreur post execution parent ", 30);
+		write(2, "Erreur post execution process parent ", 38);
 		perror(": ");
 }
 
-void parent_process(pid_t prev_pid, t_exec *exec_st, t_node *last_node, t_shell *shell)
+void parent_process(pid_t prev_pid, t_exec *exec_st, t_node *last_node, t_shell shell)
 {
-	(void)shell;
-
 	t_exec	*exec_st_parent;
 	int		status;
 	pid_t	parent_pid;
@@ -171,5 +153,6 @@ void parent_process(pid_t prev_pid, t_exec *exec_st, t_node *last_node, t_shell 
 	write(1, "pi\n",3);
 	waitpid(parent_pid, &status, 0);
 	write(1, "pa\n",3);
+	free(exec_st);
 	free(exec_st_parent);
 }

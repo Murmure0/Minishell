@@ -6,7 +6,14 @@ char	*update_shell_lvl(char *env)
 	char	*lvl_char;
 	
 	lvl = ft_substr(env, 6, ft_strlen(env) - 6);
+	if (!lvl)
+		return (NULL);
 	lvl_char = ft_itoa(ft_atoi(lvl) + 1);
+	if (!lvl_char)
+	{
+		free(lvl);
+		return (NULL);
+	}
 	env = ft_strjoin("SHLVL=", lvl_char);
 	free(lvl);
 	free(lvl_char);
@@ -30,7 +37,11 @@ char	**get_env(char **env)
 	while (env && env[++i])
 	{
 		if (!ft_strncmp(env[i], "SHLVL=", 6))
+		{
 			env[i] = update_shell_lvl(env[i]);
+			if (!env[i])
+				return (NULL);
+		}
 		env_cpy[i] = ft_strdup(env[i]);
 		if (!env_cpy[i])
 			return (NULL);

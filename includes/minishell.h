@@ -75,6 +75,12 @@ char	**add_env_var(char **env, char *var);
 
 /* ------------------------------------ main.c -------------------------------------------- */
 int		ret_err(int ret, char *msg);
+void	ft_exit(t_shell *sh, t_parsing *ps, t_node *n);
+
+/* ------------------------------------ free.c -------------------------------------------- */
+void	free_parstruct(t_parsing *ps);
+void	free_shellstruct(t_shell *sh);
+void	free_nodestruct(t_node *n);
 void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
 
 /* --------------------------------------------------------------------------------- */
@@ -82,10 +88,10 @@ void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ parse.c ------------------------------------ */
-int		init_global_struct(t_parsing *ps);
-int		init_local_struct(t_node **nodes, t_parsing **ps);
+int		init_global_struct(t_parsing *ps, t_shell *sh);
+int		init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh);
 int		process_parse(t_node **nodes, t_parsing *ps);
-t_node	*parse(t_parsing *parstruct);
+t_node	*parse(t_parsing *ps, t_shell *sh);
 
 int	check_space_between_redirs(t_parsing *ps);
 
@@ -116,23 +122,27 @@ int		check_quotes_for_pipe_split(t_parsing *parstruct);
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ exec.c ------------------------------- */
-int		exec(t_node *node, t_shell *shell);
+int		exec(t_node *node, t_shell shell);
 
 /* ------------------------------------ exec_utils.c ------------------------------- */
+t_exec	*init_exec_st(t_node *first_node);
 int		path_finder(t_node *first_node, t_shell shell);
 int		exec_cmd(t_node *first_node, t_shell shell);
 void	free_all(t_node *first_node, t_shell shell);
-int		find_builtin(t_node *first_node, t_shell *shell);
+int		find_builtin(t_node *first_node, t_shell shell);
 
 
 /* ---------------------------------- exec_process_child.c ------------------------- */
-void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell *shell);
+void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell shell);
 int		find_fd_in(t_node *first_node);
 int		find_fd_out(t_node *first_node, t_exec *exec_st);
-t_exec	*init_exec_st(t_node *first_node);
+pid_t	exec_child_proc(t_node *first_node, t_shell shell, t_exec *exec_st);
 
 /* ---------------------------------- exec_process_parent.c ------------------------- */
-void parent_process(pid_t child_pid, t_exec *exec_st, t_node *second_node, t_shell *shell);
+void	parent_process(pid_t child_pid, t_exec *exec_st, t_node *second_node, t_shell shell);
+
+/* ---------------------------------- exec_process_brother.c ------------------------- */
+void	brother_process(pid_t prev_pid, t_exec *exec_st, t_node *last_node, t_shell shell);
 
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ BUILTINS ----------------------------------- */
