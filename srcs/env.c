@@ -200,3 +200,21 @@ char	**update_env_var(char **env, char *key, char *value)
 	}
 	return (env);
 }
+
+char	*get_env_var_value(char **env, char *key)
+{
+	int	i;
+	char *value;
+
+	i = -1;
+	while (env[++i])
+	{
+		if (!strncmp(env[i], key, ft_strlen(key)))
+		{
+			value = ft_substr(env[i], ft_strlen(key) + 1, ft_strlen(env[i]));
+			if (!value)
+				return (NULL);
+		}
+	}
+	return (value);
+}
