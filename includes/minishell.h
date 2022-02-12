@@ -51,6 +51,7 @@ typedef struct s_parsing
 	int		cmd_nb;
 	int		stop_err;
 	int		is_s_quote;
+	int		is_d_quote;
 }	t_parsing;
 
 typedef struct s_shell
@@ -136,6 +137,7 @@ int		check_quotes_for_pipe_split(t_parsing *parstruct);
 
 /* ------------------------------------ parse_dollar.c ------------------------------ */
 int		contains_dollar(char *s);
+void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_start);
 
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ EXEC --------------------------------------- */

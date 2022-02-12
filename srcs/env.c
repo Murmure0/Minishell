@@ -207,6 +207,7 @@ char	*get_env_var_value(char **env, char *key)
 	char *value;
 
 	i = -1;
+	value = NULL;
 	while (env[++i])
 	{
 		if (!strncmp(env[i], key, ft_strlen(key)))
@@ -216,5 +217,7 @@ char	*get_env_var_value(char **env, char *key)
 				return (NULL);
 		}
 	}
+	if (!value)
+		value = ft_strdup("");
 	return (value);
 }
