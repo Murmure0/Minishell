@@ -136,7 +136,7 @@ int		get_matching_quote_pos(t_parsing *parstruct, int start);
 int		check_quotes_for_pipe_split(t_parsing *parstruct);
 
 /* ------------------------------------ parse_dollar.c ------------------------------ */
-int		contains_dollar(char *s);
+int		contains_dollar(char *s, int pos);
 void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_start);
 
 /* --------------------------------------------------------------------------------- */

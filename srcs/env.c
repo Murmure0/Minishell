@@ -208,7 +208,7 @@ char	*get_env_var_value(char **env, char *key)
 
 	i = -1;
 	value = NULL;
-	while (env[++i])
+	while (env && env[++i])
 	{
 		if (!strncmp(env[i], key, ft_strlen(key)))
 		{
