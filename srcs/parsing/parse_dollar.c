@@ -68,7 +68,7 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_star
 
 	cmd = NULL;
 	set_quotes_before_pos_start(ps, pos_start);
-	if (!ps->is_s_quote || ps->is_d_quote)
+	if (!ps->is_s_quote && !ps->is_d_quote)
 		j = pos_start - 1;
 	else
 		j = pos_start;
@@ -107,9 +107,12 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_star
 					ft_exit(sh, ps, nodes, "Fail to malloc cmd in expand dollar\n");
 				pos_start += ft_strlen(key);
 			}
-			if (ps->nodes[ps->i][j] == '$' && !ps->is_s_quote)
+			if ((ps->nodes[ps->i][j] == '$' && !ps->is_s_quote))
+			{
+				j++;
 				continue ;
-			if (!ps->nodes[ps->i][++j] || (is_space(ps->nodes[ps->i][j]) && !ps->is_d_quote))
+			}
+			if (!ps->nodes[ps->i][++j] || (is_space(ps->nodes[ps->i][j - 1]) && !ps->is_d_quote))
 				break ;
 		}
 		if (!ps->nodes[ps->i][j] || (is_space(ps->nodes[ps->i][j]) && !ps->is_s_quote && !ps->is_d_quote))
