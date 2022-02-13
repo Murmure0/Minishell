@@ -66,11 +66,12 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_star
 	char	*before_dollar;
 	int	j;
 
-// "ls $a $b"
-
 	cmd = NULL;
 	set_quotes_before_pos_start(ps, pos_start);
-	j = pos_start;
+	if (!ps->is_s_quote || ps->is_d_quote)
+		j = pos_start - 1;
+	else
+		j = pos_start;
 	while (ps->nodes[ps->i][++j])
 	{
 		set_quotes_after_pos_start(ps, &j);
@@ -93,23 +94,21 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_star
 					ft_exit(sh, ps, nodes, "Fail to malloc value in expand dollar\n");
 				if (cmd)
 				{
-
-					printf("cmd\n");
 					tmp = ft_strjoin(cmd, before_dollar);
+					if (!tmp)
+						ft_exit(sh, ps, nodes, "Fail to malloc tmp in expand dollar\n");
 					free(cmd);
 					cmd = ft_strjoin(tmp, value);
 					free(tmp);
 				}
 				else
-				{
-					printf("no cmd\n");
 					cmd = ft_strjoin(before_dollar, value);
-
-				}
-				pos_start += ft_strlen(key);
 				if (!cmd)
 					ft_exit(sh, ps, nodes, "Fail to malloc cmd in expand dollar\n");
+				pos_start += ft_strlen(key);
 			}
+			if (ps->nodes[ps->i][j] == '$' && !ps->is_s_quote)
+				continue ;
 			if (!ps->nodes[ps->i][++j] || (is_space(ps->nodes[ps->i][j]) && !ps->is_d_quote))
 				break ;
 		}
@@ -118,7 +117,6 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_star
 	}
 	if (cmd)
 	{
-		pos_start = j;
 		if (ps->is_d_quote)
 		{
 			while (ps->nodes[ps->i][++j] && ps->nodes[ps->i][j] != '"')
@@ -129,12 +127,12 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_star
 			while (ps->nodes[ps->i][++j] && (ps->nodes[ps->i][j] != ' ' && ps->nodes[ps->i][j] != '\t'))
 				continue ;
 		}
-		value = str_slice(ps->nodes[ps->i], pos_start, j + 1);
+		value = str_slice(ps->nodes[ps->i], pos_start, j);
 		if (!value)
-				ft_exit(sh, ps, nodes, "Fail to malloc value in expand dollar\n");
+			ft_exit(sh, ps, nodes, "Fail to malloc value in expand dollar\n");
 		cmd = ft_strjoin(cmd, value);
 		if (!cmd)
-				ft_exit(sh, ps, nodes, "Fail to malloc cmd in expand dollar\n");
+			ft_exit(sh, ps, nodes, "Fail to malloc cmd in expand dollar\n");
 		nodes[ps->i].cmd[ps->pos_cmd] = ft_strdup(cmd);
 		if (!nodes[ps->i].cmd[ps->pos_cmd])
 			ft_exit(sh, ps, nodes, "Fail to malloc node cmd in expand dollar\n");
@@ -151,3 +149,5 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_star
 
 	}
 }
+
+// ls$a$b-
