@@ -48,7 +48,7 @@ int	find_fd_in_parent(t_node *last_node, t_exec *exec_st)
 			return (-1);
 		}
 	}
-	else if (exec_st->pfd_in)
+	else
 		fd_in = exec_st->pfd_in;
 	return (fd_in);
 }
@@ -91,6 +91,7 @@ t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st)
 	exec_st_parent->fd_out = find_fd_out_parent(last_node);
 	if(exec_st_parent->fd_out < 0)
 		return (NULL);
+	printf("\nXxXRecup entree parent procXxX\nFd_in : %d, Fd_out : %d\n", exec_st_parent->fd_in, exec_st_parent->fd_out);
 	return (exec_st_parent);
 }
 
@@ -118,7 +119,7 @@ static void parent_fork_process(t_node *last_node, t_exec *exec_st, t_exec *exec
 	}
 	close(exec_st->pfd_in);
 	close(exec_st->pfd_out);
-	if (!find_builtin(last_node, shell))
+	if (!find_builtin(last_node, shell, 'y'))
 	{
 		exec_cmd_parent(last_node, shell);
 	}
@@ -138,7 +139,9 @@ void parent_process(pid_t prev_pid, t_exec *exec_st, t_node *last_node, t_shell 
 
 
 	status = 0;
+
 	waitpid(prev_pid, &status, 0); //on attend la fin du processus enfant 
+	printf("Parent process\n");
 	exec_st_parent = init_exec_st_parent(last_node, exec_st); //recup des bon fd 
 
 	//on lance l'execution dans un fork :
@@ -150,13 +153,13 @@ void parent_process(pid_t prev_pid, t_exec *exec_st, t_node *last_node, t_shell 
 	}
 	if (parent_pid == 0)
 		parent_fork_process(last_node, exec_st, exec_st_parent, shell);
-
 	/*close time*/
 	close(exec_st->pfd_in);
 	close(exec_st->pfd_out);
-	write(1, "pi\n",3);
-	waitpid(parent_pid, &status, 0);
-	write(1, "pa\n",3);
 	free(exec_st);
 	free(exec_st_parent);
+
+	write(1, "pu\n",3);
+	waitpid(parent_pid, &status, 0);
+	write(1, "po\n",3);
 }

@@ -62,6 +62,7 @@ typedef struct s_exec
 	int	fd_out; //si plusieurs cmd fd_out = fds;
 	int pfd_out;
 	int pfd_in;
+	int num_cmd;
 }	t_exec;
 
 /* ------------------------------------ init_struct.c ------------------------------------ */
@@ -138,8 +139,11 @@ t_exec	*init_exec_st(t_node *first_node);
 int		path_finder(t_node *first_node, t_shell *shell);
 int		exec_cmd(t_node *first_node, t_shell *shell);
 void	free_all(t_node *first_node, t_shell *shell);
-int		find_builtin(t_node *first_node, t_shell *shell);
+void	fd_dup(int fd, int std);
 
+/* ------------------------------------ exec_utils.c ------------------------------- */
+int		find_builtin(t_node *first_node, t_shell *shell, char exec);
+void	redir_solo_builtin(t_node *first_node, t_shell *shell, t_exec	*exec_st);
 
 /* ---------------------------------- exec_process_child.c ------------------------- */
 void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell *shell);
