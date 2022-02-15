@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-static char	*get_env_var_value(char *cmd)
+static char	*get_var_value(char *cmd)
 {
 	int	i;
 
@@ -13,7 +13,7 @@ static char	*get_env_var_value(char *cmd)
 	return (NULL);
 }
 
-static char	*get_env_var_key(char *cmd)
+static char	*get_var_key(char *cmd)
 {
 	int	i;
 
@@ -70,10 +70,10 @@ int	my_export(t_shell *sh, char **cmd)
 	cmd_pos = 0;
 	while (cmd[++cmd_pos])
 	{
-		key = get_env_var_key(cmd[cmd_pos]);
+		key = get_var_key(cmd[cmd_pos]);
 		if (!key)
 			return (-1);
-		value = get_env_var_value(cmd[cmd_pos]);
+		value = get_var_value(cmd[cmd_pos]);
 		if (!validate_var(key, value, cmd[cmd_pos]))
 			continue ;
 		if (check_has_key(sh->env, key))

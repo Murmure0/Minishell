@@ -9,11 +9,13 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <sys/errno.h>
+# include <sys/types.h>
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <dirent.h>
-//# include <wait.h>
+# include <signal.h>
+# include <wait.h>
 
 # define no_redir	0
 # define redir_l	1
@@ -48,6 +50,8 @@ typedef struct s_parsing
 	int		pipe_nb;
 	int		cmd_nb;
 	int		stop_err;
+	int		is_s_quote;
+	int		is_d_quote;
 }	t_parsing;
 
 typedef struct s_shell
@@ -81,6 +85,7 @@ void 	free_tab(char **env_paths);
 char	**realloc_env(char **env);
 char	**update_env_var(char **env, char *str, char *new);
 char	**add_env_var(char **env, char *var);
+char	*get_env_var_value(char **env, char *key);
 
 /* ------------------------------------ main.c -------------------------------------------- */
 int		ret_err(int ret, char *msg);
@@ -91,6 +96,9 @@ void	free_parstruct(t_parsing *ps);
 void	free_shellstruct(t_shell *sh);
 void	free_nodestruct(t_node *n);
 void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
+
+/* ------------------------------------ signals.c -------------------------------------------- */
+void	handle_signal(int sig);
 
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ PARSING ------------------------------------ */
@@ -107,6 +115,7 @@ int		arr_len(char **arr);
 char	*str_slice(char *src, int start, int stop);
 int		check_space_between_redirs(t_parsing *ps);
 void	skip_spaces(t_parsing *ps);
+void	modify_dollar_value(t_parsing *ps, t_shell *sh);
 
 /* ------------------------------------ parse_files.c ------------------------------ */
 int		get_files_nb(char *node, char chevron);
@@ -126,6 +135,10 @@ void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh);
 int		get_quote_pos(t_parsing *parstruct, int start);
 int		get_matching_quote_pos(t_parsing *parstruct, int start);
 int		check_quotes_for_pipe_split(t_parsing *parstruct);
+
+/* ------------------------------------ parse_dollar.c ------------------------------ */
+int		contains_dollar(char *s, int pos);
+void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_start);
 
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ EXEC --------------------------------------- */

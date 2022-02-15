@@ -1,5 +1,7 @@
 #include "../includes/minishell.h"
 
+pid_t g_pid;
+
 int	ret_err(int ret, char *msg)
 {
 	if (!msg)
@@ -32,36 +34,36 @@ int not_emptycmd(char *cmd)
 	return (0);
 }
 
-static void print_debug(t_parsing parstruct, t_node *nodes, t_shell shell)
-{
-	(void)shell;
-	/*		PRINT CMDS		*/
+// static void print_debug(t_parsing parstruct, t_node *nodes, t_shell shell)
+// {
+// 	(void)shell;
+// 	/*		PRINT CMDS		*/
 
-	int i = -1;
-	while (++i < parstruct.pipe_nb + 1)
-	{
-		int j = -1;
-		if (nodes[i].cmd)
-			while (nodes[i].cmd[++j])
-				printf("Node %d cmd % d : |%s|\n", i, j, nodes[i].cmd[j]);
-	}
+// 	int i = -1;
+// 	while (++i < parstruct.pipe_nb + 1)
+// 	{
+// 		int j = -1;
+// 		if (nodes[i].cmd)
+// 			while (nodes[i].cmd[++j])
+// 				printf("Node %d cmd % d : |%s|\n", i, j, nodes[i].cmd[j]);
+// 	}
 
-		/*		PRINT INFILES		*/
+// 		/*		PRINT INFILES		*/
 
-	i = -1;
-	while (++i < parstruct.pipe_nb + 1)
-	{
-		printf("Node %d infile : |%s|\n", i, nodes[i].infiles);
-	}
+// 	i = -1;
+// 	while (++i < parstruct.pipe_nb + 1)
+// 	{
+// 		printf("Node %d infile : |%s|\n", i, nodes[i].infiles);
+// 	}
 
-	// 	/*		PRINT OUTFILES		*/
+// 	// 	/*		PRINT OUTFILES		*/
 	
-	i = -1;
-	while (++i < parstruct.pipe_nb + 1)
-	{
-		printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
-	}
-}
+// 	i = -1;
+// 	while (++i < parstruct.pipe_nb + 1)
+// 	{
+// 		printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
+// 	}
+// }
 
 int main(int argc, char **argv, char **env)
 {
@@ -72,9 +74,11 @@ int main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	nodes = NULL;
+	g_pid = 0;
 	init_shell_struct(&shell, env); //faire un check sur le shell pendant l'init
 	while (1)
 	{
+		// signal(SIGINT, handle_signal);
 		// reinit struct pour le unset PATH
 		parstruct.prompt = readline("minishell$ ");
 		add_history(parstruct.prompt);
@@ -83,10 +87,10 @@ int main(int argc, char **argv, char **env)
 			nodes = parse(&parstruct, &shell);
 			if (parstruct.stop_err)
 				continue ;
-			print_debug(parstruct, nodes, shell);
+			// print_debug(parstruct, nodes, shell);
 			if (nodes)
 			{
-				exec(nodes, &shell);
+				// exec(nodes, &shell);
 				free_nodestruct(nodes);
 				free_parstruct(&parstruct);
 			}
@@ -104,5 +108,10 @@ int main(int argc, char **argv, char **env)
 
 /* TESTS QUI LEAKS (sans exec)
 	$< >
+
+*/
+
+/* A MODIFIER
+	gestion des ">" dans le parsing (ne pas le considérer comme outfile dans ce cas)
 
 */
