@@ -6,7 +6,6 @@ int	find_builtin(t_node *first_node, t_shell *shell, char exec)
 	{
 		if (!ft_strcmp(first_node[0].cmd[0], "echo"))
 		{
-			// printf("builtin echo detected\n");
 			if (exec == 'y')
 			{
 				my_echo(first_node[0].cmd + 1);
@@ -17,7 +16,6 @@ int	find_builtin(t_node *first_node, t_shell *shell, char exec)
 		}
 		if (!ft_strcmp(first_node[0].cmd[0], "cd"))
 		{
-			printf("builtin cd detected\n");
 			if (exec == 'y')
 				my_cd(shell, first_node[0].cmd[1]);
 				if (first_node->node_nb > 1)
@@ -26,7 +24,6 @@ int	find_builtin(t_node *first_node, t_shell *shell, char exec)
 		}
 		if (!ft_strcmp(first_node[0].cmd[0], "export"))
 		{
-			printf("builtin export detected\n");
 			if (exec == 'y')
 				my_export(shell, first_node[0].cmd);
 				if (first_node->node_nb > 1)

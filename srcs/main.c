@@ -90,7 +90,7 @@ int main(int argc, char **argv, char **env)
 			// print_debug(parstruct, nodes, shell);
 			if (nodes)
 			{
-				// exec(nodes, &shell);
+				exec(nodes, &shell);
 				free_nodestruct(nodes);
 				free_parstruct(&parstruct);
 			}

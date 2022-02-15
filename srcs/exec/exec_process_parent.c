@@ -99,7 +99,7 @@ static void parent_fork_process(t_node *last_node, t_exec *exec_st, t_exec *exec
 {
 	if (exec_st_parent->fd_in > 0)
 	{
-		if(dup2(exec_st_parent->fd_in, STDIN_FILENO) < 0)
+		if (dup2(exec_st_parent->fd_in, STDIN_FILENO) < 0)
 		{
 			write(2, "Dup2 fdin parent ", 18);
 			perror(": ");
@@ -109,7 +109,7 @@ static void parent_fork_process(t_node *last_node, t_exec *exec_st, t_exec *exec
 	}
 	if (exec_st_parent->fd_out > 1)
 	{
-		if(dup2(exec_st_parent->fd_out, STDOUT_FILENO) < 0)
+		if (dup2(exec_st_parent->fd_out, STDOUT_FILENO) < 0)
 		{
 			write(2, "Dup2 fdout parent ", 19);
 			perror(": ");
@@ -127,39 +127,25 @@ static void parent_fork_process(t_node *last_node, t_exec *exec_st, t_exec *exec
 		perror(": ");
 }
 
-// rval = (stqtus >> 8) & 0xff;
-// TEST A FAIRE : cat /dev/urandom | head
-
-
-void parent_process(pid_t prev_pid, t_exec *exec_st, t_node *last_node, t_shell *shell)
+void parent_process(pid_t prev_pid, t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
 {
 	t_exec	*exec_st_parent;
 	int		status;
 	pid_t	parent_pid;
 
-
+	(void)prev_pid;
 	status = 0;
-
-	waitpid(prev_pid, &status, 0); //on attend la fin du processus enfant 
-	printf("Parent process\n");
-	exec_st_parent = init_exec_st_parent(last_node, exec_st); //recup des bon fd 
-
-	//on lance l'execution dans un fork :
+	exec_st_parent = init_exec_st_parent(last_node, prev_exec_st); //recup des bon fd 
 	parent_pid = fork();
 	if (parent_pid < 0)
 	{
 		perror(": ");
-		exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE); // exit ?
 	}
 	if (parent_pid == 0)
-		parent_fork_process(last_node, exec_st, exec_st_parent, shell);
-	/*close time*/
-	close(exec_st->pfd_in);
-	close(exec_st->pfd_out);
-	free(exec_st);
+		parent_fork_process(last_node, prev_exec_st, exec_st_parent, shell);
+	close(prev_exec_st->pfd_in);
+	close(prev_exec_st->pfd_out);
+	free(prev_exec_st);
 	free(exec_st_parent);
-
-	write(1, "pu\n",3);
-	waitpid(parent_pid, &status, 0);
-	write(1, "po\n",3);
 }

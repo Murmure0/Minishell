@@ -137,22 +137,20 @@ static void brother_fork_process(t_node *middle_node, t_exec *prev_exec_st, t_ex
 	{
 		exec_cmd_bro(middle_node, shell);
 	}
-		write(2, "Erreur post execution process brother ", 39);
-		perror(": ");
+		write(2, middle_node->cmd[0], 3);
+		perror(" ");
 }
 
 void	brother_process(pid_t prev_pid, t_exec *prev_exec_st, t_node *middle_node, t_shell *shell)
 {
-	printf("Process brother\n");
 	pid_t	bro_pid;
 	int		status;
 	t_exec	*exec_st_bro;
 
 	status = 0;
-	waitpid(prev_pid, &status, 0);
+	(void)prev_pid;
 	exec_st_bro = init_exec_st_bro(middle_node, prev_exec_st);
 	printf("\nxXx Processus num %d (Bro)xXx\nFDin : %d, FDout : %d\nPFDIN : %d PFDOUT : %d\n", exec_st_bro->num_cmd, exec_st_bro->fd_in, exec_st_bro->fd_out, exec_st_bro->pfd_in, exec_st_bro->pfd_out);
-	/*recup les fd : ok, faire l'exec et le passage au process suivant, bisous, je t'aime, have fun love love <3 <3*/
 	bro_pid = fork();
 	if (bro_pid < 0)
 	{
@@ -168,10 +166,8 @@ void	brother_process(pid_t prev_pid, t_exec *prev_exec_st, t_node *middle_node, 
 	if (exec_st_bro->num_cmd < (middle_node->node_nb - 1)) //warning
 	{
 		exec_st_bro->num_cmd++;
-		printf("exec_st_bro num cmd : %d", exec_st_bro->num_cmd);
 		brother_process(bro_pid, exec_st_bro, middle_node + 1, shell);
 	}
 	else
 		parent_process(bro_pid, exec_st_bro, middle_node + 1, shell);
-
 }

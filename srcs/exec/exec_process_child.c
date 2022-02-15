@@ -1,29 +1,5 @@
 #include "../../includes/minishell.h"
 
-/*
-	CAS DE 2 COMMANDES
-	MAIN PROCESS
-	pfdin, pfdout;
-
-	CHILD PROCESS
-	->infile, outfile dans le child process? < in cat > out | grep coucou
-		dup2(infile, STDIN), dup2(outfile, STDOUT)
-		close (infile), close(outfile)
-	->sinon cat | grep coucou
-		dup2(pfdout, STDOUT)
-		close(pdfout)
-	on execute
-	close(pfdin), close(STDIN), close(STDOUT)
-
-	PARENT PROCESS
-	close (pfdout)
-	-> infile dans le parent process? cat | < in grep
-		dup2(in, STDIN)
-	->sinon <in cat > out | grep (avec ou sans files dans le child process)
-		dup2(pfdin, STDIN)
-	on execute
-*/
-
 int	find_fd_in(t_node *first_node)
 {
 	int	fd_in;
@@ -106,7 +82,6 @@ pid_t	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st)
 	int		status;
 	pid_t	child_pid;
 
-	printf("Exec child \n");
 	status = 0;
 	child_pid = fork();
 	if (child_pid < 0)
