@@ -4,9 +4,9 @@ int	exec(t_node *first_node, t_shell *shell)
 {
 	pid_t	child_pid;
 	t_exec	*exec_st;
-	int status;
+	// int status;
 
-	status = 0;
+	// status = 0;
 	exec_st = init_exec_st(first_node);
 	if (!exec_st)
 		return (-1);
@@ -14,12 +14,15 @@ int	exec(t_node *first_node, t_shell *shell)
 		redir_solo_builtin(first_node, shell, exec_st);
 	else
 	{
+		write(2, "Giello world!\n", 14);
 		child_pid = exec_child_proc(first_node, shell, exec_st);
 		if (first_node[0].node_nb == 2)
 			parent_process(child_pid, exec_st, first_node + 1, shell);
 		else if (first_node[0].node_nb > 2)
 			brother_process(child_pid, exec_st, first_node + 1, shell);
 	}
-	waitpid(-1, &status, 0);
+	write(2, "Miello world!\n", 14);
+	//waitpid(-1, &status, WUNTRACED);
+	write(2, "Hello world!\n", 13);
 	return (0);
 }

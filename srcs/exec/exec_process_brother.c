@@ -141,14 +141,15 @@ static void brother_fork_process(t_node *middle_node, t_exec *prev_exec_st, t_ex
 		perror(" ");
 }
 
+// void	brother_process(t_exec *prev_exec_st, t_node *middle_node, t_shell *shell)
 void	brother_process(pid_t prev_pid, t_exec *prev_exec_st, t_node *middle_node, t_shell *shell)
 {
 	pid_t	bro_pid;
-	int		status;
 	t_exec	*exec_st_bro;
+	int status;
 
 	status = 0;
-	(void)prev_pid;
+	waitpid(prev_pid, &status, WUNTRACED);
 	exec_st_bro = init_exec_st_bro(middle_node, prev_exec_st);
 	printf("\nxXx Processus num %d (Bro)xXx\nFDin : %d, FDout : %d\nPFDIN : %d PFDOUT : %d\n", exec_st_bro->num_cmd, exec_st_bro->fd_in, exec_st_bro->fd_out, exec_st_bro->pfd_in, exec_st_bro->pfd_out);
 	bro_pid = fork();
@@ -163,7 +164,7 @@ void	brother_process(pid_t prev_pid, t_exec *prev_exec_st, t_node *middle_node, 
 	close(prev_exec_st->pfd_in);
 	close(prev_exec_st->pfd_out);
 	free(prev_exec_st);
-	if (exec_st_bro->num_cmd < (middle_node->node_nb - 1)) //warning
+	if (exec_st_bro->num_cmd < (middle_node->node_nb - 1))
 	{
 		exec_st_bro->num_cmd++;
 		brother_process(bro_pid, exec_st_bro, middle_node + 1, shell);

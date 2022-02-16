@@ -125,16 +125,18 @@ static void parent_fork_process(t_node *last_node, t_exec *exec_st, t_exec *exec
 	}
 		write(2, "Erreur post execution process parent ", 38);
 		perror(": ");
+		exit(EXIT_FAILURE);
 }
 
-void parent_process(pid_t prev_pid, t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
+// void parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
+void parent_process(pid_t	child_pid, t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
 {
 	t_exec	*exec_st_parent;
-	int		status;
 	pid_t	parent_pid;
+	int status;
 
-	(void)prev_pid;
 	status = 0;
+	waitpid(child_pid, &status, WUNTRACED);
 	exec_st_parent = init_exec_st_parent(last_node, prev_exec_st); //recup des bon fd 
 	parent_pid = fork();
 	if (parent_pid < 0)
@@ -146,6 +148,9 @@ void parent_process(pid_t prev_pid, t_exec *prev_exec_st, t_node *last_node, t_s
 		parent_fork_process(last_node, prev_exec_st, exec_st_parent, shell);
 	close(prev_exec_st->pfd_in);
 	close(prev_exec_st->pfd_out);
-	free(prev_exec_st);
-	free(exec_st_parent);
+
+	// free(prev_exec_st);
+	// free(exec_st_parent);
+
+	waitpid(parent_pid, &status, WUNTRACED);
 }

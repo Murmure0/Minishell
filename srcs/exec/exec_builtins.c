@@ -22,14 +22,14 @@ int	find_builtin(t_node *first_node, t_shell *shell, char exec)
 					exit(EXIT_SUCCESS);
 			return (1);
 		}
-		if (!ft_strcmp(first_node[0].cmd[0], "export"))
-		{
-			if (exec == 'y')
-				my_export(shell, first_node[0].cmd);
-				if (first_node->node_nb > 1)
-					exit(EXIT_SUCCESS);
-			return (1);
-		}
+		// if (!ft_strcmp(first_node[0].cmd[0], "export"))
+		// {
+		// 	if (exec == 'y')
+		// 		my_export(shell, first_node[0].cmd);
+		// 		if (first_node->node_nb > 1)
+		// 			exit(EXIT_SUCCESS);
+		// 	return (1);
+		// }
 	}
 	return (0);
 }

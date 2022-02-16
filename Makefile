@@ -11,12 +11,10 @@ MAIN = 	srcs/main.c			\
 		srcs/init_struct.c	\
 		srcs/free.c	\
 		srcs/env.c			\
-		srcs/signals.c			\
 		srcs/parsing/parse.c \
 		srcs/parsing/parse_utils.c \
 		srcs/parsing/parse_quotes.c \
 		srcs/parsing/parse_cmds.c \
-		srcs/parsing/parse_dollar.c \
 		srcs/parsing/parse_files.c \
 		srcs/exec/exec.c \
 		srcs/exec/exec_process_child.c \
@@ -27,6 +25,7 @@ MAIN = 	srcs/main.c			\
 		srcs/builtins/echo.c \
 		srcs/builtins/cd.c \
 		srcs/builtins/export.c \
+		srcs/signals.c
 
 
 SOURCES = $(MAIN)

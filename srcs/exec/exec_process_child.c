@@ -73,6 +73,7 @@ void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node,
 			exec_cmd(first_node, shell);
 			write(2, "Erreur post execution child ", 29);
 			perror(": ");
+			exit(EXIT_FAILURE);
 		}
 	}
 }

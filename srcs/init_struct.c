@@ -31,8 +31,6 @@ int	init_global_struct(t_parsing *ps, t_shell *sh)
 		ft_exit(sh, ps, NULL, "Fail to split nodes in init_global_struct\n");
 	ps->pipe_nb = arr_len(ps->nodes) - 1;
 	ps->stop_err = 0;
-	ps->is_s_quote = 0;
-	ps->is_d_quote = 0;
 	ps->i = 0;
 	return (1);
 }
