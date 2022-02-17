@@ -15,6 +15,9 @@
 # include <readline/history.h>
 # include <dirent.h>
 # include <signal.h>
+# include <errno.h>
+# include <termios.h>
+
 //# include <wait.h>
 
 # define no_redir	0
@@ -58,6 +61,7 @@ typedef struct s_shell
 {
 	char **env;
 	char **path;
+	struct termios	termios_p;
 }	t_shell;
 
 typedef struct s_exec
@@ -165,12 +169,12 @@ int		find_fd_out(t_node *first_node, t_exec *exec_st);
 pid_t	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st);
 
 /* ---------------------------------- exec_process_parent.c ------------------------- */
-// void	parent_process(t_exec *exec_st, t_node *second_node, t_shell *shell);
-void	parent_process(pid_t	child_pid, t_exec *exec_st, t_node *second_node, t_shell *shell);
+void	parent_process(t_exec *exec_st, t_node *second_node, t_shell *shell);
+// void	parent_process(pid_t	child_pid, t_exec *exec_st, t_node *second_node, t_shell *shell);
 
 /* ---------------------------------- exec_process_brother.c ------------------------- */
-// void	brother_process(t_exec *exec_st, t_node *last_node, t_shell *shell);
-void	brother_process(pid_t	child_pid, t_exec *exec_st, t_node *last_node, t_shell *shell);
+void	brother_process(t_exec *exec_st, t_node *last_node, t_shell *shell);
+// void	brother_process(pid_t	child_pid, t_exec *exec_st, t_node *last_node, t_shell *shell);
 
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ BUILTINS ----------------------------------- */

@@ -92,8 +92,10 @@ pid_t	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st)
 	}
 	if (child_pid == 0)
 		child_process(child_pid, exec_st, first_node, shell);
+	close(exec_st->pfd_out);//ajout
 	if (first_node[0].node_nb == 1)
 	{
+		printf(" le pid ne passe pas\n");
 		waitpid(child_pid, &status, 0);
 	}
 	printf("\nXxXFin child procXxX\nPdfin : %d, Pdfout : %d\nEnvoyer apres: fd_out : %d\n", exec_st->pfd_in, exec_st->pfd_out, exec_st->fd_out);

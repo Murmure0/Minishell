@@ -73,6 +73,7 @@ int main(int argc, char **argv, char **env)
 	(void)argv;
 	nodes = NULL;
 	init_shell_struct(&shell, env); //faire un check sur le shell pendant l'init
+	tcgetattr(STDIN_FILENO, &shell.termios_p);
 	while (1)
 	{
 		signal(SIGINT, handle_signal);

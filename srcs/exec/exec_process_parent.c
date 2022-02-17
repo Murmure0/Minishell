@@ -80,6 +80,8 @@ t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st)
 	t_exec	*exec_st_parent;
 
 	exec_st_parent = malloc(sizeof(t_exec));
+	exec_st_parent->pfd_in = 0;
+	exec_st_parent->pfd_out = 0;
 	if (!exec_st_parent)
 	{
 		write(2, "Memory allocation for last execution struct initialisation failed\n", 67);
@@ -128,15 +130,15 @@ static void parent_fork_process(t_node *last_node, t_exec *exec_st, t_exec *exec
 		exit(EXIT_FAILURE);
 }
 
-// void parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
-void parent_process(pid_t	child_pid, t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
+// void parent_process(pid_t	child_pid, t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
+void parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
 {
 	t_exec	*exec_st_parent;
 	pid_t	parent_pid;
-	int status;
+	//int status;
 
-	status = 0;
-	waitpid(child_pid, &status, WUNTRACED);
+	//status = 0;
+	//waitpid(child_pid, &status, WUNTRACED);
 	exec_st_parent = init_exec_st_parent(last_node, prev_exec_st); //recup des bon fd 
 	parent_pid = fork();
 	if (parent_pid < 0)
@@ -152,5 +154,5 @@ void parent_process(pid_t	child_pid, t_exec *prev_exec_st, t_node *last_node, t_
 	// free(prev_exec_st);
 	// free(exec_st_parent);
 
-	waitpid(parent_pid, &status, WUNTRACED);
+	//waitpid(parent_pid, &status, WUNTRACED);
 }
