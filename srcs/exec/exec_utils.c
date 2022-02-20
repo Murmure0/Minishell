@@ -1,5 +1,16 @@
 #include "../../includes/minishell.h"
 
+void	fd_dup(int fd, int std)
+{
+	if (dup2(fd, std) < 0)
+	{
+		close(fd);
+		perror(": ");
+		exit (errno);
+	}
+	close(fd);
+}
+
 t_exec	*init_exec_st(t_node *first_node)
 {
 	t_exec	*exec_st;
@@ -10,6 +21,7 @@ t_exec	*init_exec_st(t_node *first_node)
 		write(2, "Mem. alloc. for execution struct initialisation failed.\n", 57);
 		perror(": ");
 	}
+	exec_st->num_cmd = 1;
 	exec_st->pfd_in = 0;
 	exec_st->pfd_out = 0;
 	exec_st->fd_in = find_fd_in(first_node);
@@ -33,10 +45,8 @@ int	path_finder(t_node *first_node, t_shell *shell)
 		while (shell->path[++i])
 		{
 			first_node[0].cmd[0] = ft_strjoin(shell->path[i], tmp);
-			printf("EXEXC cmd : %s\n", first_node[0].cmd[0]); //warning
 			if (!tmp)
 				return (-1);
-			// printf("|%s|\n", first_node[0].cmd[0]);
 			execve(first_node[0].cmd[0], first_node[0].cmd, shell->env);
 			free(first_node[0].cmd[0]);
 		}
@@ -46,43 +56,18 @@ int	path_finder(t_node *first_node, t_shell *shell)
 	return (0);
 }
 
-int	find_builtin(t_node *first_node, t_shell *shell)
-{
-	if(first_node[0].cmd)
-	{
-		if (!ft_strcmp(first_node[0].cmd[0], "echo"))
-		{
-			printf("builtin detected\n");
-			my_echo(first_node[0].cmd + 1);
-			return (1);
-		}
-		if (!ft_strcmp(first_node[0].cmd[0], "cd"))
-		{
-			printf("builtin detected\n");
-			my_cd(shell, first_node[0].cmd[1]);
-			return (1);
-		}
-		if (!ft_strcmp(first_node[0].cmd[0], "export"))
-		{
-			my_export(shell, first_node[0].cmd);
-			return (1);
-		}
-	}
-	return (0);
-}
-
 int	exec_cmd(t_node *first_node, t_shell *shell)
 {
 	if (!path_finder(first_node, shell))
 	{
-		//free_all(first_node); faire une bonne fct free
+		//free_all(first_node); fais une bonne fct free stp
 		return (-1);
 	}
 	return (0);
 }
 
 /*
-void	free_all(t_node *first_node, t_shell shell)
+void	free_all(t_node *first_node, t_shell shell) // ah ouais ce serait une super idee quand meme
 {
 	int i = -1;
 	while (shell.env[++i])

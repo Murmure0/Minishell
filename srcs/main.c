@@ -86,14 +86,17 @@ int main(int argc, char **argv, char **env)
 		{
 			nodes = parse(&parstruct, &shell);
 			if (parstruct.stop_err)
+			{
+				final_free(NULL, &parstruct, nodes);
 				continue ;
+			}
 			// print_debug(parstruct, nodes, shell);
 			if (nodes)
 			{
-				// exec(nodes, &shell);
+				exec(nodes, &shell);
 				free_nodestruct(nodes);
-				free_parstruct(&parstruct);
 			}
+			free_parstruct(&parstruct);
 		}
 		else
 		{

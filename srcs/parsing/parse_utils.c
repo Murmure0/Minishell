@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:08:35 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/10 17:10:55 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/20 11:46:46 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,10 @@ void	skip_spaces(t_parsing *ps)
 		else
 			break ;
 	}
+}
+
+t_node	*parse_ret_free(t_node *nodes)
+{
+	free(nodes);
+	return (NULL);
 }

@@ -1,29 +1,5 @@
 #include "../../includes/minishell.h"
 
-/*
-	CAS DE 2 COMMANDES
-	MAIN PROCESS
-	pfdin, pfdout;
-
-	CHILD PROCESS
-	->infile, outfile dans le child process? < in cat > out | grep coucou
-		dup2(infile, STDIN), dup2(outfile, STDOUT)
-		close (infile), close(outfile)
-	->sinon cat | grep coucou
-		dup2(pfdout, STDOUT)
-		close(pdfout)
-	on execute
-	close(pfdin), close(STDIN), close(STDOUT)
-
-	PARENT PROCESS
-	close (pfdout)
-	-> infile dans le parent process? cat | < in grep
-		dup2(in, STDIN)
-	->sinon <in cat > out | grep (avec ou sans files dans le child process)
-		dup2(pfdin, STDIN)
-	on execute
-*/
-
 int	find_fd_in(t_node *first_node)
 {
 	int	fd_in;
@@ -50,6 +26,7 @@ void	pipe_case(t_exec *exec_st)
 		perror(": ");
 	exec_st->pfd_out = pfd[1];
 	exec_st->pfd_in = pfd[0];
+	exec_st->num_cmd++;
 }
 
 int	find_fd_out(t_node *first_node, t_exec *exec_st)
@@ -77,17 +54,6 @@ int	find_fd_out(t_node *first_node, t_exec *exec_st)
 	return (fd_out);
 }
 
-void	fd_dup(int fd, int std)
-{
-	if (dup2(fd, std) < 0)
-	{
-		close(fd);
-		perror(": ");
-		exit (errno);
-	}
-	close(fd);
-}
-
 void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node,
 		t_shell *shell)
 {
@@ -97,16 +63,17 @@ void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node,
 			fd_dup(exec_st->fd_in, STDIN_FILENO);
 		if (exec_st->fd_out > 1)
 			fd_dup(exec_st->fd_out, STDOUT_FILENO);
-		if (!find_builtin(first_node, shell))
+		if (first_node[0].node_nb > 1)
+		{
+			close(exec_st->pfd_in);
+			close(exec_st->pfd_out);
+		}
+		if (!find_builtin(first_node, shell, 'y'))
 		{
 			exec_cmd(first_node, shell);
 			write(2, "Erreur post execution child ", 29);
 			perror(": ");
 		}
-		close(exec_st->pfd_in);
-		close(exec_st->pfd_out);
-		close(exec_st->fd_in);
-		close(exec_st->fd_out);
 	}
 }
 
@@ -115,7 +82,6 @@ pid_t	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st)
 	int		status;
 	pid_t	child_pid;
 
-	printf("exec child \n");
 	status = 0;
 	child_pid = fork();
 	if (child_pid < 0)
@@ -129,5 +95,6 @@ pid_t	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st)
 	{
 		waitpid(child_pid, &status, 0);
 	}
+	printf("\nXxXFin child procXxX\nPdfin : %d, Pdfout : %d\nEnvoyer apres: fd_out : %d\n", exec_st->pfd_in, exec_st->pfd_out, exec_st->fd_out);
 	return (child_pid);
 }

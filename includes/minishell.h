@@ -66,6 +66,7 @@ typedef struct s_exec
 	int	fd_out; //si plusieurs cmd fd_out = fds;
 	int pfd_out;
 	int pfd_in;
+	int num_cmd;
 }	t_exec;
 
 /* ------------------------------------ init_struct.c ------------------------------------ */
@@ -114,7 +115,7 @@ int		arr_len(char **arr);
 char	*str_slice(char *src, int start, int stop);
 int		check_space_between_redirs(t_parsing *ps);
 void	skip_spaces(t_parsing *ps);
-void	modify_dollar_value(t_parsing *ps, t_shell *sh);
+t_node	*parse_ret_free(t_node *nodes);
 
 /* ------------------------------------ parse_files.c ------------------------------ */
 int		get_files_nb(char *node, char chevron);
@@ -136,7 +137,7 @@ int		get_matching_quote_pos(t_parsing *parstruct, int start);
 int		check_quotes_for_pipe_split(t_parsing *parstruct);
 
 /* ------------------------------------ parse_dollar.c ------------------------------ */
-int		contains_dollar(char *s, int pos);
+int		contains_dollar(t_parsing *ps, char *s, int pos);
 void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_start);
 
 /* --------------------------------------------------------------------------------- */
@@ -151,8 +152,11 @@ t_exec	*init_exec_st(t_node *first_node);
 int		path_finder(t_node *first_node, t_shell *shell);
 int		exec_cmd(t_node *first_node, t_shell *shell);
 void	free_all(t_node *first_node, t_shell *shell);
-int		find_builtin(t_node *first_node, t_shell *shell);
+void	fd_dup(int fd, int std);
 
+/* ------------------------------------ exec_utils.c ------------------------------- */
+int		find_builtin(t_node *first_node, t_shell *shell, char exec);
+void	redir_solo_builtin(t_node *first_node, t_shell *shell, t_exec	*exec_st);
 
 /* ---------------------------------- exec_process_child.c ------------------------- */
 void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell *shell);

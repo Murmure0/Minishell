@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/11 15:07:07 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/20 11:46:41 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		while (ps->nodes[ps->i][ps->j])
 		{
 			if (!process_parse(&nodes, ps, sh))
-				return (NULL);
+				return (parse_ret_free(nodes));
 			if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1] &&
 				!is_chevron(ps->nodes[ps->i][ps->j]))
 					ps->j++;

@@ -23,6 +23,7 @@ MAIN = 	srcs/main.c			\
 		srcs/exec/exec_process_brother.c \
 		srcs/exec/exec_process_parent.c \
 		srcs/exec/exec_utils.c \
+		srcs/exec/exec_builtins.c \
 		srcs/builtins/echo.c \
 		srcs/builtins/cd.c \
 		srcs/builtins/export.c \
