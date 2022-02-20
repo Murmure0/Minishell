@@ -15,7 +15,7 @@
 # include <readline/history.h>
 # include <dirent.h>
 # include <signal.h>
-//# include <wait.h>
+# include <wait.h>
 
 # define no_redir	0
 # define redir_l	1
@@ -177,5 +177,6 @@ void	brother_process(pid_t prev_pid, t_exec *exec_st, t_node *last_node, t_shell
 int 	my_echo(char **str);
 int		my_cd(t_shell *shell, char *dir);
 int		my_export(t_shell *shell, char **var);
+int		my_unset(t_shell *sh, char *var);
 
 #endif

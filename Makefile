@@ -27,6 +27,7 @@ MAIN = 	srcs/main.c			\
 		srcs/builtins/echo.c \
 		srcs/builtins/cd.c \
 		srcs/builtins/export.c \
+		srcs/builtins/unset.c \
 
 
 SOURCES = $(MAIN)
