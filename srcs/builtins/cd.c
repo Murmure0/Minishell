@@ -29,11 +29,6 @@ static int get_pwds(t_shell *s, char **old_pwd, char **pwd, char **home)
 	return (1);
 }
 
-// static char	**update_env_absolute(char **env, char *dir, char *pwd, char *home)
-// {
-
-// }
-
 static void update_env(char **env, char *dir, char *pwd, char *home)
 {
 	int	i;
