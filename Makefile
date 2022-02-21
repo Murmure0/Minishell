@@ -30,6 +30,8 @@ MAIN = 	srcs/main.c			\
 		srcs/builtins/cd.c \
 		srcs/builtins/export.c \
 		srcs/builtins/unset.c \
+		srcs/builtins/pwd.c \
+		srcs/builtins/exit.c \
 		srcs/builtins/env.c \
 
 

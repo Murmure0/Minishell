@@ -91,12 +91,12 @@ int main(int argc, char **argv, char **env)
 				continue ;
 			}
 			// print_debug(parstruct, nodes, shell);
+			free_parstruct(&parstruct);
 			if (nodes)
 			{
 				exec(nodes, &shell);
 				free_nodestruct(nodes);
 			}
-			free_parstruct(&parstruct);
 		}
 		else
 		{

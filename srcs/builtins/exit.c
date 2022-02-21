@@ -1,26 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/21 12:26:10 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/21 12:30:17 by vmasse           ###   ########.fr       */
+/*   Created: 2022/02/21 12:26:18 by vmasse            #+#    #+#             */
+/*   Updated: 2022/02/21 12:39:51 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	my_pwd()
+int	my_exit(t_shell *sh, t_node *n)
 {
-	char	*pwd;
-
-	pwd = NULL;
-	pwd = getcwd(pwd, 0);
-	if (!pwd)
-		return (-1);
-	printf("%s\n", pwd);
-	free(pwd);
+	ft_exit(sh, NULL, n, NULL);
 	return (0);
 }

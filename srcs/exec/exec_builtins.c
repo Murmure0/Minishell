@@ -54,6 +54,26 @@ int	find_builtin(t_node *first_node, t_shell *shell, char exec)
 			}
 			return (1);
 		}
+		if (!ft_strcmp(first_node[0].cmd[0], "pwd"))
+		{
+			if (exec == 'y')
+			{
+				my_pwd(shell);
+				if (first_node->node_nb > 1)
+					exit(EXIT_SUCCESS);
+			}
+			return (1);
+		}
+		if (!ft_strcmp(first_node[0].cmd[0], "exit"))
+		{
+			if (exec == 'y')
+			{
+				my_exit(shell, first_node);
+				if (first_node->node_nb > 1)
+					exit(EXIT_SUCCESS);
+			}
+			return (1);
+		}
 	}
 	return (0);
 }
