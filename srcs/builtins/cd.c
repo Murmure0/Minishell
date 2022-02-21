@@ -1,5 +1,15 @@
 #include "../../includes/minishell.h"
 
+static int	ret_err_free(int ret, char *msg, char *s1, char *s2)
+{
+	printf("%s\n", msg);
+	if (s1)
+		free(s1);
+	if (s2)
+		free(s2);
+	return (ret);
+}
+
 static int get_pwds(t_shell *s, char **old_pwd, char **pwd, char **home)
 {
 	int		i;
@@ -11,19 +21,19 @@ static int get_pwds(t_shell *s, char **old_pwd, char **pwd, char **home)
 		{
 			*old_pwd = ft_strdup(s->env[i]);
 			if (!*old_pwd)
-				return (0);
+				return (ret_err(0, "Fail to malloc oldpwd in get pwds"));
 		}
 		else if (!ft_strncmp(s->env[i], "PWD", 3))
 		{
 			*pwd = ft_strdup(s->env[i]);
 			if (!*pwd)
-				return (0);
+				return (ret_err(0, "Fail to malloc pwd in get pwds"));
 		}
 		else if (!ft_strncmp(s->env[i], "HOME", 4))
 		{
 			*home = ft_strdup(s->env[i]);
 			if (!*home)
-				return (0);
+				return (ret_err(0, "Fail to malloc home in get pwds"));
 		}
 	}
 	return (1);
@@ -83,11 +93,6 @@ int	my_cd(t_shell *shell, char *dir)
 	char	*pwd;
 	char	*home;
 
-	// TO DO 1
-	// checker si le home nest pas set
-	// bash: cd: HOME not set
-
-	// TO DO 2
 	// minishell$ cd ./
 	// builtin detected
 	// PWD=/Users/vmasse//
@@ -96,11 +101,19 @@ int	my_cd(t_shell *shell, char *dir)
 	// TO DO 3
 	// ..
 
+	// PB : après avoir unset HOME, l'exec crashe
+	// => réglé avec le path mais quel est le lien ?
+
+	old_pwd = NULL;
+	pwd = NULL;
+	home = NULL;
 	if (!get_pwds(shell, &old_pwd, &pwd, &home))
 		return (-1);
 	if (!dir)
 	{
-		if (!try_chdir(ft_substr(home, 5, ft_strlen(home) - 5)))
+		if (!home)
+			return (ret_err_free(-1, HOME_UNSET, old_pwd, pwd));
+		else if (!try_chdir(ft_substr(home, 5, ft_strlen(home) - 5)))
 			return (-1);
 		update_env(shell->env, NULL, pwd, home);
 	}
@@ -128,7 +141,8 @@ int	my_cd(t_shell *shell, char *dir)
 			printf("%s\n", shell->env[i]);
 		}
 	}
-	free(old_pwd);
+	if (old_pwd)
+		free(old_pwd);
 	free(pwd);
 	free(home);
 	return (0);

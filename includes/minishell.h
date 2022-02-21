@@ -26,6 +26,7 @@
 
 # define PERR		"minishell: " 
 # define NO_FILE	"minishell: syntax error near unexpected symbol « newline »"
+# define HOME_UNSET	"minishell: cd: « HOME » not set"
 
 typedef struct s_node
 {
