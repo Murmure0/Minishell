@@ -188,7 +188,7 @@ int		my_cd(t_shell *shell, char *dir);
 int		my_export(t_shell *shell, char **var);
 int		my_unset(t_shell *sh, char *var);
 int		my_env(t_shell *sh);
-int		my_exit(t_shell *sh, t_node *n);
+void	my_exit(t_shell *sh, t_node *n);
 int		my_pwd();
 
 #endif

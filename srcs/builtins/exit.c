@@ -6,14 +6,13 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:26:18 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/21 12:39:51 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/21 12:41:45 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	my_exit(t_shell *sh, t_node *n)
+void	my_exit(t_shell *sh, t_node *n)
 {
 	ft_exit(sh, NULL, n, NULL);
-	return (0);
 }

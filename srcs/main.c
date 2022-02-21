@@ -94,7 +94,7 @@ int main(int argc, char **argv, char **env)
 			free_parstruct(&parstruct);
 			if (nodes)
 			{
-				exec(nodes, &shell);
+				// exec(nodes, &shell);
 				free_nodestruct(nodes);
 			}
 		}
@@ -110,7 +110,6 @@ int main(int argc, char **argv, char **env)
 }
 
 /* TESTS QUI LEAKS (sans exec)
-	$< >
 
 */
 

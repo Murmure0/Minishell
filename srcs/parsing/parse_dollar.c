@@ -115,7 +115,7 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_star
 			}
 			if (ps->nodes[ps->i][j] == '$' && ps->nodes[ps->i][j + 1])
 				continue ;
-			if (!ps->nodes[ps->i][j + 1] || (is_space(ps->nodes[ps->i][j]) && !ps->is_d_quote))
+			if ((!ps->nodes[ps->i][j] && !ps->nodes[ps->i][j + 1]) || (is_space(ps->nodes[ps->i][j]) && !ps->is_d_quote))
 			{
 
 				break ;

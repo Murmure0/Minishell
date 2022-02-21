@@ -66,6 +66,7 @@ static void update_env(char **env, char *dir, char *pwd, char *home)
 				return ;
 			free(dir);
 			dir = ft_strdup(tmp);
+			free(tmp);
 			if (!dir)
 				return ;
 		}
@@ -157,6 +158,13 @@ int	my_cd(t_shell *shell, char *dir)
 	home = NULL;
 	if (!get_pwds(shell, &old_pwd, &pwd, &home))
 		return (ret_free_full(-1, home, old_pwd, pwd));
+	if (!old_pwd)
+	{
+		printf("cpy \n");
+		old_pwd = ft_strdup(pwd);
+		if (!old_pwd)
+			return (-1);
+	}
 	if (!dir)
 	{
 		if (!home)
@@ -165,7 +173,7 @@ int	my_cd(t_shell *shell, char *dir)
 			return (ret_free_full(-1, home, old_pwd, pwd));
 		update_env(shell->env, NULL, pwd, home);
 	}
-	if (dir && (!ft_strncmp(dir, "~/", 2) || !ft_strncmp(dir, "..", 2) || !ft_strncmp(dir, "/", 1)))
+	if (dir && (!ft_strncmp(dir, "~/", 2) || !ft_strncmp(dir, ".", 1) || !ft_strncmp(dir, "/", 1)))
 	{
 		if (!try_chdir(dir, 0))
 			return (ret_free_full(-1, home, old_pwd, pwd));
