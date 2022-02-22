@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split_pipe.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/22 16:29:40 by vmasse            #+#    #+#             */
+/*   Updated: 2022/02/22 16:42:32 by vmasse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/libft.h"
 
 static	int	count_elems(char const *s, char c)
@@ -40,21 +52,6 @@ static	char	**free_arr(char **arr)
 	return (NULL);
 }
 
-void	process_fill_arr_first()
-{
-	while (s[i] && (s[i] != c || is_quote))
-	{
-		set_quote(s[i], &is_quote);
-		arr[j][k++] = s[i++];
-	}
-	arr[j++][k] = '\0';
-}
-
-void	process_fill_arr_second()
-{
-
-}
-
 static	char	**fill_arr(char const *s, char **arr, char c, int is_quote)
 {
 	int	i;
@@ -62,16 +59,13 @@ static	char	**fill_arr(char const *s, char **arr, char c, int is_quote)
 	int	k;
 	int	elem_len;
 
-	i = 0;
-	j = 0;
-	while (s[i])
+	set_i_and_j(&i, &j);
+	while (s[++i])
 	{
-		set_quote(s[i], &is_quote);
 		if (s[i] != c)
 		{
 			k = 0;
 			elem_len = count_elem_len(s, c, i);
-			process_fill_arr_first();
 			arr[j] = (char *)malloc((elem_len + 1) * sizeof(char));
 			if (!arr[j])
 				return (free_arr(arr));
@@ -80,11 +74,9 @@ static	char	**fill_arr(char const *s, char **arr, char c, int is_quote)
 				set_quote(s[i], &is_quote);
 				arr[j][k++] = s[i++];
 			}
-			arr[j++][k] = '\0';
-			if (!s[i])
+			if (!put_arr_end(arr, j, k, s[i]))
 				return (arr);
 		}
-		i++;
 	}
 	return (arr);
 }

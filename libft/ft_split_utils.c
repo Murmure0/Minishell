@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:16:28 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/22 16:18:38 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/22 16:43:13 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,4 +21,18 @@ void	set_quote(char c, int *is_quote)
 		else
 			*is_quote = 1;
 	}
+}
+
+void	set_i_and_j(int *i, int *j)
+{
+	*i = -1;
+	*j = 0;
+}
+
+int	put_arr_end(char **arr, int j, int k, char s)
+{
+	arr[j++][k] = '\0';
+	if (!s)
+		return (0);
+	return (1);
 }

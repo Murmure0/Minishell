@@ -23,5 +23,7 @@ char	*ft_itoa(int n);
 int		ft_atoi(const char *str);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_isalnum(int c);
+void	set_i_and_j(int *i, int *j);
+int		put_arr_end(char **arr, int j, int k, char s);
 
 #endif
