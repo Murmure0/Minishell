@@ -25,7 +25,7 @@ static void	set_quotes_after_pos_start(t_parsing *ps, int *j)
 	}
 	else if (ps->nodes[ps->i][*j] == '"')
 	{
-		printf("quote before %d\n", *j);
+		printf("quote after %d\n", *j);
 		if (ps->is_d_quote)
 			ps->is_d_quote = 0;
 		else
@@ -50,7 +50,7 @@ static void	set_quotes_before_pos_start(t_parsing *ps, int pos_start)
 		}
 		else if (ps->nodes[ps->i][j] == '"')
 		{
-			printf("quote after %d\n", j);
+			printf("quote before %d\n", j);
 			if (ps->is_d_quote)
 				ps->is_d_quote = 0;
 			else
@@ -71,10 +71,10 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_star
 	cmd = NULL;
 	set_quotes_before_pos_start(ps, pos_start);
 	if (!ps->is_d_quote && !ps->is_s_quote)
-		j = pos_start - 1;
-	else
 		j = pos_start;
-	while (ps->nodes[ps->i][++j])
+	else
+		j = pos_start + 1;
+	while (ps->nodes[ps->i][j])
 	{
 		set_quotes_after_pos_start(ps, &j);
 		while (contains_dollar(ps, ps->nodes[ps->i], j) > -1 && !ps->is_s_quote)
@@ -96,8 +96,6 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_star
 					ft_exit(sh, ps, nodes, "Fail to malloc value in expand dollar\n");
 				if (cmd)
 				{
-
-					printf("cmd\n");
 					tmp = ft_strjoin(cmd, before_dollar);
 					free(cmd);
 					cmd = ft_strjoin(tmp, value);
@@ -105,9 +103,7 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_star
 				}
 				else
 				{
-					printf("no cmd\n");
 					cmd = ft_strjoin(before_dollar, value);
-
 				}
 				pos_start += ft_strlen(key);
 				if (!cmd)
@@ -115,35 +111,44 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_star
 			}
 			if (ps->nodes[ps->i][j] == '$' && ps->nodes[ps->i][j + 1])
 				continue ;
-			if ((!ps->nodes[ps->i][j] && !ps->nodes[ps->i][j + 1]) || (is_space(ps->nodes[ps->i][j]) && !ps->is_d_quote))
+			set_quotes_after_pos_start(ps, &j);
+			if (!ps->nodes[ps->i][j] || !ps->nodes[ps->i][j + 1]
+				|| (is_space(ps->nodes[ps->i][j]) && !ps->is_d_quote))
+				// || (ps->is_d_quote && ps->nodes[ps->i][j] == '"' && is_space(ps->nodes[ps->i][j + 1])))
 			{
-
+				printf("1st break at %d\n", j);
 				break ;
 			}
 			j++;
 		}
-		if (!ps->nodes[ps->i][j] || (is_space(ps->nodes[ps->i][j]) && !ps->is_s_quote && !ps->is_d_quote))
+		if (!ps->nodes[ps->i][j] || !ps->nodes[ps->i][j + 1]
+			|| (is_space(ps->nodes[ps->i][j]) && !ps->is_s_quote && !ps->is_d_quote))
+			// || (ps->is_d_quote && ps->nodes[ps->i][j] == '"' && is_space(ps->nodes[ps->i][j + 1])))
+		{
+			printf("2nd break at %d\n", j);
 			break ;
+		}
+		j++;
 	}
 	if (cmd)
 	{
 		pos_start = j;
-		if (ps->is_d_quote)
-		{
-			while (ps->nodes[ps->i][++j] && ps->nodes[ps->i][j] != '"')
-				continue ;
-		}
-		else
-		{
+		// if (ps->is_d_quote)
+		// {
+		// 	while (ps->nodes[ps->i][j] && ps->nodes[ps->i][j] != '"')
+		// 		j++;
+		// }
+		// else
+		// {
 			while (ps->nodes[ps->i][j] && (ps->nodes[ps->i][j] != ' ' && ps->nodes[ps->i][j] != '\t'))
-				j++ ;
-		}
+				j++;
+		// }
 		value = str_slice(ps->nodes[ps->i], pos_start, j + 1);
 		if (!value)
-				ft_exit(sh, ps, nodes, "Fail to malloc value in expand dollar\n");
+			ft_exit(sh, ps, nodes, "Fail to malloc value in expand dollar\n");
 		cmd = ft_strjoin(cmd, value);
 		if (!cmd)
-				ft_exit(sh, ps, nodes, "Fail to malloc cmd in expand dollar\n");
+			ft_exit(sh, ps, nodes, "Fail to malloc cmd in expand dollar\n");
 		nodes[ps->i].cmd[ps->pos_cmd] = ft_strdup(cmd);
 		if (!nodes[ps->i].cmd[ps->pos_cmd])
 			ft_exit(sh, ps, nodes, "Fail to malloc node cmd in expand dollar\n");
@@ -154,7 +159,7 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_star
 	}
 	else
 	{
-		nodes[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i], pos_start, j);
+		nodes[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i], pos_start, j + 1);
 		if (!nodes[ps->i].cmd[ps->pos_cmd])
 			ft_exit(sh, ps, nodes, "Fail to malloc node cmd in expand dollar\n");
 
