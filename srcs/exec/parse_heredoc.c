@@ -44,6 +44,7 @@ static void	here_doc_reading(char *line, int pipe_hd, char *del)
 {
 	while (line)
 	{
+		//free(line);
 		line = get_next_line(STDIN_FILENO);
 		if (!line)
 			break ;

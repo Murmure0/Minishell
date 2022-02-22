@@ -27,7 +27,7 @@ int	exec_cmd_parent(t_node *last_node, t_shell *shell)
 {
 	if (!path_finder_parent(last_node, shell))
 	{
-		//free_all(first_node); faire une bonne fct free
+		// free(); faire une bonne fct free
 		return (-1);
 	}
 	return (0);
@@ -100,7 +100,7 @@ t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st)
 	exec_st_parent->fd_out = find_fd_out_parent(last_node);
 	if(exec_st_parent->fd_out < 0)
 		return (NULL);
-	printf("\nXxXRecup entree parent procXxX\nFd_in : %d, Fd_out : %d\n", exec_st_parent->fd_in, exec_st_parent->fd_out);
+	// printf("\nXxXRecup entree parent procXxX\nFd_in : %d, Fd_out : %d\n", exec_st_parent->fd_in, exec_st_parent->fd_out);
 	return (exec_st_parent);
 }
 
@@ -154,4 +154,6 @@ void parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
 		parent_fork_process(last_node, prev_exec_st, exec_st_parent, shell);
 	close(prev_exec_st->pfd_in);
 	close(prev_exec_st->pfd_out);
+	free(prev_exec_st);
+	free(exec_st_parent);
 }
