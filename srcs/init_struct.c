@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/22 11:26:43 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/22 15:22:42 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh)
 	char	*tmp;
 
 	(*ps)->pos_cmd = 0;
+	(*ps)->pos_tmp = 0;
 	(*ps)->j = 0;
 	tmp = ft_strtrim((*ps)->nodes[(*ps)->i], " ");
 	free((*ps)->nodes[(*ps)->i]);

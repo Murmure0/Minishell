@@ -56,6 +56,7 @@ typedef struct s_parsing
 	int		pipe_nb;
 	int		cmd_nb;
 	int		stop_err;
+	int		pos_tmp;
 	int		is_s_quote;
 	int		is_d_quote;
 }	t_parsing;
