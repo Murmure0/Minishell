@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/22 15:44:58 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/02/22 16:29:49 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,3 +109,9 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 	}
 	return (nodes);
 }
+
+// echo coucou>>out
+// grep o<out
+
+// pb du split dans les quotes
+// echo "cat lol.c |cat>lol.c"

@@ -2,6 +2,8 @@
 
 SRCS =	ft_bzero.c	\
 		ft_split.c	\
+		ft_split_pipe.c	\
+		ft_split_utils.c	\
 		ft_atoi.c	\
 		ft_itoa.c	\
 		ft_strlen.c	\

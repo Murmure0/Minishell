@@ -7,6 +7,8 @@
 # define	MAX_LONG	9223372036854775807
 
 char	**ft_split(char const *s, char c);
+char	**ft_split_pipe(char const *s, char c);
+void	set_quote(char c, int *is_quote);
 int		ft_strncmp(const char *s1, const char *s2, unsigned int n);
 char	*ft_strjoin(char const *s1, char const *s2);
 int		ft_strlen(const char *str);

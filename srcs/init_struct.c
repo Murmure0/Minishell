@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/22 11:26:43 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/22 16:02:25 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	init_global_struct(t_parsing *ps, t_shell *sh)
 	ps->pipe_nb = 0;
 	if (!check_quotes_for_pipe_split(ps))
 		return (0);
-	ps->nodes = ft_split(ps->prompt, '|');
+	ps->nodes = ft_split_pipe(ps->prompt, '|');
 	if (!ps->nodes)
 		ft_exit(sh, ps, NULL, "Fail to split nodes in init_global_struct\n");
 	ps->pipe_nb = arr_len(ps->nodes) - 1;
@@ -64,6 +64,7 @@ void	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh)
 	char	*tmp;
 
 	(*ps)->pos_cmd = 0;
+	(*ps)->pos_tmp = 0;
 	(*ps)->j = 0;
 	tmp = ft_strtrim((*ps)->nodes[(*ps)->i], " ");
 	free((*ps)->nodes[(*ps)->i]);
