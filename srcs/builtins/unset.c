@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 15:47:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/21 11:39:05 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/22 14:19:18 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	my_unset(t_shell *sh, char *var)
 	i = -1;
 	while (sh->env[++i])
 	{
-		if (!strncmp(sh->env[i], var, ft_strlen(var)))
+		if (!ft_strncmp(sh->env[i], var, ft_strlen(var)))
 		{
 			free(sh->env[i]);
 			sh->env[i] = NULL;

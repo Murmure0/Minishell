@@ -18,7 +18,7 @@
 # include <errno.h>
 # include <termios.h>
 
-# include <wait.h>
+//# include <wait.h>
 
 # define no_redir	0
 # define redir_l	1

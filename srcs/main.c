@@ -79,6 +79,11 @@ int main(int argc, char **argv, char **env)
 		signal(SIGINT, handle_signal);
 		signal(SIGQUIT, SIG_IGN);
 		parstruct.prompt = readline("minishell$ ");
+		if(!parstruct.prompt)
+		{
+			write(1, "exit\n", 6);
+			break ;
+		}
 		add_history(parstruct.prompt);
 		if (not_emptycmd(parstruct.prompt))
 		{

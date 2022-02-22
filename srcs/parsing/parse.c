@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/22 14:27:22 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/22 16:29:49 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,18 @@ int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 	}
 	if (ps->nodes[ps->i][ps->j + 1] && ps->nodes[ps->i][ps->j + 1] == '<')
 	{
-		if(!nodes[ps->i].invalid_infile) //
-			nodes[ps->i].in_id = 1; //
-		// printf("add heredoc\n");
+		if(!nodes[ps->i].invalid_infile)
+			nodes[ps->i].in_id = 1;
 		ps->j++;
-		add_heredoc_file(nodes, ps); //
-
+		add_heredoc_file(nodes, ps);
 	}
 	else if (ps->nodes[ps->i][ps->j + 1])
 	{
-		nodes[ps->i].in_id = 2; //
-		// printf("add infile name\n");
+		nodes[ps->i].in_id = 2;
 		add_file(nodes, ps, 1, sh);
 	}
 	else
 		return (ret_err(0, NO_FILE));
-	// printf("VALEUR DE inID : %d\n", nodes[ps->i].in_id);
 	return (1);
 }
 
