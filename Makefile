@@ -10,7 +10,9 @@ CFLAGS += -g
 MAIN = 	srcs/main.c			\
 		srcs/init_struct.c	\
 		srcs/free.c	\
-		srcs/env.c			\
+		srcs/env/env.c			\
+		srcs/env/env_utils.c			\
+		srcs/env/shlvl.c			\
 		srcs/parsing/parse.c \
 		srcs/parsing/parse_utils.c \
 		srcs/parsing/parse_quotes.c \
@@ -27,6 +29,10 @@ MAIN = 	srcs/main.c			\
 		srcs/builtins/echo.c \
 		srcs/builtins/cd.c \
 		srcs/builtins/export.c \
+		srcs/builtins/unset.c \
+		srcs/builtins/pwd.c \
+		srcs/builtins/exit.c \
+		srcs/builtins/env.c \
 		srcs/signals.c
 
 

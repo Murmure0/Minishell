@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maelle <maelle@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/22 09:33:17 by maelle           ###   ########.fr       */
+/*   Updated: 2022/02/22 11:24:13 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	parse_case_infile(t_node **nodes, t_parsing *ps, t_shell *sh)
+int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 {
 	if (!check_space_between_redirs(ps))
 	{
@@ -21,26 +21,26 @@ int	parse_case_infile(t_node **nodes, t_parsing *ps, t_shell *sh)
 	}
 	if (ps->nodes[ps->i][ps->j + 1] && ps->nodes[ps->i][ps->j + 1] == '<')
 	{
-		if(!nodes[ps->i]->invalid_infile) //
-			nodes[ps->i]->in_id = 1; //
+		if(!nodes[ps->i].invalid_infile) //
+			nodes[ps->i].in_id = 1; //
 		printf("add heredoc\n");
 		ps->j++;
-		add_heredoc_file(*nodes, ps); //
+		add_heredoc_file(nodes, ps); //
 
 	}
 	else if (ps->nodes[ps->i][ps->j + 1])
 	{
-		nodes[ps->i]->in_id = 2; //
+		nodes[ps->i].in_id = 2; //
 		printf("add infile name\n");
-		add_file(*nodes, ps, 1, sh);
+		add_file(nodes, ps, 1, sh);
 	}
 	else
 		return (ret_err(0, NO_FILE));
-	printf("VALEUR DE inID : %d\n", nodes[ps->i]->in_id);
+	printf("VALEUR DE inID : %d\n", nodes[ps->i].in_id);
 	return (1);
 }
 
-int	parse_case_outfile(t_node **nodes, t_parsing *ps, t_shell *sh)
+int	parse_case_outfile(t_node *nodes, t_parsing *ps, t_shell *sh)
 {
 	if (!check_space_between_redirs(ps))
 	{
@@ -51,12 +51,12 @@ int	parse_case_outfile(t_node **nodes, t_parsing *ps, t_shell *sh)
 	{
 		printf("add outfile + append\n");
 		ps->j++;
-		if (!add_file(*nodes, ps, 3, sh))
+		if (!add_file(nodes, ps, 3, sh))
 			return (0);
 	}
 	else if (ps->nodes[ps->i][ps->j + 1])
 	{
-		if (!add_file(*nodes, ps, 2, sh))
+		if (!add_file(nodes, ps, 2, sh))
 			return (0);
 		printf("add outfile name\n");
 	}
@@ -70,12 +70,12 @@ int	process_parse(t_node **nodes, t_parsing *ps, t_shell *sh)
 	skip_spaces(ps);
 	if (ps->nodes[ps->i][ps->j] == '<')
 	{
-		if (!parse_case_infile(nodes, ps, sh))
+		if (!parse_case_infile(*nodes, ps, sh))
 			return (0);
 	}
 	else if (ps->nodes[ps->i][ps->j] == '>')
 	{
-		if (!parse_case_outfile(nodes, ps, sh))
+		if (!parse_case_outfile(*nodes, ps, sh))
 			return (0);
 	}
 	else

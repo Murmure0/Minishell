@@ -29,6 +29,7 @@
 
 # define PERR		"minishell: " 
 # define NO_FILE	"minishell: syntax error near unexpected symbol « newline »"
+# define HOME_UNSET	"minishell: cd: « HOME » not set"
 
 typedef struct s_node
 {
@@ -81,18 +82,6 @@ int		init_global_struct(t_parsing *ps, t_shell *sh);
 void	init_nodestruct(t_node **nodes, t_parsing **ps, t_shell *sh);
 void	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh);
 
-/* ------------------------------------ env.c -------------------------------------------- */
-char	*find_env_paths(char **envp);
-char	**get_env_paths(char **envp);
-char	**get_env(char **env);
-char 	**add_slash(char **env_paths);
-void 	free_tab(char **env_paths);
-
-char	**realloc_env(char **env);
-char	**update_env_var(char **env, char *str, char *new);
-char	**add_env_var(char **env, char *var);
-char	*get_env_var_value(char **env, char *key);
-
 /* ------------------------------------ main.c -------------------------------------------- */
 int		ret_err(int ret, char *msg);
 void	ft_exit(t_shell *sh, t_parsing *ps, t_node *n, char *err);
@@ -112,12 +101,32 @@ void	handle_sig_heredoc(int sig);
 char	*get_next_line(int fd);
 
 /* --------------------------------------------------------------------------------- */
+/* ------------------------------------ ENV ---------------------------------------- */
+/* --------------------------------------------------------------------------------- */
+
+/* ------------------------------------ env.c -------------------------------------------- */
+char	*find_env_paths(char **envp);
+char	**get_env_paths(char **envp);
+char	**get_env(char **env);
+char 	**add_slash(char **env_paths);
+void 	free_tab(char **env_paths);
+
+/* ------------------------------------ env_utils.c -------------------------------------------- */
+char	**realloc_env(char **env);
+char	**update_env_var(char **env, char *str, char *new);
+char	**add_env_var(char **env, char *var);
+char	*get_env_var_value(char **env, char *key);
+
+/* ------------------------------------ shlvl.c -------------------------------------------- */
+char	*update_shell_lvl(char *env);
+
+/* --------------------------------------------------------------------------------- */
 /* ------------------------------------ PARSING ------------------------------------ */
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ parse.c ------------------------------------ */
-int		parse_case_infile(t_node **nodes, t_parsing *ps, t_shell *sh);
-int		parse_case_outfile(t_node **nodes, t_parsing *ps, t_shell *sh);
+int		parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh);
+int		parse_case_outfile(t_node *nodes, t_parsing *ps, t_shell *sh);
 int		process_parse(t_node **nodes, t_parsing *ps, t_shell *sh);
 t_node	*parse(t_parsing *ps, t_shell *sh);
 
@@ -194,5 +203,9 @@ void	brother_process(t_exec *exec_st, t_node *last_node, t_shell *shell);
 int 	my_echo(char **str);
 int		my_cd(t_shell *shell, char *dir);
 int		my_export(t_shell *shell, char **var);
+int		my_unset(t_shell *sh, char *var);
+int		my_env(t_shell *sh);
+void	my_exit(t_shell *sh, t_node *n);
+int		my_pwd();
 
 #endif
