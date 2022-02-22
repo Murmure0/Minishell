@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maelle <maelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 13:14:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/20 11:38:49 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/20 15:44:59 by maelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	free_nodestruct(t_node *n)
 				free(n[i].cmd[j]);
 				free(n[i].cmd);
 			}
+			unlink("/tmp/tmp.txt");
 			free(n[i].infiles);
 			free(n[i].outfiles);
 		}

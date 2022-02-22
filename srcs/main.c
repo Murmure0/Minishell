@@ -1,7 +1,5 @@
 #include "../includes/minishell.h"
 
-pid_t g_pid;
-
 int	ret_err(int ret, char *msg)
 {
 	if (!msg)
@@ -34,36 +32,36 @@ int not_emptycmd(char *cmd)
 	return (0);
 }
 
-// static void print_debug(t_parsing parstruct, t_node *nodes, t_shell shell)
-// {
-// 	(void)shell;
-// 	/*		PRINT CMDS		*/
+static void print_debug(t_parsing parstruct, t_node *nodes, t_shell shell)
+{
+	(void)shell;
+	/*		PRINT CMDS		*/
 
-// 	int i = -1;
-// 	while (++i < parstruct.pipe_nb + 1)
-// 	{
-// 		int j = -1;
-// 		if (nodes[i].cmd)
-// 			while (nodes[i].cmd[++j])
-// 				printf("Node %d cmd % d : |%s|\n", i, j, nodes[i].cmd[j]);
-// 	}
+	int i = -1;
+	while (++i < parstruct.pipe_nb + 1)
+	{
+		int j = -1;
+		if (nodes[i].cmd)
+			while (nodes[i].cmd[++j])
+				printf("Node %d cmd % d : |%s|\n", i, j, nodes[i].cmd[j]);
+	}
 
-// 		/*		PRINT INFILES		*/
+		/*		PRINT INFILES		*/
 
-// 	i = -1;
-// 	while (++i < parstruct.pipe_nb + 1)
-// 	{
-// 		printf("Node %d infile : |%s|\n", i, nodes[i].infiles);
-// 	}
+	i = -1;
+	while (++i < parstruct.pipe_nb + 1)
+	{
+		printf("Node %d infile : |%s|\n", i, nodes[i].infiles);
+	}
 
-// 	// 	/*		PRINT OUTFILES		*/
+	// 	/*		PRINT OUTFILES		*/
 	
-// 	i = -1;
-// 	while (++i < parstruct.pipe_nb + 1)
-// 	{
-// 		printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
-// 	}
-// }
+	i = -1;
+	while (++i < parstruct.pipe_nb + 1)
+	{
+		printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
+	}
+}
 
 int main(int argc, char **argv, char **env)
 {
@@ -74,28 +72,25 @@ int main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	nodes = NULL;
-	g_pid = 0;
 	init_shell_struct(&shell, env); //faire un check sur le shell pendant l'init
+	tcgetattr(STDIN_FILENO, &shell.termios_p); //permet d'avoir le status de l'affichage au debut, pour le reinitialiser apres l'eventuelle utilisation de top qui fout la merde
 	while (1)
 	{
-		// signal(SIGINT, handle_signal);
-		// reinit struct pour le unset PATH
+		signal(SIGINT, handle_signal);
+		signal(SIGQUIT, SIG_IGN);
 		parstruct.prompt = readline("minishell$ ");
 		add_history(parstruct.prompt);
 		if (not_emptycmd(parstruct.prompt))
 		{
 			nodes = parse(&parstruct, &shell);
 			if (parstruct.stop_err)
-			{
-				final_free(NULL, &parstruct, nodes);
 				continue ;
-			}
-			// print_debug(parstruct, nodes, shell);
-			free_parstruct(&parstruct);
+			print_debug(parstruct, nodes, shell);
 			if (nodes)
 			{
-				// exec(nodes, &shell);
+				exec(nodes, &shell);
 				free_nodestruct(nodes);
+				free_parstruct(&parstruct);
 			}
 		}
 		else
@@ -104,16 +99,13 @@ int main(int argc, char **argv, char **env)
 			free(parstruct.prompt);
 		}
 	}
+	write(2,"sortie exec\n", 13);
 	free_shellstruct(&shell);
 	
 	return (0);
 }
 
 /* TESTS QUI LEAKS (sans exec)
-
-*/
-
-/* A MODIFIER
-	gestion des ">" dans le parsing (ne pas le considérer comme outfile dans ce cas)
+	$< >
 
 */

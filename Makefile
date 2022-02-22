@@ -10,16 +10,14 @@ CFLAGS += -g
 MAIN = 	srcs/main.c			\
 		srcs/init_struct.c	\
 		srcs/free.c	\
-		srcs/signals.c			\
-		srcs/env/env.c			\
-		srcs/env/env_utils.c			\
-		srcs/env/shlvl.c			\
+		srcs/env.c			\
 		srcs/parsing/parse.c \
 		srcs/parsing/parse_utils.c \
 		srcs/parsing/parse_quotes.c \
 		srcs/parsing/parse_cmds.c \
-		srcs/parsing/parse_dollar.c \
 		srcs/parsing/parse_files.c \
+		srcs/exec/parse_heredoc.c \
+		srcs/exec/gnl.c \
 		srcs/exec/exec.c \
 		srcs/exec/exec_process_child.c \
 		srcs/exec/exec_process_brother.c \
@@ -29,10 +27,7 @@ MAIN = 	srcs/main.c			\
 		srcs/builtins/echo.c \
 		srcs/builtins/cd.c \
 		srcs/builtins/export.c \
-		srcs/builtins/unset.c \
-		srcs/builtins/pwd.c \
-		srcs/builtins/exit.c \
-		srcs/builtins/env.c \
+		srcs/signals.c
 
 
 SOURCES = $(MAIN)

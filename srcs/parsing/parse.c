@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maelle <maelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/20 11:46:41 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/22 09:33:17 by maelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,22 @@ int	parse_case_infile(t_node **nodes, t_parsing *ps, t_shell *sh)
 	}
 	if (ps->nodes[ps->i][ps->j + 1] && ps->nodes[ps->i][ps->j + 1] == '<')
 	{
+		if(!nodes[ps->i]->invalid_infile) //
+			nodes[ps->i]->in_id = 1; //
 		printf("add heredoc\n");
 		ps->j++;
+		add_heredoc_file(*nodes, ps); //
+
 	}
 	else if (ps->nodes[ps->i][ps->j + 1])
 	{
+		nodes[ps->i]->in_id = 2; //
 		printf("add infile name\n");
 		add_file(*nodes, ps, 1, sh);
 	}
 	else
 		return (ret_err(0, NO_FILE));
+	printf("VALEUR DE inID : %d\n", nodes[ps->i]->in_id);
 	return (1);
 }
 
@@ -94,7 +100,7 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		while (ps->nodes[ps->i][ps->j])
 		{
 			if (!process_parse(&nodes, ps, sh))
-				return (parse_ret_free(nodes));
+				return (NULL);
 			if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1] &&
 				!is_chevron(ps->nodes[ps->i][ps->j]))
 					ps->j++;

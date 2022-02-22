@@ -5,7 +5,7 @@ int	find_fd_in(t_node *first_node)
 	int	fd_in;
 
 	fd_in = 0;
-	if (first_node[0].infiles)
+	if (first_node[0].infiles && first_node->in_id == 2)
 	{
 		fd_in = open(first_node[0].infiles, O_RDONLY);
 		if (fd_in < 0)
@@ -15,6 +15,8 @@ int	find_fd_in(t_node *first_node)
 			return (-1);
 		}
 	}
+	else if (first_node->in_id == 1 && !first_node->invalid_infile)
+		fd_in = first_node->infile_hd;
 	return (fd_in);
 }
 
@@ -73,6 +75,7 @@ void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node,
 			exec_cmd(first_node, shell);
 			write(2, "Erreur post execution child ", 29);
 			perror(": ");
+			exit(EXIT_FAILURE);
 		}
 	}
 }
@@ -91,10 +94,10 @@ pid_t	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st)
 	}
 	if (child_pid == 0)
 		child_process(child_pid, exec_st, first_node, shell);
+	if (exec_st->pfd_out > 0)
+		close(exec_st->pfd_out);//ajout
 	if (first_node[0].node_nb == 1)
-	{
 		waitpid(child_pid, &status, 0);
-	}
 	printf("\nXxXFin child procXxX\nPdfin : %d, Pdfout : %d\nEnvoyer apres: fd_out : %d\n", exec_st->pfd_in, exec_st->pfd_out, exec_st->fd_out);
 	return (child_pid);
 }
