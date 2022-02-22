@@ -100,7 +100,6 @@ t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st)
 	exec_st_parent->fd_out = find_fd_out_parent(last_node);
 	if(exec_st_parent->fd_out < 0)
 		return (NULL);
-	// printf("\nXxXRecup entree parent procXxX\nFd_in : %d, Fd_out : %d\n", exec_st_parent->fd_in, exec_st_parent->fd_out);
 	return (exec_st_parent);
 }
 
@@ -137,13 +136,12 @@ static void parent_fork_process(t_node *last_node, t_exec *exec_st, t_exec *exec
 		exit(EXIT_FAILURE);
 }
 
-// void parent_process(pid_t	child_pid, t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
 void parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
 {
 	t_exec	*exec_st_parent;
 	pid_t	parent_pid;
 
-	exec_st_parent = init_exec_st_parent(last_node, prev_exec_st); //recup des bon fd 
+	exec_st_parent = init_exec_st_parent(last_node, prev_exec_st);
 	parent_pid = fork();
 	if (parent_pid < 0)
 	{

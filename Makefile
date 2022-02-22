@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -I/Users/mberthet/.brew/opt/readline/include
 
 CFLAGS += -g 
 # CFLAGS += -fsanitize=address
@@ -45,7 +45,7 @@ OBJECTS = $(SOURCES:.c=.o)
 all : $(NAME)
 
 $(NAME): $(LIBFT) $(OBJECTS)
-	@$(CC) $(CFLAGS) $(OBJECTS) -L./libft -lft -lreadline -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJECTS) -L./libft -lft -lreadline -L/Users/$(USER)/.brew/opt/readline/lib -o $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C ./libft
