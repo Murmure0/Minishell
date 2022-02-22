@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/22 16:02:25 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/22 21:46:44 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,11 @@ void	init_nodestruct(t_node **nodes, t_parsing **ps, t_shell *sh)
 	(*nodes)[(*ps)->i].outfiles = 0;
 	(*nodes)[(*ps)->i].append = 0;
 	(*nodes)[(*ps)->i].invalid_infile = 0;
-	if (!(*ps)->cmd_nb)
-		(*nodes)[(*ps)->i].cmd = 0;
-	else
-	{
-		(*nodes)[(*ps)->i].cmd = malloc(sizeof(char *) * ((*ps)->cmd_nb + 1));
-		if (!(*nodes)[(*ps)->i].cmd)
-			ft_exit(sh, *ps, *nodes,
-				"Fail to malloc nodes cmds in init_shell_struct\n");
-	}
+	(*nodes)[(*ps)->i].cmd = malloc(sizeof(char *) * ((*ps)->cmd_nb + 1));
+	if (!(*nodes)[(*ps)->i].cmd)
+		ft_exit(sh, *ps, *nodes,
+			"Fail to malloc nodes cmds in init_shell_struct\n");
+	(*nodes)[(*ps)->i].cmd[(*ps)->cmd_nb] = 0;
 }
 
 void	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh)
@@ -68,12 +64,14 @@ void	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh)
 	(*ps)->j = 0;
 	tmp = ft_strtrim((*ps)->nodes[(*ps)->i], " ");
 	free((*ps)->nodes[(*ps)->i]);
-	(*ps)->nodes[(*ps)->i] = tmp;
+	(*ps)->nodes[(*ps)->i] = ft_strdup(tmp);
+	free(tmp);
 	if (!(*ps)->nodes[(*ps)->i])
 		ft_exit(sh, *ps, *nodes, "Fail to trim in init_local_struct\n");
 	tmp = ft_strtrim((*ps)->nodes[(*ps)->i], "\t");
 	free((*ps)->nodes[(*ps)->i]);
-	(*ps)->nodes[(*ps)->i] = tmp;
+	(*ps)->nodes[(*ps)->i] = ft_strdup(tmp);
+	free(tmp);
 	if (!(*ps)->nodes[(*ps)->i])
 		ft_exit(sh, *ps, *nodes, "Fail to trim in init_local_struct\n");
 	(*ps)->cmd_nb = get_cmds_nb((*ps)->nodes[(*ps)->i]);

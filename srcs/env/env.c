@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 17:24:04 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/20 17:32:08 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/22 21:53:52 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void	free_tab(char **env_paths)
 	i = -1;
 	while (env_paths[++i])
 		free(env_paths[i]);
-	free(env_paths[i]);
 	free(env_paths);
 }
 

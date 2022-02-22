@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/22 16:29:49 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/02/22 21:52:22 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,8 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		}
 		ps->i++;
 	}
+	// expand_dollar_value(nodes, ps , sh);
+	// expand dollar
+	// remove quotes
 	return (nodes);
 }
-
-// echo coucou>>out
-// grep o<out
-
-// pb du split dans les quotes
-// echo "cat lol.c |cat>lol.c"

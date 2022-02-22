@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -I/Users/mberthet/.brew/opt/readline/include
+CFLAGS = -Wall -Wextra -Werror -I/Users/$(USER)/.brew/opt/readline/include
 
 CFLAGS += -g 
 # CFLAGS += -fsanitize=address
@@ -19,6 +19,7 @@ MAIN = 	srcs/main.c			\
 		srcs/parsing/parse_cmds.c \
 		srcs/parsing/parse_files.c \
 		srcs/exec/parse_heredoc.c \
+		srcs/parsing/parse_dollar.c \
 		srcs/exec/gnl.c \
 		srcs/exec/exec.c \
 		srcs/exec/exec_process_child.c \
