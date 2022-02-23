@@ -32,36 +32,36 @@ int not_emptycmd(char *cmd)
 	return (0);
 }
 
-// static void print_debug(t_parsing parstruct, t_node *nodes, t_shell shell)
-// {
-// 	(void)shell;
-// 	/*		PRINT CMDS		*/
+static void print_debug(t_parsing parstruct, t_node *nodes, t_shell shell)
+{
+	(void)shell;
+	/*		PRINT CMDS		*/
 
-// 	int i = -1;
-// 	while (++i < parstruct.pipe_nb + 1)
-// 	{
-// 		int j = -1;
-// 		if (nodes[i].cmd)
-// 			while (nodes[i].cmd[++j])
-// 				printf("Node %d cmd % d : |%s|\n", i, j, nodes[i].cmd[j]);
-// 	}
+	int i = -1;
+	while (++i < parstruct.pipe_nb + 1)
+	{
+		int j = -1;
+		if (nodes[i].cmd)
+			while (nodes[i].cmd[++j])
+				printf("Node %d cmd % d : |%s|\n", i, j, nodes[i].cmd[j]);
+	}
 
-// 		/*		PRINT INFILES		*/
+		/*		PRINT INFILES		*/
 
-// 	i = -1;
-// 	while (++i < parstruct.pipe_nb + 1)
-// 	{
-// 		printf("Node %d infile : |%s|\n", i, nodes[i].infiles);
-// 	}
+	i = -1;
+	while (++i < parstruct.pipe_nb + 1)
+	{
+		printf("Node %d infile : |%s|\n", i, nodes[i].infiles);
+	}
 
-// 	// 	/*		PRINT OUTFILES		*/
+	// 	/*		PRINT OUTFILES		*/
 	
-// 	i = -1;
-// 	while (++i < parstruct.pipe_nb + 1)
-// 	{
-// 		printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
-// 	}
-// }
+	i = -1;
+	while (++i < parstruct.pipe_nb + 1)
+	{
+		printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
+	}
+}
 
 int main(int argc, char **argv, char **env)
 {
@@ -72,6 +72,7 @@ int main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	nodes = NULL;
+	g_exit_st = 0;
 	init_shell_struct(&shell, env); //faire un check sur le shell pendant l'init
 	tcgetattr(STDIN_FILENO, &shell.termios_p); //permet d'avoir le status de l'affichage au debut, pour le reinitialiser apres l'eventuelle utilisation de top qui fout la merde
 	while (1)
@@ -93,7 +94,7 @@ int main(int argc, char **argv, char **env)
 				final_free(NULL, &parstruct, nodes);
 				continue ;
 			}
-			// print_debug(parstruct, nodes, shell);
+			print_debug(parstruct, nodes, shell);
 			free_parstruct(&parstruct);
 			if (nodes)
 			{

@@ -18,7 +18,7 @@
 # include <errno.h>
 # include <termios.h>
 
-# include <wait.h>
+// # include <wait.h>
 
 # define no_redir	0
 # define redir_l	1
@@ -30,6 +30,8 @@
 # define PERR		"minishell: " 
 # define NO_FILE	"minishell: syntax error near unexpected symbol « newline »"
 # define HOME_UNSET	"minishell: cd: « HOME » not set"
+
+int	g_exit_st;
 
 typedef struct s_node
 {

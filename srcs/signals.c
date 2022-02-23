@@ -44,7 +44,7 @@ void handle_sig_heredoc(int sig)
 {
 	if (sig == SIGINT)
 	{
-		write(1, "\x03", 2);
-		// exit(130);
+		write(1, "KAPOUE\n", 8);
+		exit(130);
 	}
 }
