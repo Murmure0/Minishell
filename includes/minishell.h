@@ -159,7 +159,6 @@ int		check_quotes_for_pipe_split(t_parsing *parstruct);
 
 /* ------------------------------------ parse_dollar.c ------------------------------ */
 int		get_next_dollar(char *s, int pos);
-char	*ret_null_free(char *ret, char *s);
 char	*replace_in_str(char *s, char *value, int pos, int len);
 void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh);
 int		get_key_len(char *s, int pos);

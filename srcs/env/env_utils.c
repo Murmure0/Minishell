@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 17:24:22 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/22 19:20:38 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/23 16:37:32 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ char	*get_env_var_value(char **env, char *key)
 	value = NULL;
 	while (env && env[++i])
 	{
+		/// !!! A CHANGER 
 		if (!ft_strncmp(env[i], key, ft_strlen(key)))
 		{
 			value = ft_substr(env[i], ft_strlen(key) + 1, ft_strlen(env[i]));
