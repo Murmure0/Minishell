@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/08 08:25:16 by vmasse            #+#    #+#             */
-/*   Updated: 2022/01/14 16:40:53 by vmasse           ###   ########.fr       */
+/*   Created: 2022/02/20 15:49:59 by vmasse            #+#    #+#             */
+/*   Updated: 2022/02/20 15:58:50 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "../../includes/minishell.h"
 
-int	ft_strchr_pos(char *s, char c, int pos)
+int	my_env(t_shell *sh)
 {
-	while (s[++pos] != (char)c)
-		if (!s[pos])
-			return (-1);
-	return (pos);
+	int	i;
+
+	i = -1;
+	while (sh->env[++i])
+	{
+		printf("%s\n", sh->env[i]);
+	}
+	return (0);
 }

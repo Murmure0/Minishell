@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 13:14:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/10 15:27:16 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/22 21:54:08 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	free_parstruct(t_parsing *ps)
 		{
 			while (ps->nodes[++i])
 				free(ps->nodes[i]);
-			free(ps->nodes[i]);
 			free(ps->nodes);
 		}
 	}
@@ -43,7 +42,6 @@ void	free_shellstruct(t_shell *sh)
 		i = -1;
 		while (sh->path[++i])
 			free(sh->path[i]);
-		free(sh->path[i]);
 		free(sh->env);
 		free(sh->path);
 	}
@@ -67,7 +65,6 @@ void	free_nodestruct(t_node *n)
 			{
 				while (n[i].cmd[++j])
 					free(n[i].cmd[j]);
-				free(n[i].cmd[j]);
 				free(n[i].cmd);
 			}
 			free(n[i].infiles);

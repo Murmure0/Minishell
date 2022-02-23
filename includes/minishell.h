@@ -18,7 +18,7 @@
 # include <errno.h>
 # include <termios.h>
 
-//# include <wait.h>
+// # include <wait.h>
 
 # define no_redir	0
 # define redir_l	1
@@ -29,10 +29,15 @@
 
 # define PERR		"minishell: " 
 # define NO_FILE	"minishell: syntax error near unexpected symbol « newline »"
+# define HOME_UNSET	"minishell: cd: « HOME » not set"
+
+int	g_exit_st;
 
 typedef struct s_node
 {
     char     *infiles;
+	int		infile_hd; //
+	int		in_id; //
     char     *outfiles;
 	int		 append;
 	int		 invalid_infile;
@@ -53,6 +58,7 @@ typedef struct s_parsing
 	int		pipe_nb;
 	int		cmd_nb;
 	int		stop_err;
+	int		pos_tmp;
 	int		is_s_quote;
 	int		is_d_quote;
 }	t_parsing;
@@ -79,18 +85,6 @@ int		init_global_struct(t_parsing *ps, t_shell *sh);
 void	init_nodestruct(t_node **nodes, t_parsing **ps, t_shell *sh);
 void	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh);
 
-/* ------------------------------------ env.c -------------------------------------------- */
-char	*find_env_paths(char **envp);
-char	**get_env_paths(char **envp);
-char	**get_env(char **env);
-char 	**add_slash(char **env_paths);
-void 	free_tab(char **env_paths);
-
-char	**realloc_env(char **env);
-char	**update_env_var(char **env, char *str, char *new);
-char	**add_env_var(char **env, char *var);
-char	*get_env_var_value(char **env, char *key);
-
 /* ------------------------------------ main.c -------------------------------------------- */
 int		ret_err(int ret, char *msg);
 void	ft_exit(t_shell *sh, t_parsing *ps, t_node *n, char *err);
@@ -103,14 +97,39 @@ void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
 
 /* ------------------------------------ signals.c -------------------------------------------- */
 void	handle_signal(int sig);
+void	handle_sig_fork(int sig);
+void	handle_sig_heredoc(int sig);
+
+/* ------------------------------------ gnl.c -------------------------------------------- */
+char	*get_next_line(int fd);
+
+/* --------------------------------------------------------------------------------- */
+/* ------------------------------------ ENV ---------------------------------------- */
+/* --------------------------------------------------------------------------------- */
+
+/* ------------------------------------ env.c -------------------------------------------- */
+char	*find_env_paths(char **envp);
+char	**get_env_paths(char **envp);
+char	**get_env(char **env);
+char 	**add_slash(char **env_paths);
+void 	free_tab(char **env_paths);
+
+/* ------------------------------------ env_utils.c -------------------------------------------- */
+char	**realloc_env(char **env);
+char	**update_env_var(char **env, char *str, char *new);
+char	**add_env_var(char **env, char *var);
+char	*get_env_var_value(char **env, char *key);
+
+/* ------------------------------------ shlvl.c -------------------------------------------- */
+char	*update_shell_lvl(char *env);
 
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ PARSING ------------------------------------ */
 /* --------------------------------------------------------------------------------- */
 
 /* ------------------------------------ parse.c ------------------------------------ */
-int		parse_case_infile(t_node **nodes, t_parsing *ps, t_shell *sh);
-int		parse_case_outfile(t_node **nodes, t_parsing *ps, t_shell *sh);
+int		parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh);
+int		parse_case_outfile(t_node *nodes, t_parsing *ps, t_shell *sh);
 int		process_parse(t_node **nodes, t_parsing *ps, t_shell *sh);
 t_node	*parse(t_parsing *ps, t_shell *sh);
 
@@ -141,8 +160,14 @@ int		get_matching_quote_pos(t_parsing *parstruct, int start);
 int		check_quotes_for_pipe_split(t_parsing *parstruct);
 
 /* ------------------------------------ parse_dollar.c ------------------------------ */
-int		contains_dollar(char *s, int pos);
-void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh, int pos_start);
+int		get_next_dollar(char *s, int pos);
+char	*ret_null_free(char *ret, char *s);
+char	*replace_in_str(char *s, char *value, int pos, int len);
+void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh);
+int		get_key_len(char *s, int pos);
+
+/* ------------------------------------ parse_heredoc.c ------------------------------ */
+int		add_heredoc_file(t_node *nodes, t_parsing *ps);
 
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ EXEC --------------------------------------- */
@@ -176,6 +201,7 @@ void	parent_process(t_exec *exec_st, t_node *second_node, t_shell *shell);
 void	brother_process(t_exec *exec_st, t_node *last_node, t_shell *shell);
 // void	brother_process(pid_t	child_pid, t_exec *exec_st, t_node *last_node, t_shell *shell);
 
+//
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ BUILTINS ----------------------------------- */
 /* --------------------------------------------------------------------------------- */
@@ -183,5 +209,9 @@ void	brother_process(t_exec *exec_st, t_node *last_node, t_shell *shell);
 int 	my_echo(char **str);
 int		my_cd(t_shell *shell, char *dir);
 int		my_export(t_shell *shell, char **var);
+int		my_unset(t_shell *sh, char *var);
+int		my_env(t_shell *sh);
+void	my_exit(t_shell *sh, t_node *n);
+int		my_pwd();
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 16:25:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/10 16:54:01 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/23 17:03:17 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	check_for_command_args(t_parsing *ps, int *pos_start, int *stop)
 	*pos_start = ps->j;
 	if (!ps->nodes[ps->i][ps->j])
 		return (0);
+	ps->pos_tmp = ps->j;
 	while (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j] != '\t'
 		&& ps->nodes[ps->i][ps->j] != ' ')
 	{
@@ -93,7 +94,15 @@ void	add_command_args(t_node **nodes, t_parsing *ps, t_shell *sh)
 			return ;
 		if (stop)
 		{
-			(*nodes)[ps->i].cmd[ps->cmd_nb] = 0;
+			if (ps->pos_tmp != ps->j)
+			{
+				(*nodes)[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i],
+					pos_start, ps->j);
+				if (!(*nodes)[ps->i].cmd[ps->pos_cmd])
+					ft_exit(sh, ps, *nodes, "Fail to malloc args in add_command_args\n");
+			}
+			else
+				(*nodes)[ps->i].cmd[ps->cmd_nb] = 0;
 			return ;
 		}
 		(*nodes)[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i],
@@ -121,7 +130,9 @@ void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh)
 			|| is_chevron(ps->nodes[ps->i][ps->j]))
 			break ;
 		ps->j++;
-	}		
+	}
+	// expand_dollar_value(*nodes, ps, sh, pos_start);
+	// printf("%s\n", (*nodes)[ps->i].cmd[ps->pos_cmd]);
 	(*nodes)[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i],
 			pos_start, ps->j);
 	if (!(*nodes)[ps->i].cmd[ps->pos_cmd])

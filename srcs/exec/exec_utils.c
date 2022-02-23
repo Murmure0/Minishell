@@ -40,8 +40,9 @@ int	path_finder(t_node *first_node, t_shell *shell)
 
 	if(first_node[0].cmd)
 	{
-		tmp = first_node[0].cmd[0];
+		execve(first_node->cmd[0], first_node->cmd, shell->env);
 		i = -1;
+		tmp = ft_strdup(first_node[0].cmd[0]);
 		while (shell->path[++i])
 		{
 			first_node[0].cmd[0] = ft_strjoin(shell->path[i], tmp);
@@ -50,11 +51,32 @@ int	path_finder(t_node *first_node, t_shell *shell)
 			execve(first_node[0].cmd[0], first_node[0].cmd, shell->env);
 			free(first_node[0].cmd[0]);
 		}
-		first_node[0].cmd[0] = tmp;
-		execve(first_node->cmd[0], first_node->cmd, shell->env);
+		free(tmp);
 	}
 	return (0);
 }
+// int	path_finder(t_node *first_node, t_shell *shell)
+// {
+// 	char	*tmp;
+// 	int		i;
+
+// 	if(first_node[0].cmd)
+// 	{
+// 		tmp = first_node[0].cmd[0];
+// 		i = -1;
+// 		while (shell->path[++i])
+// 		{
+// 			first_node[0].cmd[0] = ft_strjoin(shell->path[i], tmp);
+// 			if (!tmp)
+// 				return (-1);
+// 			execve(first_node[0].cmd[0], first_node[0].cmd, shell->env);
+// 			free(first_node[0].cmd[0]);
+// 		}
+// 		first_node[0].cmd[0] = tmp;
+// 		execve(first_node->cmd[0], first_node->cmd, shell->env);
+// 	}
+// 	return (0);
+// }
 
 int	exec_cmd(t_node *first_node, t_shell *shell)
 {

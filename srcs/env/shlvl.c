@@ -1,21 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   shlvl.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/08 08:25:16 by vmasse            #+#    #+#             */
-/*   Updated: 2022/01/14 16:40:53 by vmasse           ###   ########.fr       */
+/*   Created: 2022/02/20 17:31:55 by vmasse            #+#    #+#             */
+/*   Updated: 2022/02/20 17:36:17 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "../../includes/minishell.h"
 
-int	ft_strchr_pos(char *s, char c, int pos)
+char	*update_shell_lvl(char *env)
 {
-	while (s[++pos] != (char)c)
-		if (!s[pos])
-			return (-1);
-	return (pos);
+	char	*lvl;
+	char	*lvl_char;
+
+	lvl = ft_substr(env, 6, ft_strlen(env) - 6);
+	if (!lvl)
+		return (NULL);
+	lvl_char = ft_itoa(ft_atoi(lvl) + 1);
+	if (!lvl_char)
+	{
+		free(lvl);
+		return (NULL);
+	}
+	env = ft_strjoin("SHLVL=", lvl_char);
+	free(lvl);
+	free(lvl_char);
+	if (!env)
+		return (NULL);
+	return (env);
 }

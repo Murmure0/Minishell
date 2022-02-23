@@ -72,25 +72,34 @@ int main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	nodes = NULL;
+	g_exit_st = 0;
 	init_shell_struct(&shell, env); //faire un check sur le shell pendant l'init
-	tcgetattr(STDIN_FILENO, &shell.termios_p);
+	tcgetattr(STDIN_FILENO, &shell.termios_p); //permet d'avoir le status de l'affichage au debut, pour le reinitialiser apres l'eventuelle utilisation de top qui fout la merde
 	while (1)
 	{
 		signal(SIGINT, handle_signal);
-		// reinit struct pour le unset PATH
+		signal(SIGQUIT, SIG_IGN);
 		parstruct.prompt = readline("minishell$ ");
+		if(!parstruct.prompt)
+		{
+			write(1, "exit\n", 6);
+			break ;
+		}
 		add_history(parstruct.prompt);
 		if (not_emptycmd(parstruct.prompt))
 		{
 			nodes = parse(&parstruct, &shell);
 			if (parstruct.stop_err)
+			{
+				final_free(NULL, &parstruct, nodes);
 				continue ;
+			}
 			print_debug(parstruct, nodes, shell);
+			free_parstruct(&parstruct);
 			if (nodes)
 			{
-				exec(nodes, &shell);
+				// exec(nodes, &shell);
 				free_nodestruct(nodes);
-				free_parstruct(&parstruct);
 			}
 		}
 		else
@@ -99,12 +108,11 @@ int main(int argc, char **argv, char **env)
 			free(parstruct.prompt);
 		}
 	}
+	write(2,"sortie exec\n", 13);
 	free_shellstruct(&shell);
-	
 	return (0);
 }
 
 /* TESTS QUI LEAKS (sans exec)
-	$< >
 
 */

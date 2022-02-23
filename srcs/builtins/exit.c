@@ -1,21 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/08 08:25:16 by vmasse            #+#    #+#             */
-/*   Updated: 2022/01/14 16:40:53 by vmasse           ###   ########.fr       */
+/*   Created: 2022/02/21 12:26:18 by vmasse            #+#    #+#             */
+/*   Updated: 2022/02/21 12:41:45 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "../../includes/minishell.h"
 
-int	ft_strchr_pos(char *s, char c, int pos)
+void	my_exit(t_shell *sh, t_node *n)
 {
-	while (s[++pos] != (char)c)
-		if (!s[pos])
-			return (-1);
-	return (pos);
+	ft_exit(sh, NULL, n, NULL);
 }

@@ -38,15 +38,20 @@ int	find_fd_in_bro(t_node *middle_node, t_exec *prev_exec_st)
 	int	fd_in;
 
 	fd_in = 0;
-	if (middle_node->infiles)
+	if(middle_node->infiles || middle_node->infile_hd)
 	{
-		fd_in = open(middle_node->infiles, O_RDONLY);
-		if (fd_in < 0)
+		if (middle_node->infiles && middle_node->in_id == 2)
 		{
-			write(2, middle_node->infiles, ft_strlen(middle_node->infiles));
-			perror(": ");
-			return (-1);
+			fd_in = open(middle_node->infiles, O_RDONLY);
+			if (fd_in < 0)
+			{
+				write(2, middle_node->infiles, ft_strlen(middle_node->infiles));
+				perror(": ");
+				return (-1);
+			}
 		}
+		else if (middle_node->in_id == 1 && !middle_node->invalid_infile)
+			fd_in = middle_node->infile_hd;
 	}
 	else
 		fd_in = prev_exec_st->pfd_in;
@@ -151,7 +156,7 @@ void	brother_process(t_exec *prev_exec_st, t_node *middle_node, t_shell *shell)
 	// status = 0;
 	// waitpid(prev_pid, &status, WUNTRACED);
 	exec_st_bro = init_exec_st_bro(middle_node, prev_exec_st);
-	printf("\nxXx Processus num %d (Bro)xXx\nFDin : %d, FDout : %d\nPFDIN : %d PFDOUT : %d\n", exec_st_bro->num_cmd, exec_st_bro->fd_in, exec_st_bro->fd_out, exec_st_bro->pfd_in, exec_st_bro->pfd_out);
+	// printf("\nxXx Processus num %d (Bro)xXx\nFDin : %d, FDout : %d\nPFDIN : %d PFDOUT : %d\n", exec_st_bro->num_cmd, exec_st_bro->fd_in, exec_st_bro->fd_out, exec_st_bro->pfd_in, exec_st_bro->pfd_out);
 	bro_pid = fork();
 	if (bro_pid < 0)
 	{

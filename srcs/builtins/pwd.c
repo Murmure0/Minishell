@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/08 08:25:16 by vmasse            #+#    #+#             */
-/*   Updated: 2022/01/14 16:40:53 by vmasse           ###   ########.fr       */
+/*   Created: 2022/02/21 12:26:10 by vmasse            #+#    #+#             */
+/*   Updated: 2022/02/22 11:16:57 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "../../includes/minishell.h"
 
-int	ft_strchr_pos(char *s, char c, int pos)
+int	my_pwd()
 {
-	while (s[++pos] != (char)c)
-		if (!s[pos])
-			return (-1);
-	return (pos);
+	char	*pwd;
+
+	pwd = NULL;
+	pwd = getcwd(pwd, 0);
+	if (!pwd)
+		return (-1);
+	printf("%s\n", pwd);
+	free(pwd);
+	return (0);
 }

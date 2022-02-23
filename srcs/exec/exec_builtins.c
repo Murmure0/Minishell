@@ -17,19 +17,63 @@ int	find_builtin(t_node *first_node, t_shell *shell, char exec)
 		if (!ft_strcmp(first_node[0].cmd[0], "cd"))
 		{
 			if (exec == 'y')
+			{
 				my_cd(shell, first_node[0].cmd[1]);
 				if (first_node->node_nb > 1)
 					exit(EXIT_SUCCESS);
+			}
 			return (1);
 		}
-		// if (!ft_strcmp(first_node[0].cmd[0], "export"))
-		// {
-		// 	if (exec == 'y')
-		// 		my_export(shell, first_node[0].cmd);
-		// 		if (first_node->node_nb > 1)
-		// 			exit(EXIT_SUCCESS);
-		// 	return (1);
-		// }
+		if (!ft_strcmp(first_node[0].cmd[0], "export"))
+		{
+			if (exec == 'y')
+			{
+				my_export(shell, first_node[0].cmd);
+				if (first_node->node_nb > 1)
+					exit(EXIT_SUCCESS);
+			}
+			return (1);
+		}
+		if (!ft_strcmp(first_node[0].cmd[0], "unset"))
+		{
+			if (exec == 'y')
+			{
+				my_unset(shell, first_node[0].cmd[1]);
+				if (first_node->node_nb > 1)
+					exit(EXIT_SUCCESS);
+			}
+			return (1);
+		}
+		if (!ft_strcmp(first_node[0].cmd[0], "env"))
+		{
+			if (exec == 'y')
+			{
+				my_env(shell);
+				if (first_node->node_nb > 1)
+					exit(EXIT_SUCCESS);
+			}
+			return (1);
+		}
+		if (!ft_strcmp(first_node[0].cmd[0], "pwd"))
+		{
+			if (exec == 'y')
+			{
+				my_pwd(shell);
+				if (first_node->node_nb > 1)
+					exit(EXIT_SUCCESS);
+			}
+			return (1);
+		}
+		if (!ft_strcmp(first_node[0].cmd[0], "exit"))
+		{
+			if (exec == 'y')
+			{
+				my_exit(shell, first_node);
+				if (first_node->node_nb > 1)
+					exit(EXIT_SUCCESS);
+			}
+			return (1);
+		}
 	}
 	return (0);
 }
