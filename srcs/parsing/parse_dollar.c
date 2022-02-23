@@ -1,18 +1,5 @@
 #include "../../includes/minishell.h"
 
-// int	contains_dollar(t_parsing *ps, char *s, int pos)
-// {
-// 	while (s && s[pos])
-// 	{
-// 		if (is_space(s[pos]) && !ps->is_d_quote)
-// 			return (-1);
-// 		if (s[pos] == '$')
-// 			return (pos);
-// 		pos++;
-// 	}
-// 	return (-1);
-// }
-
 // // static void	set_quotes_while_dollar(t_parsing *ps, int j)
 // // {
 // // 	// do not move j in this function !!
@@ -189,19 +176,101 @@
 // 	}
 // }
 
-// "$a"
-// ls$ $a
+int	get_key_len(char *s, int pos)
+{
+	int	len;
 
-// "a"$ $a
+	len = 0;
+	while (s[pos] && (ft_isalnum(s[pos]) || s[pos] == '_'))
+	{
+		len++;
+		pos++;
+	}
+	return (len);
+}
 
+int	get_next_dollar(char *s, int pos)
+{
+	while (s && s[pos])
+	{
+		if (s[pos] == '$')
+			return (pos);
+		pos++;
+	}
+	return (-1);
+}
 
-// void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh)
-// {
-// 	int	i;
+char	*ret_null_free(char *ret, char *s)
+{
+	if (s)
+		free(s);
+	return (ret);
+}
 
-// 	i = -1;
-// 	while (++i < ps->pipe_nb + 1)
-// 	{
+char	*replace_in_str(char *s, char *value, int pos, int len)
+{
+	int		i;
+	char	*aside_dollar;
+	char	*tmp;
 
-// 	}
-// }
+	aside_dollar = str_slice(s, 0, pos);
+	if (!aside_dollar)
+	{
+		printf("1st aside dollar failed\n");
+		return (NULL);
+	}
+	tmp = ft_strjoin(aside_dollar, value);
+	if (!tmp)
+		return (ret_null_free(NULL, aside_dollar));
+	// printf("before : %s\n", tmp);
+	free(aside_dollar);
+	i = pos + len;
+	while (s[pos + len])
+		pos++;
+	aside_dollar = str_slice(s, i, pos);
+	if (!aside_dollar)
+		return (ret_null_free(NULL, tmp));
+	// printf("after : %s\n", aside_dollar);
+	free(s);
+	s = ft_strjoin(tmp, aside_dollar);
+	free(tmp);
+	free(aside_dollar);
+	return (s);
+}
+
+void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh)
+{
+	int		k;
+	int		pos_dollar;
+	char	*key;
+	char	*value;
+	int		key_len;
+
+	ps->i = -1;
+	while (++(ps->i) < ps->pipe_nb + 1)
+	{
+		ps->j = -1;
+		// faire 3 fonctions => expand_cmd, expand_infiles et expand_outfiles
+		while (nodes[ps->i].cmd[++(ps->j)])
+		{
+			k = 0;
+			pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], k);
+			while (pos_dollar > -1)
+			{
+				key_len = get_key_len(nodes[ps->i].cmd[ps->j], pos_dollar + 1);
+				printf("KEYLEN : %d\n", key_len);
+				key = str_slice(nodes[ps->i].cmd[ps->j], pos_dollar + 1,
+					pos_dollar + key_len + 1);
+				printf("KEY : %s\n", key);
+				value = get_env_var_value(sh->env, key);
+				printf("VALUE : %s\n", value);
+				free(key);
+				nodes[ps->i].cmd[ps->j] = replace_in_str(nodes[ps->i].cmd[ps->j],
+					value, pos_dollar, key_len);
+				k += pos_dollar + key_len;
+				pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], k);
+			}
+			printf("CMD : %s\n", nodes[ps->i].cmd[ps->j]);
+		}
+	}
+}

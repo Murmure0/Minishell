@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/22 21:52:22 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/23 09:26:33 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		}
 		ps->i++;
 	}
-	// expand_dollar_value(nodes, ps , sh);
+	expand_dollar_value(nodes, ps , sh);
 	// expand dollar
 	// remove quotes
 	return (nodes);

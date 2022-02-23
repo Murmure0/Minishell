@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:16:28 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/22 16:43:13 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/23 14:26:28 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ void	set_i_and_j(int *i, int *j)
 	*j = 0;
 }
 
-int	put_arr_end(char **arr, int j, int k, char s)
+int	put_arr_end(char ***arr, int *j, int k, char s)
 {
-	arr[j++][k] = '\0';
+	*arr[*j++][k] = '\0';
 	if (!s)
 		return (0);
 	return (1);

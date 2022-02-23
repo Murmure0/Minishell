@@ -158,8 +158,11 @@ int		get_matching_quote_pos(t_parsing *parstruct, int start);
 int		check_quotes_for_pipe_split(t_parsing *parstruct);
 
 /* ------------------------------------ parse_dollar.c ------------------------------ */
-int		contains_dollar(t_parsing *ps, char *s, int pos);
+int		get_next_dollar(char *s, int pos);
+char	*ret_null_free(char *ret, char *s);
+char	*replace_in_str(char *s, char *value, int pos, int len);
 void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh);
+int		get_key_len(char *s, int pos);
 
 /* ------------------------------------ parse_heredoc.c ------------------------------ */
 int		add_heredoc_file(t_node *nodes, t_parsing *ps);
