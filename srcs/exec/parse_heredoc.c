@@ -64,33 +64,107 @@ int	add_heredoc_file(t_node *nodes, t_parsing *ps)
 	int		pipe_hd[2];
 	char	*delimiter;
 	char	*line;
+	int status;
+	pid_t fork_pid;
+
+	status = 0;
 
 	if (pipe(pipe_hd) == -1)
 	{
 		write(2, "Error: pipe failed\n", 19);
 		//free_cmds_path(script, path_env);
-		//exit(1);
+		exit(1);
 	}
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, handle_sig_heredoc);
 	nodes[ps->i].infile_hd = pipe_hd[0];
 	delimiter = get_delimiter(ps);
-	line = get_next_line(STDIN_FILENO);
-	if (!line)
-		return (ret_err(0, NULL));
-	if (!ft_strcmp(line, delimiter))
+
+	fork_pid = fork();
+	if (fork_pid < 0)
 	{
-		free(delimiter);
-		free(line);
-		close(pipe_hd[0]);
-		close(pipe_hd[1]);
-		return (0);
+		write(2, "Child fork failed", 18);
+		perror(": ");
 	}
-	else
-		write(pipe_hd[1], line, ft_strlen(line));
-	here_doc_reading(line, pipe_hd[1], delimiter);
+	if (fork_pid == 0)
+	{
+
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, handle_sig_heredoc);
+		
+		line = get_next_line(STDIN_FILENO);
+		if (!line)
+			exit (0); //trouver le bon status
+		if (!ft_strcmp(line, delimiter))
+		{
+			free(delimiter);
+			free(line);
+			close(pipe_hd[0]);
+			close(pipe_hd[1]);
+			exit (0); //toruver le bon status
+		}
+		else
+			write(pipe_hd[1], line, ft_strlen(line));
+		here_doc_reading(line, pipe_hd[1], delimiter);
+		exit (0);
+	}
+	// waitpid(fork_pid, &status, 0);
+	close(pipe_hd[1]);
+	wait(&status);
+	if (status != 0)
+	{
+		g_exit_st = status / 256;
+		printf("valeur de status : %d\n", status);
+		printf("valeur de gexitst : %d\n", g_exit_st);
+		return (1);
+	}
+	// if (WIFSIGNALED(status))
+	// {
+	// 	write(1, "RAAAAH\n", 8);
+
+	// 	g_exit_st = 130;
+	// 	printf("valeur de gexitst : %d\n", g_exit_st);
+	// }
+
 	return (0);
 }
+
+
+// wait(&g_exit_status);
+// 	if (WIFSIGNALED(g_exit_status))
+// 		g_exit_status = 128 + WTERMSIG(g_exit_status);
+
+// int	add_heredoc_file(t_node *nodes, t_parsing *ps)
+// {
+
+// 	int		pipe_hd[2];
+// 	char	*delimiter;
+// 	char	*line;
+
+// 	if (pipe(pipe_hd) == -1)
+// 	{
+// 		write(2, "Error: pipe failed\n", 19);
+// 		//free_cmds_path(script, path_env);
+// 		//exit(1);
+// 	}
+// 	signal(SIGQUIT, SIG_IGN);
+// 	signal(SIGINT, handle_sig_heredoc);
+// 	nodes[ps->i].infile_hd = pipe_hd[0];
+// 	delimiter = get_delimiter(ps);
+// 	line = get_next_line(STDIN_FILENO);
+// 	if (!line)
+// 		return (ret_err(0, NULL));
+// 	if (!ft_strcmp(line, delimiter))
+// 	{
+// 		free(delimiter);
+// 		free(line);
+// 		close(pipe_hd[0]);
+// 		close(pipe_hd[1]);
+// 		return (0);
+// 	}
+// 	else
+// 		write(pipe_hd[1], line, ft_strlen(line));
+// 	here_doc_reading(line, pipe_hd[1], delimiter);
+// 	return (0);
+// }
 
 
 /*
