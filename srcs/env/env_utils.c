@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 17:24:22 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/23 16:37:32 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/23 22:05:15 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,30 @@ char	**add_env_var(char **env, char *var)
 	return (env);
 }
 
-char	**update_env_var(char **env, char *key, char *value)
+int	get_equal(char *s)
 {
 	int	i;
 
 	i = -1;
+	while (s[++i])
+	{
+		if (s[i] == '=')
+			return (i);
+	}
+	return (-1);
+}
+
+char	**update_env_var(char **env, char *key, char *value)
+{
+	int	i;
+	char	*env_key;
+
+	i = -1;
 	while (env && env[++i])
 	{
-		if (!ft_strncmp(env[i], key, ft_strlen(key)))
+		// !!!! TO FREE 
+		env_key = str_slice(env[i], 0, get_equal(env[i]));
+		if (!ft_strcmp(env_key, key))
 		{
 			free(env[i]);
 			env[i] = ft_strdup(ft_strjoin(key, value));
@@ -97,13 +113,16 @@ char	*get_env_var_value(char **env, char *key)
 {
 	int		i;
 	char	*value;
+	char	*env_key;
 
 	i = -1;
 	value = NULL;
 	while (env && env[++i])
 	{
-		/// !!! A CHANGER 
-		if (!ft_strncmp(env[i], key, ft_strlen(key)))
+		// !!!! TO FREE 
+
+		env_key = str_slice(env[i], 0, get_equal(env[i]));
+		if (!ft_strcmp(env_key, key))
 		{
 			value = ft_substr(env[i], ft_strlen(key) + 1, ft_strlen(env[i]));
 			if (!value)

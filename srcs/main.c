@@ -1,5 +1,7 @@
 #include "../includes/minishell.h"
 
+extern int g_exit_st;
+
 int	ret_err(int ret, char *msg)
 {
 	if (!msg)
@@ -98,7 +100,7 @@ int main(int argc, char **argv, char **env)
 			free_parstruct(&parstruct);
 			if (nodes)
 			{
-				// exec(nodes, &shell);
+				exec(nodes, &shell);
 				free_nodestruct(nodes);
 			}
 		}

@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2022/02/23 09:26:33 by vmasse           ###   ########.fr       */
-=======
-/*   Updated: 2022/02/23 16:57:02 by mberthet         ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2022/02/23 21:50:24 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+// extern int g_exit_st;
 
 int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 {

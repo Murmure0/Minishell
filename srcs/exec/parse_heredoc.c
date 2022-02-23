@@ -1,5 +1,7 @@
 #include "../../includes/minishell.h"
 
+int g_exit_st;
+
 static char	*adj_av(char *tmp)
 {
 	char	*str;

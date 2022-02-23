@@ -18,7 +18,7 @@
 # include <errno.h>
 # include <termios.h>
 
-// # include <wait.h>
+# include <wait.h>
 
 # define no_redir	0
 # define redir_l	1
@@ -31,7 +31,7 @@
 # define NO_FILE	"minishell: syntax error near unexpected symbol « newline »"
 # define HOME_UNSET	"minishell: cd: « HOME » not set"
 
-int	g_exit_st;
+// int	g_exit_st;
 
 typedef struct s_node
 {
@@ -119,6 +119,9 @@ char	**realloc_env(char **env);
 char	**update_env_var(char **env, char *str, char *new);
 char	**add_env_var(char **env, char *var);
 char	*get_env_var_value(char **env, char *key);
+
+int	get_equal(char *s);
+
 
 /* ------------------------------------ shlvl.c -------------------------------------------- */
 char	*update_shell_lvl(char *env);

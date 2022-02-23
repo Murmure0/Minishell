@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 15:47:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/22 14:19:18 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/02/23 22:06:20 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,15 @@ static int	contains_equal(char *s)
 int	my_unset(t_shell *sh, char *var)
 {
 	int		i;
+	char	*env_key;
 
 	if (!var || contains_equal(var))
 		return (-1);
 	i = -1;
 	while (sh->env[++i])
 	{
-		if (!ft_strncmp(sh->env[i], var, ft_strlen(var)))
+		env_key = str_slice(sh->env[i], 0, get_equal(sh->env[i]));
+		if (!ft_strcmp(env_key, var))
 		{
 			free(sh->env[i]);
 			sh->env[i] = NULL;

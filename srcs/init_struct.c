@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2022/02/23 14:50:13 by vmasse           ###   ########.fr       */
-=======
-/*   Updated: 2022/02/23 12:01:47 by mberthet         ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2022/02/23 21:42:23 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
