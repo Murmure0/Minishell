@@ -132,11 +132,11 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh)
 				free(key);
 				nodes[ps->i].cmd[ps->j] = replace_in_str(nodes[ps->i].cmd[ps->j],
 					value, pos_dollar, key_len);
-				k += pos_dollar + ft_strlen(value) - 1;
-				printf("%d %s\n", k, nodes[ps->i].cmd[ps->j]);
+				k = pos_dollar + ft_strlen(value) - 1;
+				free(value);
 				pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], k);
 			}
-			// printf("CMD : %s\n", nodes[ps->i].cmd[ps->j]);
+			printf("CMD : %s\n", nodes[ps->i].cmd[ps->j]);
 		}
 
 		// k = 0;
