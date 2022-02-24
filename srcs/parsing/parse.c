@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/24 11:27:52 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/24 13:06:31 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,31 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		ps->i++;
 	}
 	expand_dollar_value_cmd(nodes, ps , sh);
-	remove_quotes_cmd(nodes, ps, sh);
+	remove_quotes_cmd(nodes, ps);
 	return (nodes);
 }
+
+// "'$a $b'"
+
+// minishell$ echo "$POP + $PIP"
+// CMD : echo
+// found d quote at 0
+// CMD INSIDE : "2
+// CMD : 2
+// CMD : +
+// CMD INSIDE : 3"
+// ==146834== Invalid read of size 1
+// ==146834==    at 0x403620: get_next_quote (parse_quotes.c:71)
+// ==146834==    by 0x40397D: remove_quotes_cmd (parse_quotes.c:138)
+// ==146834==    by 0x40303E: parse (parse.c:122)
+// ==146834==    by 0x4014BF: main (main.c:93)
+// ==146834==  Address 0x4b50842 is 0 bytes after a block of size 2 alloc'd
+// ==146834==    at 0x484486F: malloc (vg_replace_malloc.c:381)
+// ==146834==    by 0x40842E: ft_strjoin (in /home/vmasse/Code/Minishell/minishell)
+// ==146834==    by 0x403697: remove_quote (parse_quotes.c:92)
+// ==146834==    by 0x403920: remove_quotes_cmd (parse_quotes.c:136)
+// ==146834==    by 0x40303E: parse (parse.c:122)
+// ==146834==    by 0x4014BF: main (main.c:93)
+// ==146834== 
+// CMD : 3
+// 2 + 3
