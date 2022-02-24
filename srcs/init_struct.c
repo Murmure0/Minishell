@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/24 10:08:18 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/24 11:49:54 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	init_global_struct(t_parsing *ps, t_shell *sh)
 	ps->stop_err = 0;
 	ps->is_s_quote = 0;
 	ps->is_d_quote = 0;
+	ps->quote = 0;
 	ps->i = 0;
 	ps->k = 0;
 	ps->nodes = NULL;

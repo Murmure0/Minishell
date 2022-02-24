@@ -62,6 +62,7 @@ typedef struct s_parsing
 	int		pos_tmp;
 	int		is_s_quote;
 	int		is_d_quote;
+	char	quote;
 }	t_parsing;
 
 typedef struct s_shell
@@ -162,6 +163,10 @@ void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh);
 int		get_quote_pos(t_parsing *parstruct, int start);
 int		get_matching_quote_pos(t_parsing *parstruct, int start);
 int		check_quotes_for_pipe_split(t_parsing *parstruct);
+void	remove_quotes_cmd(t_node *nodes, t_parsing *ps);
+int		get_next_quote(t_parsing *ps, char *s, int pos);
+
+char	*remove_quote(char *s, int pos);
 
 /* ------------------------------------ parse_dollar.c ------------------------------ */
 int		get_next_dollar(char *s, int pos);

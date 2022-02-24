@@ -94,7 +94,6 @@ void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh)
 				replace_dollar(nodes, ps, sh, &pos_dollar);
 				pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], ps->k);
 			}
-			printf("CMD : %s\n", nodes[ps->i].cmd[ps->j]);
 		}
 	}
 }
