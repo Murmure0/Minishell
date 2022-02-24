@@ -87,7 +87,8 @@ void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh)
 			ps->k = 0;
 			set_quotes_for_cmd(ps, nodes);
 			pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], ps->k);
-			while (pos_dollar > -1 && !ps->is_s_quote)
+			while (pos_dollar > -1 && !ps->is_s_quote
+				&& ft_isalnum(nodes[ps->i].cmd[ps->j][pos_dollar + 1]))
 			{
 				set_quotes_for_cmd(ps, nodes);
 				replace_dollar(nodes, ps, sh, &pos_dollar);
@@ -98,10 +99,7 @@ void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh)
 	}
 }
 
-// "$a$b"
-
 // $ for infiles / outfiles
-
 
 // static void	set_quotes_for_infiles(t_parsing *ps, t_node *n, int *k)
 // {

@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 17:24:22 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/24 10:38:29 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/24 11:11:59 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,11 +136,7 @@ char	*get_env_var_value(char **env, char *key)
 		}
 		free(env_key);
 	}
-	// if (!value)
-	// {
-	// 	value = ft_strdup("");
-	// 	if (!value)
-	// 		return (NULL);
-	// }
+	if (!value)
+		value = ft_strdup("");
 	return (value);
 }
