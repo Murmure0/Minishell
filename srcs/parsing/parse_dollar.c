@@ -24,45 +24,85 @@ int	get_next_dollar(char *s, int pos)
 	return (-1);
 }
 
-char	*replace_in_str(char *s, char *value, int pos, int len)
+void	set_quotes_for_cmd(t_parsing *ps, t_node *n)
 {
-	char	*before_dollar;
-	char	*tmp;
-
-	before_dollar = str_slice(s, 0, pos);
-	if (!before_dollar)
-		return (NULL);
-	tmp = ft_strjoin(before_dollar, value);
-	if (!tmp)
-	{
-		free(before_dollar);
-		return (NULL);
-	}
-	s = ft_strjoin(tmp, s + pos + len + 1);
-	free(tmp);
-	free(before_dollar);
-	return (s);
-}
-
-static void	set_quotes_for_cmd(t_parsing *ps, t_node *n, int *k)
-{
-	if (n[ps->i].cmd[ps->j][*k] == '\'')
+	if (n[ps->i].cmd[ps->j][ps->k] == '\'')
 	{
 		if (ps->is_s_quote)
 			ps->is_s_quote = 0;
 		else
 			ps->is_s_quote = 1;
-		(*k)++;
+		ps->k++;
 	}
-	else if (n[ps->i].cmd[ps->j][*k] == '"')
+	else if (n[ps->i].cmd[ps->j][ps->k] == '"')
 	{
 		if (ps->is_d_quote)
 			ps->is_d_quote = 0;
 		else
 			ps->is_d_quote = 1;
-		(*k)++;
+		ps->k++;
 	}
 }
+
+void	replace_dollar(t_node *nodes, t_parsing *ps, t_shell *sh, int *pos_dollar)
+{
+	int		key_len;
+	char	*tmp;
+	char	*value;
+
+	key_len = get_key_len(nodes[ps->i].cmd[ps->j], *pos_dollar + 1);
+	tmp = str_slice(nodes[ps->i].cmd[ps->j], *pos_dollar + 1,
+		*pos_dollar + key_len + 1);
+	if (!tmp)
+		ft_exit(sh, ps, nodes, "Fail to malloc key in replace dollar\n");
+	value = get_env_var_value(sh->env, tmp);
+	free(tmp);
+	if (!value)
+		ft_exit(sh, ps, nodes, "Fail to malloc value in replace dollar\n");
+	tmp = ft_strdup(nodes[ps->i].cmd[ps->j]);
+	if (!tmp)
+	{
+		free(value);
+		ft_exit(sh, ps, nodes, "Fail to malloc tmp in replace dollar\n");
+	}
+	free(nodes[ps->i].cmd[ps->j]);
+	nodes[ps->i].cmd[ps->j] = replace_in_str(tmp,
+		value, *pos_dollar, key_len);
+	free(tmp);
+	ps->k = *pos_dollar + ft_strlen(value) - 1;
+	free(value);
+	if (!nodes[ps->i].cmd[ps->j])
+		ft_exit(sh, ps, nodes, "Fail to malloc node cmd in replace dollar\n");
+}
+
+void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh)
+{
+	int		pos_dollar;
+
+	ps->i = -1;
+	while (++(ps->i) < ps->pipe_nb + 1)
+	{
+		ps->j = -1;
+		while (nodes[ps->i].cmd[++(ps->j)])
+		{
+			ps->k = 0;
+			set_quotes_for_cmd(ps, nodes);
+			pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], ps->k);
+			while (pos_dollar > -1 && !ps->is_s_quote)
+			{
+				set_quotes_for_cmd(ps, nodes);
+				replace_dollar(nodes, ps, sh, &pos_dollar);
+				pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], ps->k);
+			}
+			printf("CMD : %s\n", nodes[ps->i].cmd[ps->j]);
+		}
+	}
+}
+
+// "$a$b"
+
+// $ for infiles / outfiles
+
 
 // static void	set_quotes_for_infiles(t_parsing *ps, t_node *n, int *k)
 // {
@@ -104,40 +144,6 @@ static void	set_quotes_for_cmd(t_parsing *ps, t_node *n, int *k)
 // 	}
 // }
 
-void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh)
-{
-	int		k;
-	int		pos_dollar;
-	char	*key;
-	char	*value;
-	int		key_len;
-
-	ps->i = -1;
-	while (++(ps->i) < ps->pipe_nb + 1)
-	{
-		ps->j = -1;
-		// faire 3 fonctions => expand_cmd, expand_infiles et expand_outfiles
-		while (nodes[ps->i].cmd[++(ps->j)])
-		{
-			k = 0;
-			set_quotes_for_cmd(ps, nodes, &k);
-			pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], k);
-			while (pos_dollar > -1 && !ps->is_s_quote)
-			{
-				set_quotes_for_cmd(ps, nodes, &k);
-				key_len = get_key_len(nodes[ps->i].cmd[ps->j], pos_dollar + 1);
-				key = str_slice(nodes[ps->i].cmd[ps->j], pos_dollar + 1,
-					pos_dollar + key_len + 1);
-				value = get_env_var_value(sh->env, key);
-				free(key);
-				nodes[ps->i].cmd[ps->j] = replace_in_str(nodes[ps->i].cmd[ps->j],
-					value, pos_dollar, key_len);
-				k = pos_dollar + ft_strlen(value) - 1;
-				free(value);
-				pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], k);
-			}
-			printf("CMD : %s\n", nodes[ps->i].cmd[ps->j]);
-		}
 
 		// k = 0;
 		// set_quotes_for_infiles(ps, nodes, &k);
@@ -174,7 +180,3 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh)
 		// 	pos_dollar = get_next_dollar(nodes[ps->i].outfiles, k);
 		// }
 		// printf("OUTFILE : %s\n", nodes[ps->i].outfiles);
-	}
-}
-
-// "$a$b"

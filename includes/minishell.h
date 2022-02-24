@@ -49,6 +49,7 @@ typedef struct s_parsing
 {
 	int		i;
 	int		j;
+	int		k;
 	int		pos_infiles;
 	int		pos_outfiles;
 	int		pos_cmd;
@@ -138,7 +139,7 @@ t_node	*parse(t_parsing *ps, t_shell *sh);
 
 /* ------------------------------------ parse_utils.c ------------------------------- */
 int		arr_len(char **arr);
-char	*str_slice(char *src, int start, int stop);
+char	*replace_in_str(char *s, char *value, int pos, int len);
 int		check_space_between_redirs(t_parsing *ps);
 void	skip_spaces(t_parsing *ps);
 void	modify_dollar_value(t_parsing *ps, t_shell *sh);
@@ -164,9 +165,10 @@ int		check_quotes_for_pipe_split(t_parsing *parstruct);
 
 /* ------------------------------------ parse_dollar.c ------------------------------ */
 int		get_next_dollar(char *s, int pos);
-char	*replace_in_str(char *s, char *value, int pos, int len);
-void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh);
+void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh);
 int		get_key_len(char *s, int pos);
+void	replace_dollar(t_node *nodes, t_parsing *ps, t_shell *sh, int *pos_dollar);
+void	set_quotes_for_cmd(t_parsing *ps, t_node *n);
 
 /* ------------------------------------ parse_heredoc.c ------------------------------ */
 int		add_heredoc_file(t_node *nodes, t_parsing *ps);

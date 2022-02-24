@@ -17,6 +17,7 @@ SRCS =	ft_bzero.c	\
 		is_space.c \
 		is_chevron.c \
 		ft_isalnum.c \
+		str_slice.c \
 
 OBJS = $(SRCS:.c=.o)
 

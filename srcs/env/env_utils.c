@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 17:24:22 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/23 22:05:15 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/24 10:38:29 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,15 +96,18 @@ char	**update_env_var(char **env, char *key, char *value)
 	i = -1;
 	while (env && env[++i])
 	{
-		// !!!! TO FREE 
 		env_key = str_slice(env[i], 0, get_equal(env[i]));
+		if (!env_key)
+			return (NULL);
 		if (!ft_strcmp(env_key, key))
 		{
 			free(env[i]);
 			env[i] = ft_strdup(ft_strjoin(key, value));
+			free(env_key);
 			if (!env[i])
 				return (NULL);
 		}
+		free(env_key);
 	}
 	return (env);
 }
@@ -119,21 +122,25 @@ char	*get_env_var_value(char **env, char *key)
 	value = NULL;
 	while (env && env[++i])
 	{
-		// !!!! TO FREE 
-
 		env_key = str_slice(env[i], 0, get_equal(env[i]));
+		if (!env_key)
+			return (NULL);
 		if (!ft_strcmp(env_key, key))
 		{
 			value = ft_substr(env[i], ft_strlen(key) + 1, ft_strlen(env[i]));
 			if (!value)
+			{
+				free(env_key);
 				return (NULL);
+			}
 		}
+		free(env_key);
 	}
-	if (!value)
-	{
-		value = ft_strdup("");
-		if (!value)
-			return (NULL);
-	}
+	// if (!value)
+	// {
+	// 	value = ft_strdup("");
+	// 	if (!value)
+	// 		return (NULL);
+	// }
 	return (value);
 }

@@ -32,5 +32,6 @@ char	*ft_itoa(int n);
 int		ft_atoi(const char *str);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_isalnum(int c);
+char	*str_slice(char *src, int start, int stop);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/23 21:50:24 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/24 10:43:46 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		return (NULL);
 	nodes = malloc(sizeof(t_node) * (ps->pipe_nb + 1));
 	if (!nodes)
-		ft_exit(sh, ps, NULL, "Fail to malloc nodes\n");
+		ft_exit(sh, ps, NULL, "Fail to malloc nodes in parse\n");
 	while (ps->nodes[ps->i])
 	{
 		init_local_struct(&nodes, &ps, sh);
@@ -108,8 +108,8 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		{
 			if (!process_parse(&nodes, ps, sh))
 				return (NULL);
-			if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1] &&
-				!is_chevron(ps->nodes[ps->i][ps->j]))
+			if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1]
+				&& !is_chevron(ps->nodes[ps->i][ps->j]))
 					ps->j++;
 			else if (is_chevron(ps->nodes[ps->i][ps->j]))
 				continue ;
@@ -118,8 +118,7 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		}
 		ps->i++;
 	}
-	expand_dollar_value(nodes, ps , sh);
-	// expand dollar
+	expand_dollar_value_cmd(nodes, ps , sh);
 	// remove quotes
 	return (nodes);
 }

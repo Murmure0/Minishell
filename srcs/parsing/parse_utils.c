@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:08:35 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/23 14:51:21 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/24 10:53:04 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,29 +22,6 @@ int	arr_len(char **arr)
 		i++;
 	}
 	return (i);
-}
-
-char	*str_slice(char *src, int start, int stop)
-{
-	char	*string;
-	int		src_size;
-	int		i;
-
-	if (!src)
-		return (NULL);
-	src_size = stop - start;
-	string = malloc(sizeof(char) * (src_size + 1));
-	if (!string)
-		return (NULL);
-	i = 0;
-	while (start < stop)
-	{
-		string[i] = src[start];
-		i++;
-		start++;
-	}
-	string[src_size] = '\0';
-	return (string);
 }
 
 int	check_space_between_redirs(t_parsing *ps)
@@ -88,4 +65,28 @@ t_node	*parse_ret_free(t_node *nodes)
 {
 	free(nodes);
 	return (NULL);
+}
+
+char	*replace_in_str(char *s, char *value, int pos, int len)
+{
+	char	*before_dollar;
+	char	*tmp;
+	char	*tmp_two;
+
+	before_dollar = str_slice(s, 0, pos);
+	if (!before_dollar)
+		return (NULL);
+	tmp = ft_strjoin(before_dollar, value);
+	if (!tmp)
+	{
+		free(before_dollar);
+		return (NULL);
+	}
+	tmp_two = ft_strdup(s);
+	free(s);
+	s = ft_strjoin(tmp, tmp_two + pos + len + 1);
+	free(before_dollar);
+	free(tmp);
+	free(tmp_two);
+	return (s);
 }
