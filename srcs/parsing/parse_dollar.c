@@ -68,7 +68,6 @@ void	replace_dollar(t_node *nodes, t_parsing *ps, t_shell *sh, int *pos_dollar)
 	free(nodes[ps->i].cmd[ps->j]);
 	nodes[ps->i].cmd[ps->j] = replace_in_str(tmp,
 		value, *pos_dollar, key_len);
-	free(tmp);
 	ps->k = *pos_dollar + ft_strlen(value) - 1;
 	free(value);
 	if (!nodes[ps->i].cmd[ps->j])

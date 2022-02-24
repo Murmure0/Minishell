@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:08:35 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/24 10:53:04 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/24 11:04:18 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,17 @@ char	*replace_in_str(char *s, char *value, int pos, int len)
 	if (!before_dollar)
 		return (NULL);
 	tmp = ft_strjoin(before_dollar, value);
+	free(before_dollar);
 	if (!tmp)
-	{
-		free(before_dollar);
 		return (NULL);
-	}
 	tmp_two = ft_strdup(s);
 	free(s);
+	if (!tmp_two)
+	{
+		free(tmp);
+		return (NULL);
+	}
 	s = ft_strjoin(tmp, tmp_two + pos + len + 1);
-	free(before_dollar);
 	free(tmp);
 	free(tmp_two);
 	return (s);
