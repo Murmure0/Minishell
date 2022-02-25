@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_pipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:29:40 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/23 15:36:15 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/24 10:19:15 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static	char	**fill_arr(char const *s, char **arr, char c, int is_quote)
 				arr[j][k++] = s[i++];
 			}
 			arr[j++][k] = '\0';
-			arr[j] = '\0';
+			arr[j] = NULL;
 			if (!s[i])
 				return (arr);
 		}

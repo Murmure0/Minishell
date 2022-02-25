@@ -20,7 +20,7 @@ int	find_fd_in(t_node *first_node)
 	return (fd_in);
 }
 
-void	pipe_case(t_exec *exec_st)
+static void	pipe_case(t_exec *exec_st)
 {
 	int	pfd[2];
 
@@ -56,7 +56,7 @@ int	find_fd_out(t_node *first_node, t_exec *exec_st)
 	return (fd_out);
 }
 
-void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node,
+static void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node,
 		t_shell *shell)
 {
 	if (child_pid == 0)
@@ -95,12 +95,11 @@ pid_t	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st)
 	if (child_pid == 0)
 		child_process(child_pid, exec_st, first_node, shell);
 	if (exec_st->pfd_out > 0)
-		close(exec_st->pfd_out);//ajout
+		close(exec_st->pfd_out);
 	if (first_node[0].node_nb == 1)
 	{
 		free(exec_st);
 		waitpid(child_pid, &status, 0);
 	}
-	// printf("\nXxXFin child procXxX\nPdfin : %d, Pdfout : %d\nEnvoyer apres: fd_out : %d\n", exec_st->pfd_in, exec_st->pfd_out, exec_st->fd_out);
 	return (child_pid);
 }

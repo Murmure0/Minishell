@@ -264,7 +264,7 @@ void	expand_dollar_value(t_node *nodes, t_parsing *ps, t_shell *sh)
 				k += pos_dollar + ft_strlen(value);
 				pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], k);
 			}
-			printf("CMD : %s\n", nodes[ps->i].cmd[ps->j]);
+			//printf("CMD : %s\n", nodes[ps->i].cmd[ps->j]);
 		}
 	}
 }

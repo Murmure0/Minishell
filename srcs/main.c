@@ -73,12 +73,12 @@ int main(int argc, char **argv, char **env)
 	(void)argv;
 	nodes = NULL;
 	g_exit_st = 0;
-	init_shell_struct(&shell, env); //faire un check sur le shell pendant l'init
-	tcgetattr(STDIN_FILENO, &shell.termios_p); //permet d'avoir le status de l'affichage au debut, pour le reinitialiser apres l'eventuelle utilisation de top qui fout la merde
+	init_shell_struct(&shell, env);
+	tcgetattr(STDIN_FILENO, &shell.termios_p);
 	while (1)
 	{
-		signal(SIGINT, handle_signal);
 		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, handle_signal);
 		parstruct.prompt = readline("minishell$ ");
 		if(!parstruct.prompt)
 		{
@@ -98,7 +98,7 @@ int main(int argc, char **argv, char **env)
 			free_parstruct(&parstruct);
 			if (nodes)
 			{
-				// exec(nodes, &shell);
+				exec(nodes, &shell);
 				free_nodestruct(nodes);
 			}
 		}

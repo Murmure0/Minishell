@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/23 17:04:12 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/02/25 12:43:48 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,8 @@ int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 		if (add_heredoc_file(nodes, ps))
 		{
 			ps->stop_err = 1;
-			return (0);
+			return (g_exit_st);
 		}
-		// if (g_exit_st == 130)
-		// {
-			write(1, "pouet\n", 6);
-		// 	return (ret_err(0, NO_FILE));
-		// }
 	}
 	else if (ps->nodes[ps->i][ps->j + 1])
 	{
@@ -41,7 +36,7 @@ int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 		add_file(nodes, ps, 1, sh);
 	}
 	else
-		return (ret_err(0, NO_FILE)); //tester le retour 0, maybe segfault
+		return (ret_err(0, NO_FILE));
 	return (1);
 }
 
