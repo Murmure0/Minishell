@@ -227,12 +227,15 @@ void	brother_process(t_exec *exec_st, t_node *last_node, t_shell *shell);
 int 	my_echo(char **str);
 int		my_cd(t_shell *shell, char *dir);
 int		my_export(t_shell *shell, char **var);
-int		my_unset(t_shell *sh, char *var);
+int		my_unset(t_shell *sh, char **var);
 int		my_env(t_shell *sh);
 void	my_exit(t_shell *sh, t_node *n);
 int		my_pwd(void);
+char	*get_var_value(char *cmd);
+char	*get_var_key(char *cmd);
 
 /* ---------------------------------- builtins_utils.c ------------------------- */
 void	free_export(char *key, char *value);
+int		get_key_value_export(char **key, char **value, char *cmd);
 
 #endif

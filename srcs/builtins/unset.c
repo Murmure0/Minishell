@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 15:47:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/25 19:11:55 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/25 20:30:35 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	contains_equal(char *s)
 	return (0);
 }
 
-int	shift_vars(t_shell *sh, int i)
+static int	shift_vars(t_shell *sh, int i)
 {
 	while (sh->env[i])
 	{
@@ -52,29 +52,31 @@ int	shift_vars(t_shell *sh, int i)
 	return (1);
 }
 
-int	my_unset(t_shell *sh, char *var)
+int	my_unset(t_shell *sh, char **var)
 {
 	int		i;
 	char	*env_key;
 
-	if (!var || contains_equal(var))
-		return (-1);
-	i = -1;
-	while (sh->env[++i])
+	while (var && *var)
 	{
-		env_key = str_slice(sh->env[i], 0, get_equal(sh->env[i]));
-		if (!env_key)
+		if (!*var || contains_equal(*var))
 			return (-1);
-		if (!ft_strcmp(env_key, var))
+		i = -1;
+		while (sh->env[++i])
 		{
+			env_key = str_slice(sh->env[i], 0, get_equal(sh->env[i]));
+			if (!env_key)
+				return (-1);
+			if (!ft_strcmp(env_key, *var))
+			{
+				free(env_key);
+				if (!shift_vars(sh, i) && !update_env_paths(sh))
+					return (-1);
+				break ;
+			}
 			free(env_key);
-			if (shift_vars(sh, i))
-				return (-1);
-			if (!update_env_paths(sh))
-				return (-1);
-			return (1);
 		}
-		free(env_key);
+		var++;
 	}
 	return (0);
 }

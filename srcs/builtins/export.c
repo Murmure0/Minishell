@@ -6,13 +6,13 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 19:12:37 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/25 20:04:19 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/25 20:21:00 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	*get_var_value(char *cmd)
+char	*get_var_value(char *cmd)
 {
 	int	i;
 
@@ -25,7 +25,7 @@ static char	*get_var_value(char *cmd)
 	return (NULL);
 }
 
-static char	*get_var_key(char *cmd)
+char	*get_var_key(char *cmd)
 {
 	int	i;
 
@@ -81,11 +81,7 @@ int	my_export(t_shell *sh, char **cmd)
 	cmd_pos = 0;
 	while (cmd[++cmd_pos])
 	{
-		key = get_var_key(cmd[cmd_pos]);
-		if (!key)
-			return (-1);
-		value = get_var_value(cmd[cmd_pos]);
-		if (!value)
+		if (!get_key_value_export(&key, &value, cmd[cmd_pos]))
 			return (-1);
 		if (!validate_var(key, cmd[cmd_pos]))
 		{

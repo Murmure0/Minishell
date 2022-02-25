@@ -38,7 +38,7 @@ int	find_builtin(t_node *first_node, t_shell *shell, char exec)
 		{
 			if (exec == 'y')
 			{
-				my_unset(shell, first_node[0].cmd[1]);
+				my_unset(shell, first_node[0].cmd);
 				if (first_node->node_nb > 1)
 					exit(EXIT_SUCCESS);
 			}
