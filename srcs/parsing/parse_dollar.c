@@ -89,6 +89,7 @@ void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh)
 			pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], ps->k);
 			while (pos_dollar > -1 && !ps->is_s_quote
 				&& ft_isalnum(nodes[ps->i].cmd[ps->j][pos_dollar + 1]))
+				// !!! rajouter soit est alnum soit '_' ? 
 			{
 				set_quotes_for_cmd(ps, nodes);
 				replace_dollar(nodes, ps, sh, &pos_dollar);

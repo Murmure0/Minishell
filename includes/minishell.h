@@ -169,7 +169,14 @@ int		check_quotes_for_pipe_split(t_parsing *parstruct);
 void	remove_quotes_cmd(t_node *nodes, t_parsing *ps);
 int		get_next_quote(t_parsing *ps, char *s, int pos);
 
-char	*remove_quote(char *s, int pos);
+char	*remove_quote(char *s, int pos, t_parsing *ps);
+
+/* ------------------------------------ files_expander.c ------------------------------ */
+void	skip_spaces_local(t_parsing *ps, int *j);
+void	set_quotes_for_files(t_parsing *ps, int *j);
+void	replace_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh, int *pos_dollar);
+void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh);
+
 
 /* ------------------------------------ parse_dollar.c ------------------------------ */
 int		get_next_dollar(char *s, int pos);

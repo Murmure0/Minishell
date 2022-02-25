@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/25 09:48:39 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/25 16:08:21 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,13 @@ int	process_parse(t_node **nodes, t_parsing *ps, t_shell *sh)
 	skip_spaces(ps);
 	if (ps->nodes[ps->i][ps->j] == '<')
 	{
+		quotes_and_dollar_files(*nodes, ps, sh);
 		if (!parse_case_infile(*nodes, ps, sh))
 			return (0);
 	}
 	else if (ps->nodes[ps->i][ps->j] == '>')
 	{
+		quotes_and_dollar_files(*nodes, ps, sh);
 		if (!parse_case_outfile(*nodes, ps, sh))
 			return (0);
 	}
@@ -118,7 +120,7 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		}
 		ps->i++;
 	}
-	// expand_dollar_value_cmd(nodes, ps , sh);
+	expand_dollar_value_cmd(nodes, ps , sh);
 	// remove_quotes_cmd(nodes, ps);
 	return (nodes);
 }

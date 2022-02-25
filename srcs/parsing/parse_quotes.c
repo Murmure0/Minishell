@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 18:43:23 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/24 12:50:54 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/25 14:47:26 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,37 +68,38 @@ int	check_quotes_for_pipe_split(t_parsing *parstruct)
 
 int	get_next_quote(t_parsing *ps, char *s, int pos)
 {
+	(void)ps;
 	while (s && s[pos])
 	{
 		if (s[pos] == '\'' || s[pos] == '"')
-		{
-			ps->quote = s[pos];
 			return (pos);
-		}
 		pos++;
 	}
 	return (-1);
 }
 
-char	*remove_quote(char *s, int pos)
+char	*remove_quote(char *s, int pos, t_parsing *ps)
 {
 	char	*before_quote;
-	// char	*tmp;
+	char	*tmp;
 
-	printf("CMD INSIDE : %s\n", s);
+	// printf("CMD INSIDE : %s\n", s);
 	before_quote = str_slice(s, 0, pos);
 	if (!before_quote)
 		return (NULL);
-	s = ft_strjoin(before_quote, s + pos + 1);
+	tmp = ft_strjoin(before_quote, s + pos + 1);
 	free(before_quote);
-	return (s);
+	free(s);
+	ps->quote = 0;
+	return (tmp);
 }
 
 void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n)
 {
 	if (n[ps->i].cmd[ps->j][ps->k] == '\'')
 	{
-		printf("found s quote at %d\n", ps->k);
+		ps->quote = '\'';
+		// printf("found s quote at %d\n", ps->k);
 		if (ps->is_s_quote)
 			ps->is_s_quote = 0;
 		else
@@ -106,7 +107,8 @@ void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n)
 	}
 	else if (n[ps->i].cmd[ps->j][ps->k] == '"')
 	{
-		printf("found d quote at %d\n", ps->k);
+		ps->quote = '"';
+		// printf("found d quote at %d\n", ps->k);
 		if (ps->is_d_quote)
 			ps->is_d_quote = 0;
 		else
@@ -125,16 +127,19 @@ void	remove_quotes_cmd(t_node *nodes, t_parsing *ps)
 		while (nodes[ps->i].cmd[++(ps->j)])
 		{
 			ps->k = 0;
-			// set_quotes_for_cmd_in_quote(ps, nodes);
 			pos_quote = get_next_quote(ps, nodes[ps->i].cmd[ps->j], ps->k);
 			while (pos_quote > -1)
 			{
 				set_quotes_for_cmd_in_quote(ps, nodes);
 				if ((!(ps->is_d_quote && ps->quote == '\'')
-					&& !(ps->is_s_quote && ps->quote == '"')))
-					// || ((ps->is_d_quote && ps->quote == '"') && (ps->is_s_quote && ps->quote == '\'')))
-					nodes[ps->i].cmd[ps->j] = remove_quote(nodes[ps->i].cmd[ps->j], pos_quote);
-				ps->k = pos_quote + 1;
+					&& !(ps->is_s_quote && ps->quote == '"'))
+					|| ((ps->is_d_quote && ps->quote == '"') && (ps->is_s_quote && ps->quote == '\'')))
+				{
+					nodes[ps->i].cmd[ps->j] = remove_quote(nodes[ps->i].cmd[ps->j], pos_quote, ps);
+					ps->k = pos_quote;
+				}
+				else if (ps->quote)
+					ps->k = pos_quote + 1;
 				pos_quote = get_next_quote(ps, nodes[ps->i].cmd[ps->j], ps->k);
 			}
 			printf("CMD : %s\n", nodes[ps->i].cmd[ps->j]);
