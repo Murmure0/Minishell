@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 14:05:56 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/25 16:12:14 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/25 17:06:36 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ char	*get_file_name(t_parsing *ps, t_node *nodes, int redir)
 
 void	add_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 {
+	if (nodes[ps->i].infiles)
+		free(nodes[ps->i].infiles);
 	nodes[ps->i].infiles = get_file_name(ps, nodes, 1);
 	if (!nodes[ps->i].infiles)
 		ft_exit(sh, ps, nodes, "Fail to malloc infiles in add_file\n");
