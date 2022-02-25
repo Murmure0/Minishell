@@ -10,6 +10,7 @@ int	find_fd_in(t_node *first_node)
 		fd_in = open(first_node[0].infiles, O_RDONLY);
 		if (fd_in < 0)
 		{
+			g_exit_st = -1;
 			write(2, first_node[0].infiles, ft_strlen(first_node[0].infiles));
 			perror(": ");
 			return (-1);
@@ -20,15 +21,20 @@ int	find_fd_in(t_node *first_node)
 	return (fd_in);
 }
 
-static void	pipe_case(t_exec *exec_st)
+static int	pipe_case(t_exec *exec_st)
 {
 	int	pfd[2];
 
 	if (pipe(pfd) < 0)
+	{
+		g_exit_st = -1;
 		perror(": ");
+		return (g_exit_st);
+	}
 	exec_st->pfd_out = pfd[1];
 	exec_st->pfd_in = pfd[0];
 	exec_st->num_cmd++;
+	return (0);
 }
 
 int	find_fd_out(t_node *first_node, t_exec *exec_st)
@@ -37,7 +43,8 @@ int	find_fd_out(t_node *first_node, t_exec *exec_st)
 
 	fd_out = 1;
 	if (first_node[0].node_nb > 1)
-		pipe_case(exec_st);
+		if (pipe_case(exec_st) < 0)
+			return (-1);
 	if (first_node[0].node_nb > 1 && !first_node[0].outfiles)
 		fd_out = exec_st->pfd_out;
 	else if (first_node[0].outfiles)
@@ -48,9 +55,10 @@ int	find_fd_out(t_node *first_node, t_exec *exec_st)
 			fd_out = open(first_node[0].outfiles, O_WRONLY | O_APPEND);
 		if (fd_out < 0)
 		{
+			g_exit_st = -1;
 			write(2, first_node[0].outfiles, ft_strlen(first_node[0].outfiles));
 			perror(": ");
-			return (-1);
+			return (g_exit_st);
 		}
 	}
 	return (fd_out);
@@ -100,6 +108,8 @@ pid_t	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st)
 	{
 		free(exec_st);
 		waitpid(child_pid, &status, 0);
+		if (WIFSIGNALED(status))
+			g_exit_st = 128 + WTERMSIG(status);
 	}
 	return (child_pid);
 }

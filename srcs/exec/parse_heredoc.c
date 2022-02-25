@@ -50,6 +50,7 @@ static void	forking_heredoc(int pipe_in, int pipe_out, t_parsing *ps)
 	fork_pid = fork();
 	if (fork_pid < 0)
 	{
+		g_exit_st = -1;
 		free(delimiter);
 		close(pipe_in);
 		write(2, "Fork failed", 12);
@@ -71,7 +72,8 @@ int	add_heredoc_file(t_node *nodes, t_parsing *ps)
 	if (pipe(pipe_hd) == -1)
 	{
 		write(2, "Error: pipe failed\n", 19);
-		return (0);
+		g_exit_st = -1;
+		return (1);
 	}
 	nodes[ps->i].infile_hd = pipe_hd[0];
 	forking_heredoc(pipe_hd[0], pipe_hd[1], ps);

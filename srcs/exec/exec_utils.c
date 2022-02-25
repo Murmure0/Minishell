@@ -17,11 +17,7 @@ t_exec	*init_exec_st(t_node *first_node)
 
 	exec_st = malloc(sizeof(t_exec));
 	if (!exec_st)
-	{
-		write(2, "Memory allocation failed.\n", 57);
-		perror(": ");
 		return (NULL);
-	}
 	exec_st->num_cmd = 1;
 	exec_st->pfd_in = 0;
 	exec_st->pfd_out = 0;

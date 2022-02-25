@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-int no_newline(char **str)
+static int	no_newline(char **str)
 {
 	int	k;
 
@@ -11,6 +11,16 @@ int no_newline(char **str)
 		return (0);
 	else
 		return (1);
+}
+
+static int	write_n(char **str)
+{
+	if (!ft_strncmp(str[0], "-n", 2) && !no_newline(str))
+		return (0);
+	else if ((!ft_strncmp(str[0], "-n", 2) && no_newline(str))
+		|| ft_strncmp(str[0], "-n", 2))
+		write(1, "\n", 1);
+	return (0);
 }
 
 int	my_echo(char **str)
@@ -25,24 +35,17 @@ int	my_echo(char **str)
 		write(1, "\n", 1);
 		return (-1);
 	}
-
-	if (!ft_strncmp(str[0], "-n", 2) && !no_newline(str)) //nonewline = le -nnn est identifié, on ne veut pas l'imprimer, on passe a l'arg suivant
+	if (!ft_strncmp(str[0], "-n", 2) && !no_newline(str))
 	{
 		i++;
 		j++;
 	}
-	while (str[++i]) //on imprime l'arg + espace
+	while (str[++i])
 	{
 		write(1, str[i], ft_strlen(str[i]));
 		if (str[++j] != NULL)
 			write(1, " ", 1);
 	}
-
-	if (!ft_strncmp(str[0], "-n", 2) && !no_newline(str)) //le -nnn est id, on doit faire comme -n et inhiber le \n
-	{
-		return (0);
-	}
-	else if ((!ft_strncmp(str[0], "-n", 2) && no_newline(str)) || ft_strncmp(str[0], "-n", 2)) //le -n-nn est id, on doit faie le \n
-		write(1, "\n", 1);
-	return(0);
+	write_n(str);
+	return (0);
 }

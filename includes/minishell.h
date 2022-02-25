@@ -190,7 +190,7 @@ void	fd_dup(int fd, int std);
 int		find_builtin(t_node *first_node, t_shell *shell, char exec);
 
 /* ------------------------------------ exec_builtins_redir.c ------------------------------- */
-void	redir_solo_builtin(t_node *first_node, t_shell *shell, t_exec	*exec_st);
+int	redir_solo_builtin(t_node *first_node, t_shell *shell, t_exec	*exec_st);
 
 /* ---------------------------------- exec_process_child.c ------------------------- */
 int		find_fd_in(t_node *first_node);

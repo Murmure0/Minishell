@@ -102,23 +102,23 @@ int	my_cd(t_shell *shell, char *dir)
 	// ..
 
 	if (!get_pwds(shell, &old_pwd, &pwd, &home))
-		return (-1);
+		return (1);
 	if (!dir)
 	{
 		if (!try_chdir(ft_substr(home, 5, ft_strlen(home) - 5)))
-			return (-1);
+			return (1);
 		update_env(shell->env, NULL, pwd, home);
 	}
 	if (dir && (!ft_strncmp(dir, "~/", 2) || !ft_strncmp(dir, "..", 2) || !ft_strncmp(dir, "/", 1)))
 	{
 		if (!try_chdir(dir))
-			return (-1);
+			return (1);
 		update_env(shell->env, dir, pwd, NULL);
 	}
 	else if (dir)
 	{
 		if (!try_chdir(dir))
-			return (-1);
+			return (1);
 		update_env(shell->env, dir, pwd, NULL);
 	}
 	int i = -1;

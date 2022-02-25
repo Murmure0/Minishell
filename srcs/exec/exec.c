@@ -37,5 +37,7 @@ int	exec(t_node *first_node, t_shell *shell)
 	if (nb_cmd > 1)
 		while ((nb_cmd--) > 0)
 			wait(&status);
+	if (WIFSIGNALED(status))
+		g_exit_st = 128 + WTERMSIG(status);
 	return (0);
 }

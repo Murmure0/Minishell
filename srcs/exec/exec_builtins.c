@@ -16,9 +16,9 @@ static int	find_echo_cd(t_node *first_node, t_shell *shell, char exec)
 	{
 		if (exec == 'y')
 		{
-			my_cd(shell, first_node[0].cmd[1]);
+			g_exit_st = my_cd(shell, first_node[0].cmd[1]);
 			if (first_node->node_nb > 1)
-				exit(EXIT_SUCCESS);
+				exit(g_exit_st);
 		}
 		return (1);
 	}
@@ -31,9 +31,9 @@ static int	find_export_env(t_node *first_node, t_shell *shell, char exec)
 	// {
 	// 	if (exec == 'y')
 	// 	{
-	// 		my_export(shell, first_node[0].cmd);
+	// 		g_exit_st = my_export(shell, first_node[0].cmd);
 	// 		if (first_node->node_nb > 1)
-	// 			exit(EXIT_SUCCESS);
+	// 			exit(g_exit_st);
 	// 	}
 	// 	return (1);
 	// }
@@ -41,9 +41,9 @@ static int	find_export_env(t_node *first_node, t_shell *shell, char exec)
 	{
 		if (exec == 'y')
 		{
-			my_unset(shell, first_node[0].cmd[1]);
+			g_exit_st = my_unset(shell, first_node[0].cmd[1]);
 			if (first_node->node_nb > 1)
-				exit(EXIT_SUCCESS);
+				exit(g_exit_st);
 		}
 		return (1);
 	}
@@ -56,9 +56,9 @@ static int	find_env_pwd(t_node *first_node, t_shell *shell, char exec)
 	{
 		if (exec == 'y')
 		{
-			my_env(shell);
+			g_exit_st = my_env(shell);
 			if (first_node->node_nb > 1)
-				exit(EXIT_SUCCESS);
+				exit(g_exit_st);
 		}
 		return (1);
 	}
@@ -66,9 +66,9 @@ static int	find_env_pwd(t_node *first_node, t_shell *shell, char exec)
 	{
 		if (exec == 'y')
 		{
-			my_pwd(shell);
+			g_exit_st = my_pwd(shell);
 			if (first_node->node_nb > 1)
-				exit(EXIT_SUCCESS);
+				exit(g_exit_st);
 		}
 		return (1);
 	}
