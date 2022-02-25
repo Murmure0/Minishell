@@ -6,60 +6,11 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 16:25:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/24 10:13:04 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/25 11:39:42 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	get_cmds_nb_case_chevron(char *node, int *i)
-{
-	if (node[*i + 1] == '<' || node[*i + 1] == '>')
-	{
-		*i += 2;
-		while (node[*i] && is_space(node[*i]))
-			if (node[*i + 1])
-				(*i)++;
-		while (node[*i] && node[*i] != ' ' && node[*i] != '\t'
-			&& node[*i] != '<' && node[*i] != '>')
-			(*i)++;
-	}
-	if (node[*i] && node[*i + 1] && is_space(node[*i + 1]))
-	{
-		(*i)++;
-		while (node[*i] && is_space(node[*i]))
-			if (node[*i + 1])
-				(*i)++;
-	}
-	while (node[*i] && (node[*i] != ' ' && node[*i] != '\t'))
-		(*i)++;
-}
-
-int	get_cmds_nb(char *node)
-{
-	int	i;
-	int	nb;
-
-	i = 0;
-	nb = 0;
-	while (node && node[i])
-	{
-		if (node[i] != ' ' && node[i] != '\t'
-			&& node[i] != '<' && node[i] != '>')
-		{
-			while (node[i] && (node[i] != ' ' && node[i] != '\t'))
-				i++;
-			nb++;
-		}
-		else if (node[i] == '<' || node[i] == '>')
-			get_cmds_nb_case_chevron(node, &i);
-		if (node[i] && node[i + 1])
-			i++;
-		else
-			break ;
-	}
-	return (nb);
-}
 
 int	check_for_command_args(t_parsing *ps, int *pos_start, int *stop)
 {
@@ -68,10 +19,14 @@ int	check_for_command_args(t_parsing *ps, int *pos_start, int *stop)
 	if (!ps->nodes[ps->i][ps->j])
 		return (0);
 	ps->pos_tmp = ps->j;
-	while (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j] != '\t'
+	while (ps->nodes[ps->i][ps->j] && ((ps->nodes[ps->i][ps->j] != '\t'
 		&& ps->nodes[ps->i][ps->j] != ' ')
+			|| (ps->is_d_quote && ps->nodes[ps->i][ps->j] != '"')
+				|| (ps->is_s_quote && ps->nodes[ps->i][ps->j] != '\'')))
 	{
-		if (is_chevron(ps->nodes[ps->i][ps->j]))
+		set_quotes_for_prompt(ps);
+		if (is_chevron(ps->nodes[ps->i][ps->j])
+			&& !ps->is_d_quote && !ps->is_s_quote)
 		{
 			*stop = 1;
 			break ;
@@ -81,30 +36,34 @@ int	check_for_command_args(t_parsing *ps, int *pos_start, int *stop)
 	return (1);
 }
 
+int	add_cmd_args_case_stop(t_parsing *ps, t_node **n, t_shell *sh, int pos)
+{
+	if (ps->pos_tmp != ps->j)
+	{
+		(*n)[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i],
+				pos, ps->j);
+		if (!(*n)[ps->i].cmd[ps->pos_cmd])
+			ft_exit(sh, ps, *n, "Fail to malloc args in add_cmd stop\n");
+	}
+	else
+		(*n)[ps->i].cmd[ps->cmd_nb] = 0;
+	return (1);
+}
+
 void	add_command_args(t_node **nodes, t_parsing *ps, t_shell *sh)
 {
 	int		pos_start;
 	int		stop;
 
 	stop = 0;
-	while (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j] != '<'
-		&& ps->nodes[ps->i][ps->j] != '>')
+	while (ps->nodes[ps->i][ps->j] && (ps->nodes[ps->i][ps->j] != '<'
+		&& ps->nodes[ps->i][ps->j] != '>'))
 	{
 		if (!check_for_command_args(ps, &pos_start, &stop))
 			return ;
 		if (stop)
-		{
-			if (ps->pos_tmp != ps->j)
-			{
-				(*nodes)[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i],
-					pos_start, ps->j);
-				if (!(*nodes)[ps->i].cmd[ps->pos_cmd])
-					ft_exit(sh, ps, *nodes, "Fail to malloc args in add_command_args\n");
-			}
-			else
-				(*nodes)[ps->i].cmd[ps->cmd_nb] = 0;
-			return ;
-		}
+			if (add_cmd_args_case_stop(ps, nodes, sh, pos_start))
+				return ;
 		(*nodes)[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i],
 				pos_start, ps->j);
 		if (!(*nodes)[ps->i].cmd[ps->pos_cmd])
@@ -126,8 +85,10 @@ void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh)
 	pos_start = ps->j;
 	while (ps->nodes[ps->i][ps->j])
 	{
-		if (is_space(ps->nodes[ps->i][ps->j])
+		set_quotes_for_prompt(ps);
+		if ((is_space(ps->nodes[ps->i][ps->j])
 			|| is_chevron(ps->nodes[ps->i][ps->j]))
+			&& !ps->is_s_quote && !ps->is_d_quote)
 			break ;
 		ps->j++;
 	}

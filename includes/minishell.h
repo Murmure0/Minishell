@@ -152,11 +152,15 @@ int		add_outfile(t_node *nodes, t_parsing *ps, int redir, t_shell *sh);
 int		add_file(t_node *nodes, t_parsing *ps, int redir, t_shell *sh);
 
 /* ------------------------------------ parse_cmds.c ------------------------------ */
-void	get_cmds_nb_case_chevron(char *node, int *i);
-int		get_cmds_nb(char *node);
 int		check_for_command_args(t_parsing *ps, int *pos_start, int *stop);
+int		add_cmd_args_case_stop(t_parsing *ps, t_node **n, t_shell *sh, int pos);
 void	add_command_args(t_node **nodes, t_parsing *ps, t_shell *sh);
 void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh);
+
+/* ------------------------------------ parse_cmds_utils.c ------------------------------ */
+void	set_quotes_for_prompt(t_parsing *ps);
+void	get_cmds_nb_case_chevron(char *node, int *i);
+int		get_cmds_nb(char *node);
 
 /* ------------------------------------ parse_quotes.c ------------------------------ */
 int		get_quote_pos(t_parsing *parstruct, int start);
