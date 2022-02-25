@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 15:47:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/23 22:06:20 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/25 19:10:47 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,19 @@ static int	contains_equal(char *s)
 	return (0);
 }
 
+int	shift_vars(t_shell *sh, int i)
+{
+	while (sh->env[i])
+	{
+		free(sh->env[i]);
+		sh->env[i] = ft_strdup(sh->env[i + 1]);
+		if (!sh->env[i])
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	my_unset(t_shell *sh, char *var)
 {
 	int		i;
@@ -51,14 +64,18 @@ int	my_unset(t_shell *sh, char *var)
 	while (sh->env[++i])
 	{
 		env_key = str_slice(sh->env[i], 0, get_equal(sh->env[i]));
+		if (!env_key)
+			return (-1);
 		if (!ft_strcmp(env_key, var))
 		{
-			free(sh->env[i]);
-			sh->env[i] = NULL;
+			free(env_key);
+			if (shift_vars(sh, i))
+				return (-1);
 			if (!update_env_paths(sh))
 				return (-1);
 			return (1);
 		}
+		free(env_key);
 	}
 	return (0);
 }
