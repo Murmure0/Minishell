@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_dollar.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/25 19:31:57 by vmasse            #+#    #+#             */
+/*   Updated: 2022/02/25 19:33:14 by vmasse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	get_key_len(char *s, int pos)
@@ -44,34 +56,32 @@ void	set_quotes_for_cmd(t_parsing *ps, t_node *n)
 	}
 }
 
-void	replace_dollar(t_node *nodes, t_parsing *ps, t_shell *sh, int *pos_dollar)
+void	replace_dollar(t_node *n, t_parsing *ps, t_shell *sh, int *pos)
 {
 	int		key_len;
 	char	*tmp;
 	char	*value;
 
-	key_len = get_key_len(nodes[ps->i].cmd[ps->j], *pos_dollar + 1);
-	tmp = str_slice(nodes[ps->i].cmd[ps->j], *pos_dollar + 1,
-		*pos_dollar + key_len + 1);
+	key_len = get_key_len(n[ps->i].cmd[ps->j], *pos + 1);
+	tmp = str_slice(n[ps->i].cmd[ps->j], *pos + 1, *pos + key_len + 1);
 	if (!tmp)
-		ft_exit(sh, ps, nodes, "Fail to malloc key in replace dollar\n");
+		ft_exit(sh, ps, n, "Fail to malloc key in replace dollar\n");
 	value = get_env_var_value(sh->env, tmp);
 	free(tmp);
 	if (!value)
-		ft_exit(sh, ps, nodes, "Fail to malloc value in replace dollar\n");
-	tmp = ft_strdup(nodes[ps->i].cmd[ps->j]);
+		ft_exit(sh, ps, n, "Fail to malloc value in replace dollar\n");
+	tmp = ft_strdup(n[ps->i].cmd[ps->j]);
 	if (!tmp)
 	{
 		free(value);
-		ft_exit(sh, ps, nodes, "Fail to malloc tmp in replace dollar\n");
+		ft_exit(sh, ps, n, "Fail to malloc tmp in replace dollar\n");
 	}
-	free(nodes[ps->i].cmd[ps->j]);
-	nodes[ps->i].cmd[ps->j] = replace_in_str(tmp,
-		value, *pos_dollar, key_len);
-	ps->k = *pos_dollar + ft_strlen(value) - 1;
+	free(n[ps->i].cmd[ps->j]);
+	n[ps->i].cmd[ps->j] = replace_in_str(tmp, value, *pos, key_len);
+	ps->k = *pos + ft_strlen(value) - 1;
 	free(value);
-	if (!nodes[ps->i].cmd[ps->j])
-		ft_exit(sh, ps, nodes, "Fail to malloc node cmd in replace dollar\n");
+	if (!n[ps->i].cmd[ps->j])
+		ft_exit(sh, ps, n, "Fail to malloc node cmd in replace dollar\n");
 }
 
 void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh)
@@ -98,82 +108,3 @@ void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh)
 		}
 	}
 }
-
-// $ for infiles / outfiles
-
-// static void	set_quotes_for_infiles(t_parsing *ps, t_node *n, int *k)
-// {
-// 	if (n[ps->i].infiles[*k] == '\'')
-// 	{
-// 		if (ps->is_s_quote)
-// 			ps->is_s_quote = 0;
-// 		else
-// 			ps->is_s_quote = 1;
-// 		(*k)++;
-// 	}
-// 	else if (n[ps->i].infiles[*k] == '"')
-// 	{
-// 		if (ps->is_d_quote)
-// 			ps->is_d_quote = 0;
-// 		else
-// 			ps->is_d_quote = 1;
-// 		(*k)++;
-// 	}
-// }
-
-// static void	set_quotes_for_outfiles(t_parsing *ps, t_node *n, int *k)
-// {
-// 	if (n[ps->i].outfiles[*k] == '\'')
-// 	{
-// 		if (ps->is_s_quote)
-// 			ps->is_s_quote = 0;
-// 		else
-// 			ps->is_s_quote = 1;
-// 		(*k)++;
-// 	}
-// 	else if (n[ps->i].outfiles[*k] == '"')
-// 	{
-// 		if (ps->is_d_quote)
-// 			ps->is_d_quote = 0;
-// 		else
-// 			ps->is_d_quote = 1;
-// 		(*k)++;
-// 	}
-// }
-
-
-		// k = 0;
-		// set_quotes_for_infiles(ps, nodes, &k);
-		// pos_dollar = get_next_dollar(nodes[ps->i].infiles, k);
-		// while (pos_dollar > -1 && !ps->is_s_quote)
-		// {
-		// 	set_quotes_for_infiles(ps, nodes, &k);
-		// 	key_len = get_key_len(nodes[ps->i].infiles, pos_dollar + 1);
-		// 	key = str_slice(nodes[ps->i].infiles, pos_dollar + 1,
-		// 		pos_dollar + key_len + 1);
-		// 	value = get_env_var_value(sh->env, key);
-		// 	free(key);
-		// 	nodes[ps->i].infiles = replace_in_str(nodes[ps->i].infiles,
-		// 		value, pos_dollar, key_len);
-		// 	k += pos_dollar + ft_strlen(value);
-		// 	pos_dollar = get_next_dollar(nodes[ps->i].infiles, k);
-		// }
-		// printf("INFILE : %s\n", nodes[ps->i].infiles);
-
-		// k = 0;
-		// set_quotes_for_outfiles(ps, nodes, &k);
-		// pos_dollar = get_next_dollar(nodes[ps->i].outfiles, k);
-		// while (pos_dollar > -1 && !ps->is_s_quote)
-		// {
-		// 	set_quotes_for_outfiles(ps, nodes, &k);
-		// 	key_len = get_key_len(nodes[ps->i].outfiles, pos_dollar + 1);
-		// 	key = str_slice(nodes[ps->i].outfiles, pos_dollar + 1,
-		// 		pos_dollar + key_len + 1);
-		// 	value = get_env_var_value(sh->env, key);
-		// 	free(key);
-		// 	nodes[ps->i].outfiles = replace_in_str(nodes[ps->i].outfiles,
-		// 		value, pos_dollar, key_len);
-		// 	k += pos_dollar + ft_strlen(value);
-		// 	pos_dollar = get_next_dollar(nodes[ps->i].outfiles, k);
-		// }
-		// printf("OUTFILE : %s\n", nodes[ps->i].outfiles);

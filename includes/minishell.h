@@ -174,7 +174,7 @@ char	*remove_quote(char *s, int pos, t_parsing *ps);
 /* ------------------------------------ files_expander.c ------------------------------ */
 void	skip_spaces_local(t_parsing *ps, int *j);
 void	set_quotes_for_files(t_parsing *ps, int *j);
-void	replace_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh, int *pos_dollar);
+void	replace_dollar_files(t_node *n, t_parsing *ps, t_shell *sh, int *pos);
 void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh);
 
 
@@ -182,7 +182,7 @@ void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh);
 int		get_next_dollar(char *s, int pos);
 void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh);
 int		get_key_len(char *s, int pos);
-void	replace_dollar(t_node *nodes, t_parsing *ps, t_shell *sh, int *pos_dollar);
+void	replace_dollar(t_node *n, t_parsing *ps, t_shell *sh, int *pos);
 void	set_quotes_for_cmd(t_parsing *ps, t_node *n);
 
 /* ------------------------------------ parse_heredoc.c ------------------------------ */
@@ -230,7 +230,7 @@ int		my_export(t_shell *shell, char **var);
 int		my_unset(t_shell *sh, char *var);
 int		my_env(t_shell *sh);
 void	my_exit(t_shell *sh, t_node *n);
-int		my_pwd();
+int		my_pwd(void);
 
 /* ---------------------------------- builtins_utils.c ------------------------- */
 void	free_export(char *key, char *value);

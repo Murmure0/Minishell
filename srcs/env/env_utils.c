@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 17:24:22 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/24 17:36:48 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/25 20:11:21 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,16 +83,17 @@ char	**update_env_var(char **env, char *key, char *value)
 	i = -1;
 	while (env && env[++i])
 	{
-		env_key = str_slice(env[i], 0, get_equal(env[i]));
+		env_key = str_slice(env[i], 0, get_equal(env[i]) + 1);
 		if (!env_key)
 			return (NULL);
 		if (!ft_strcmp(env_key, key))
 		{
 			free(env[i]);
-			env[i] = ft_strdup(ft_strjoin(key, value));
+			env[i] = ft_strjoin(key, value);
 			free(env_key);
 			if (!env[i])
 				return (NULL);
+			return (env);
 		}
 		free(env_key);
 	}

@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 15:19:07 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/25 15:46:34 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/25 19:30:06 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,34 +43,33 @@ void	set_quotes_for_files(t_parsing *ps, int *j)
 	}
 }
 
-void	replace_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh, int *pos_dollar)
+void	replace_dollar_files(t_node *n, t_parsing *ps, t_shell *sh, int *pos)
 {
 	int		key_len;
 	char	*tmp;
 	char	*value;
 
-	key_len = get_key_len(ps->nodes[ps->i], *pos_dollar + 1);
-	tmp = str_slice(ps->nodes[ps->i], *pos_dollar + 1,
-		*pos_dollar + key_len + 1);
+	key_len = get_key_len(ps->nodes[ps->i], *pos + 1);
+	tmp = str_slice(ps->nodes[ps->i], *pos + 1, *pos + key_len + 1);
 	if (!tmp)
-		ft_exit(sh, ps, nodes, "Fail to malloc key in replace dollar outfiles\n");
+		ft_exit(sh, ps, n, "Fail to malloc key in replace dollar outfiles\n");
 	value = get_env_var_value(sh->env, tmp);
 	free(tmp);
 	if (!value)
-		ft_exit(sh, ps, nodes, "Fail to malloc value in replace dollar outfiles\n");
+		ft_exit(sh, ps, n, "Fail to malloc value in replace dollar outfiles\n");
 	tmp = ft_strdup(ps->nodes[ps->i]);
 	if (!tmp)
 	{
 		free(value);
-		ft_exit(sh, ps, nodes, "Fail to malloc tmp in replace dollar outfiles\n");
+		ft_exit(sh, ps, n, "Fail to malloc tmp in replace dollar outfiles\n");
 	}
 	free(ps->nodes[ps->i]);
 	ps->nodes[ps->i] = replace_in_str(tmp,
-		value, *pos_dollar, key_len);
-	ps->k = *pos_dollar + ft_strlen(value) - 1;
+			value, *pos, key_len);
+	ps->k = *pos + ft_strlen(value) - 1;
 	free(value);
 	if (!ps->nodes[ps->i])
-		ft_exit(sh, ps, nodes, "Fail to malloc node cmd in replace dollar outfiles\n");
+		ft_exit(sh, ps, n, "Fail to malloc node cmd in replace dollar files\n");
 }
 
 void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh)
