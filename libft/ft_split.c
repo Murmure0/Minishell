@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/24 17:38:48 by vmasse            #+#    #+#             */
+/*   Updated: 2022/02/24 17:41:51 by vmasse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/libft.h"
 
 static	int	count_elems(char const *s, char c)
@@ -47,9 +59,9 @@ static	char	**fill_arr(char const *s, char **arr, char c)
 	int	k;
 	int	elem_len;
 
-	i = 0;
+	i = -1;
 	j = 0;
-	while (s[i])
+	while (s[++i])
 	{
 		if (s[i] != c)
 		{
@@ -65,7 +77,6 @@ static	char	**fill_arr(char const *s, char **arr, char c)
 			if (!s[i])
 				return (arr);
 		}
-		i++;
 	}
 	return (arr);
 }

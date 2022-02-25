@@ -6,12 +6,11 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:29:40 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/23 15:36:15 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/25 10:12:48 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
-#include <stdio.h>
 
 static	int	count_elems(char const *s, char c)
 {
@@ -36,13 +35,6 @@ static	int	count_elem_len(char const *s, char c, int i, int is_quote)
 	len = 0;
 	while (s[i] && (s[i] != c || is_quote))
 	{
-		if (s[i] == '\'' || s[i] == '"')
-		{
-			if (is_quote)
-				is_quote = 0;
-			else
-				is_quote = 1;
-		}
 		len++;
 		i++;
 	}
@@ -60,31 +52,28 @@ static	char	**free_arr(char **arr)
 	return (NULL);
 }
 
-static	char	**fill_arr(char const *s, char **arr, char c, int is_quote)
+static	char	**fill_arr(char const *s, char **arr, char c, t_split *st)
 {
-	int	i;
-	int	j;
-	int	k;
 	int	elem_len;
 
-	set_i_and_j(&i, &j);
-	while (s[++i])
+	while (s[++(st->i)])
 	{
-		if (s[i] != c)
+		if (s[st->i] != c)
 		{
-			k = 0;
-			elem_len = count_elem_len(s, c, i, is_quote);
-			arr[j] = (char *)malloc((elem_len + 1) * sizeof(char));
-			if (!arr[j])
+			st->k = 0;
+			set_quote(s[st->i], st);
+			elem_len = count_elem_len(s, c, st->i, st->is_quote);
+			arr[st->j] = (char *)malloc((elem_len + 1) * sizeof(char));
+			if (!arr[st->j])
 				return (free_arr(arr));
-			while (s[i] && (s[i] != c || is_quote))
+			while (s[st->i] && (s[st->i] != c || st->is_quote))
 			{
-				set_quote(s[i], &is_quote);
-				arr[j][k++] = s[i++];
+				arr[st->j][st->k++] = s[st->i++];
+				set_quote(s[st->i], st);
 			}
-			arr[j++][k] = '\0';
-			arr[j] = '\0';
-			if (!s[i])
+			arr[st->j++][st->k] = '\0';
+			// arr[st->j] = '\0';
+			if (!s[st->i])
 				return (arr);
 		}
 	}
@@ -95,16 +84,23 @@ char	**ft_split_pipe(char const *s, char c)
 {
 	char	**arr;
 	int		nb_elems;
-	int		is_quote;
+	t_split	*st;
 
 	if (!s)
 		return (NULL);
-	is_quote = 0;
+	st = malloc(sizeof(t_split));
+	init_struct(st);
 	nb_elems = count_elems(s, c);
 	arr = (char **)malloc((nb_elems + 1) * sizeof(char *));
 	if (!arr)
+	{
+		free(st);
 		return (NULL);
+	}
 	arr[nb_elems] = 0;
-	arr = fill_arr(s, arr, c, is_quote);
+	arr = fill_arr(s, arr, c, st);
+	free(st);
 	return (arr);
 }
+
+// "a|b" | "b|c"

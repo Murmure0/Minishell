@@ -6,12 +6,11 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 12:03:42 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/09 15:54:01 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/24 17:40:48 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
-
 
 static int	ft_isalpha(int c)
 {

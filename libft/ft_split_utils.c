@@ -6,33 +6,27 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:16:28 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/23 14:26:28 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/25 10:06:17 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
 
-void	set_quote(char c, int *is_quote)
+void	set_quote(char c, t_split *st)
 {
 	if (c == '\'' || c == '"')
 	{
-		if (*is_quote)
-			*is_quote = 0;
+		if (st->is_quote)
+			st->is_quote = 0;
 		else
-			*is_quote = 1;
+			st->is_quote = 1;
 	}
 }
 
-void	set_i_and_j(int *i, int *j)
+void	init_struct(t_split *st)
 {
-	*i = -1;
-	*j = 0;
-}
-
-int	put_arr_end(char ***arr, int *j, int k, char s)
-{
-	*arr[*j++][k] = '\0';
-	if (!s)
-		return (0);
-	return (1);
+	st->i = -1;
+	st->j = 0;
+	st->k = 0;
+	st->is_quote = 0;
 }

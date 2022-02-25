@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 17:24:22 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/24 11:11:59 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/24 17:36:48 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,22 +75,9 @@ char	**add_env_var(char **env, char *var)
 	return (env);
 }
 
-int	get_equal(char *s)
-{
-	int	i;
-
-	i = -1;
-	while (s[++i])
-	{
-		if (s[i] == '=')
-			return (i);
-	}
-	return (-1);
-}
-
 char	**update_env_var(char **env, char *key, char *value)
 {
-	int	i;
+	int		i;
 	char	*env_key;
 
 	i = -1;

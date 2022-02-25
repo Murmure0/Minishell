@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/22 09:05:03 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/08 16:14:38 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/24 17:41:16 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*ft_itoa(int n)
 {
 	char	*result;
 	long	temp_n;
-	 int	total_digit;
+	int		total_digit;
 
 	temp_n = n;
 	total_digit = find_total_digit(temp_n);

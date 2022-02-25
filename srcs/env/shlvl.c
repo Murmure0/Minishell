@@ -6,11 +6,24 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 17:31:55 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/20 17:36:17 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/24 17:36:33 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	get_equal(char *s)
+{
+	int	i;
+
+	i = -1;
+	while (s[++i])
+	{
+		if (s[i] == '=')
+			return (i);
+	}
+	return (-1);
+}
 
 char	*update_shell_lvl(char *env)
 {

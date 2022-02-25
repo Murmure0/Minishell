@@ -117,16 +117,15 @@ char 	**add_slash(char **env_paths);
 void 	free_tab(char **env_paths);
 
 /* ------------------------------------ env_utils.c -------------------------------------------- */
+char	**realloc_env_cpy_env(char **env_cpy);
 char	**realloc_env(char **env);
 char	**update_env_var(char **env, char *str, char *new);
 char	**add_env_var(char **env, char *var);
 char	*get_env_var_value(char **env, char *key);
 
-int	get_equal(char *s);
-
-
 /* ------------------------------------ shlvl.c -------------------------------------------- */
 char	*update_shell_lvl(char *env);
+int		get_equal(char *s);
 
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ PARSING ------------------------------------ */

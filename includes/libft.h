@@ -9,15 +9,15 @@
 typedef struct s_split
 {
 	int	i;
+	int	j;
+	int	k;
 	int	is_quote;
 }	t_split;
 
 char	**ft_split(char const *s, char c);
 char	**ft_split_pipe(char const *s, char c);
-void	set_quote(char c, int *i);
-void	set_i_and_j(int *i, int *j);
-int		put_arr_end(char ***arr, int *j, int k, char s);
-
+void	set_quote(char c, t_split *st);
+void	init_struct(t_split *st);
 int		ft_strncmp(const char *s1, const char *s2, unsigned int n);
 char	*ft_strjoin(char const *s1, char const *s2);
 int		ft_strlen(const char *str);
