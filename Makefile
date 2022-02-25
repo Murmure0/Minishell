@@ -36,8 +36,8 @@ MAIN = 	srcs/main.c			\
 		srcs/builtins/pwd.c \
 		srcs/builtins/exit.c \
 		srcs/builtins/env.c \
+		srcs/builtins/builtins_utils.c \
 		srcs/signals.c
-
 
 SOURCES = $(MAIN)
 

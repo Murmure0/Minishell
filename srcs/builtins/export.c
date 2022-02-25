@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/25 19:12:37 by vmasse            #+#    #+#             */
+/*   Updated: 2022/02/25 19:20:48 by vmasse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static char	*get_var_value(char *cmd)
@@ -75,18 +87,17 @@ int	my_export(t_shell *sh, char **cmd)
 			return (-1);
 		value = get_var_value(cmd[cmd_pos]);
 		if (!validate_var(key, value, cmd[cmd_pos]))
+		{
+			free_export(key, value);
 			continue ;
+		}
 		if (check_has_key(sh->env, key))
 			sh->env = update_env_var(sh->env, key, value);
 		else
 			sh->env = add_env_var(sh->env, cmd[cmd_pos]);
 		if (!sh->env)
 			return (-1);
-	}
-	if (cmd[1])
-	{
-		free(key);
-		free(value);
+		free_export(key, value);
 	}
 	return (0);
 }

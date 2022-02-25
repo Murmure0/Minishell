@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 15:47:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/25 19:10:47 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/25 19:11:55 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static int	update_env_paths(t_shell *sh)
 	i = -1;
 	while (sh->path[++i])
 		free(sh->path[i]);
-	free(sh->path[i]);
 	free(sh->path);
 	sh->path = get_env_paths(sh->env);
 	if (!sh->path)
