@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:29:40 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/27 18:35:44 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/27 19:57:41 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ static	char	**fill_arr(char const *s, char **arr, char c, t_split *st)
 				set_quote(s[st->i], st);
 			}
 			arr[st->j++][st->k] = '\0';
-			// arr[st->j] = '\0';
 			if (!s[st->i])
 				return (arr);
 		}
@@ -102,5 +101,3 @@ char	**ft_split_pipe(char const *s, char c)
 	free(st);
 	return (arr);
 }
-
-// "a|b" | "b|c"
