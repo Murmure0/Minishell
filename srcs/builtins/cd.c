@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:26:20 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/27 15:26:38 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/27 15:29:38 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static int	try_chdir(char *dir, char *home)
 	return (1);
 }
 
-int	ret_free(int ret, char *s1, char *s2, char *s3)
+static int	ret_free(int ret, char *s1, char *s2, char *s3)
 {
 	if (s1)
 		free(s1);
