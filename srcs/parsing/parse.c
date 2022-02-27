@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/27 10:33:01 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/27 18:41:25 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 		add_file(nodes, ps, 1, sh);
 	}
 	else
-		return (ret_err(0, NO_FILE)); //tester le retour 0, maybe segfault
+		return (ret_err(0, NO_FILE));
 	return (1);
 }
 

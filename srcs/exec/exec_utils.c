@@ -32,23 +32,24 @@ t_exec	*init_exec_st(t_node *first_node)
 
 int	path_finder(t_node *first_node, t_shell *shell)
 {
-	char	*tmp;
+	char	*cmd;
 	int		i;
 
+	i = -1;
 	if (first_node[0].cmd)
 	{
-		execve(first_node->cmd[0], first_node->cmd, shell->env);
-		i = -1;
-		tmp = ft_strdup(first_node[0].cmd[0]);
 		while (shell->path[++i])
 		{
-			first_node[0].cmd[0] = ft_strjoin(shell->path[i], tmp);
-			if (!tmp)
+			cmd = ft_strjoin(shell->path[i], first_node[0].cmd[0]);
+			if (!cmd)
 				return (-1);
-			execve(first_node[0].cmd[0], first_node[0].cmd, shell->env);
-			free(first_node[0].cmd[0]);
+			execve(cmd, first_node[0].cmd, shell->env);
+			free(cmd);
 		}
-		free(tmp);
+		write(2, "minishell: ", 12);
+		write(2, first_node[0].cmd[0], ft_strlen(first_node[0].cmd[0]));
+		write(2, ": command not found\n", 21);
+		exit(EXIT_FAILURE);
 	}
 	return (0);
 }

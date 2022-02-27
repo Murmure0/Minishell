@@ -8,7 +8,7 @@ static int	find_echo_cd(t_node *first_node, t_shell *shell, char exec)
 	{
 		if (exec == 'y')
 		{
-			my_echo(first_node[0].cmd + 1);
+			g_exit_st = my_echo(first_node[0].cmd + 1);
 			if (first_node->node_nb > 1)
 				exit(EXIT_SUCCESS);
 		}

@@ -13,9 +13,12 @@ int	ret_err(int ret, char *msg)
 
 void	ft_exit(t_shell *sh, t_parsing *ps, t_node *n, char *err)
 {
+	(void)sh;
+	(void)ps;
+	(void)n;
 	if (err)
 		write(2, err, ft_strlen(err));
-	final_free(sh, ps, n);
+	// final_free(sh, ps, n);
 	exit(EXIT_FAILURE);
 }
 
@@ -106,8 +109,8 @@ int main(int argc, char **argv, char **env)
 		}
 		else
 		{
-			parstruct.prompt = NULL;
 			free(parstruct.prompt);
+			parstruct.prompt = NULL;
 		}
 	}
 	free_shellstruct(&shell);

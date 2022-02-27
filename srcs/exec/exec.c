@@ -1,14 +1,15 @@
 #include "../../includes/minishell.h"
 
-static int	execution(t_node *first_node, t_shell *shell, t_exec *exec_st,
-		pid_t child_pid)
+extern int	g_exit_st;
+
+static int	execution(t_node *first_node, t_shell *shell, t_exec *exec_st)
 {
 	int		nb_cmd;
 
 	nb_cmd = first_node[0].node_nb;
 	signal(SIGQUIT, handle_sig_fork);
 	signal(SIGINT, handle_sig_fork);
-	child_pid = exec_child_proc(first_node, shell, exec_st);
+	exec_child_proc(first_node, shell, exec_st);
 	if (nb_cmd == 2)
 		parent_process(exec_st, first_node + 1, shell);
 	else if (nb_cmd > 2)
@@ -18,13 +19,11 @@ static int	execution(t_node *first_node, t_shell *shell, t_exec *exec_st,
 
 int	exec(t_node *first_node, t_shell *shell)
 {
-	pid_t	child_pid;
 	t_exec	*exec_st;
 	int		nb_cmd;
 	int		status;
 
 	status = 0;
-	child_pid = 0;
 	nb_cmd = first_node[0].node_nb;
 	exec_st = init_exec_st(first_node);
 	if (!exec_st)
@@ -32,7 +31,7 @@ int	exec(t_node *first_node, t_shell *shell)
 	if (nb_cmd == 1 && find_builtin(first_node, shell, 'n'))
 		redir_solo_builtin(first_node, shell, exec_st);
 	else
-		execution(first_node, shell, exec_st, child_pid);
+		execution(first_node, shell, exec_st);
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &shell->termios_p);
 	if (nb_cmd > 1)
 		while ((nb_cmd--) > 0)

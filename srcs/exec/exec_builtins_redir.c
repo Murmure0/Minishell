@@ -51,9 +51,10 @@ int	redir_solo_builtin(t_node *first_node, t_shell *shell,
 	find_builtin(first_node, shell, 'y');
 	if (exec_st->fd_in != 0)
 		if (redir_old_std(oldin, exec_st->fd_in, STDIN_FILENO) < 0)
-			return(g_exit_st);
+			return (g_exit_st);
 	if (exec_st->fd_out != 1)
 		if (redir_old_std(oldout, exec_st->fd_out, STDOUT_FILENO) < 0)
 			return (g_exit_st);
+	free(exec_st);
 	return (0);
 }

@@ -73,7 +73,7 @@ static	char	**fill_arr(char const *s, char **arr, char c)
 			while (s[i] && s[i] != c)
 				arr[j][k++] = s[i++];
 			arr[j++][k] = '\0';
-			arr[j] = '\0';
+			arr[j] = NULL;
 			if (!s[i])
 				return (arr);
 		}
