@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/27 15:26:20 by vmasse            #+#    #+#             */
+/*   Updated: 2022/02/27 15:26:38 by vmasse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-static int get_pwds(t_shell *s, char **pwd, char **home)
+static int	get_pwds(t_shell *s, char **pwd, char **home)
 {
 	int		i;
 
@@ -23,30 +35,7 @@ static int get_pwds(t_shell *s, char **pwd, char **home)
 	return (1);
 }
 
-// char	*remove_after_last_slash(char *s)
-// {
-// 	int		len;
-// 	char	*tmp;
-
-// 	len = ft_strlen(s);
-// 	while (len-- > 0)
-// 	{
-// 		if (s[len] == '/')
-// 		{
-// 			tmp = ft_substr(s, 0, len);
-// 			if (!tmp)
-// 				return (NULL);
-// 			s = ft_strdup(tmp);
-// 			free(tmp);
-// 			if (!s)
-// 				return (NULL);
-// 			break ;
-// 		}
-// 	}
-// 	return (s);
-// }
-
-static void update_env(char **env, char *pwd, char *old_pwd)
+static void	update_env(char **env, char *pwd, char *old_pwd)
 {
 	int	i;
 
@@ -70,13 +59,29 @@ static void update_env(char **env, char *pwd, char *old_pwd)
 	}
 }
 
-static int	try_chdir(char *dir)
+static int	try_chdir(char *dir, char *home)
 {
-	if (chdir(dir) < 0)
+	char	*tmp;
+
+	if (home)
+	{
+		tmp = ft_substr(home, 5, ft_strlen(home) - 5);
+		if (!tmp)
+			return (0);
+	}
+	else
+	{
+		tmp = ft_strdup(dir);
+		if (!tmp)
+			return (0);
+	}
+	if (chdir(tmp) < 0)
 	{
 		perror(":");
+		free(tmp);
 		return (0);
 	}
+	free(tmp);
 	return (1);
 }
 
@@ -104,34 +109,18 @@ int	my_cd(t_shell *shell, char *dir)
 		return (ret_free(-1, pwd, NULL, home));
 	if (!dir)
 	{
-		if (!try_chdir(ft_substr(home, 5, ft_strlen(home) - 5)))
+		if (!try_chdir(NULL, home))
 			return (ret_free(-1, pwd, old_pwd, home));
-		free(pwd);
-		pwd = getcwd(NULL, 0);
-		update_env(shell->env, pwd, old_pwd);
 	}
-	else if (dir)
+	else
 	{
-		if (!try_chdir(dir))
+		if (!try_chdir(dir, NULL))
 			return (ret_free(-1, pwd, old_pwd, home));
-		free(pwd);
-		pwd = getcwd(NULL, 0);
-		update_env(shell->env, pwd, old_pwd);
 	}
-	int i = -1;
-	while (shell->env[++i])
-	{
-		if (!ft_strncmp(shell->env[i], "OLDPWD", 6))
-		{
-			printf("%s\n", shell->env[i]);
-		}
-		else if (!ft_strncmp(shell->env[i], "PWD", 3))
-		{
-			printf("%s\n", shell->env[i]);
-		}
-	}
-	// free(old_pwd);
-	// free(pwd);
-	// free(home);
-	return (0);
+	free(pwd);
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return (ret_free(-1, NULL, old_pwd, home));
+	update_env(shell->env, pwd, old_pwd);
+	return (ret_free(0, pwd, old_pwd, home));
 }
