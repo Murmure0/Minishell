@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 15:19:07 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/25 19:30:06 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/27 10:13:11 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,5 @@ void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh)
 		replace_dollar_files(nodes, ps, sh, &pos_dollar);
 		pos_dollar = get_next_dollar(ps->nodes[ps->i], j);
 	}
+	remove_quotes_files(ps);
 }

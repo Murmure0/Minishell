@@ -166,10 +166,14 @@ int		get_cmds_nb(char *node);
 int		get_quote_pos(t_parsing *parstruct, int start);
 int		get_matching_quote_pos(t_parsing *parstruct, int start);
 int		check_quotes_for_pipe_split(t_parsing *parstruct);
-void	remove_quotes_cmd(t_node *nodes, t_parsing *ps);
 int		get_next_quote(t_parsing *ps, char *s, int pos);
 
-char	*remove_quote(char *s, int pos, t_parsing *ps);
+/* ------------------------------------ remove_quotes.c ------------------------------ */
+char	*remove_quote(char *s, int pos);
+void	remove_quotes_cmd(t_node *nodes, t_parsing *ps);
+void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n);
+void	set_quotes_for_files_in_quote(t_parsing *ps, int j);
+void	remove_quotes_files(t_parsing *ps);
 
 /* ------------------------------------ files_expander.c ------------------------------ */
 void	skip_spaces_local(t_parsing *ps, int *j);
@@ -177,13 +181,15 @@ void	set_quotes_for_files(t_parsing *ps, int *j);
 void	replace_dollar_files(t_node *n, t_parsing *ps, t_shell *sh, int *pos);
 void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh);
 
-
 /* ------------------------------------ parse_dollar.c ------------------------------ */
 int		get_next_dollar(char *s, int pos);
 void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh);
 int		get_key_len(char *s, int pos);
 void	replace_dollar(t_node *n, t_parsing *ps, t_shell *sh, int *pos);
 void	set_quotes_for_cmd(t_parsing *ps, t_node *n);
+
+/* ------------------------------------ parse_dollar_utils.c ------------------------------ */
+void	free_value_tmp(char *value, char *tmp);
 
 /* ------------------------------------ parse_heredoc.c ------------------------------ */
 int		add_heredoc_file(t_node *nodes, t_parsing *ps);

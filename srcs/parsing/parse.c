@@ -6,13 +6,13 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/25 16:08:21 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/27 10:33:01 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// extern int g_exit_st;
+extern int	g_exit_st;
 
 int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 {
@@ -23,19 +23,14 @@ int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 	}
 	if (ps->nodes[ps->i][ps->j + 1] && ps->nodes[ps->i][ps->j + 1] == '<')
 	{
-		if(!nodes[ps->i].invalid_infile)
+		if (!nodes[ps->i].invalid_infile)
 			nodes[ps->i].in_id = 1;
 		ps->j++;
 		if (add_heredoc_file(nodes, ps))
 		{
 			ps->stop_err = 1;
-			return (0);
+			return (g_exit_st);
 		}
-		// if (g_exit_st == 130)
-		// {
-			write(1, "pouet\n", 6);
-		// 	return (ret_err(0, NO_FILE));
-		// }
 	}
 	else if (ps->nodes[ps->i][ps->j + 1])
 	{
@@ -56,7 +51,6 @@ int	parse_case_outfile(t_node *nodes, t_parsing *ps, t_shell *sh)
 	}
 	if (ps->nodes[ps->i][ps->j + 1] && ps->nodes[ps->i][ps->j + 1] == '>')
 	{
-		printf("add outfile + append\n");
 		ps->j++;
 		if (!add_file(nodes, ps, 3, sh))
 			return (0);
@@ -65,7 +59,6 @@ int	parse_case_outfile(t_node *nodes, t_parsing *ps, t_shell *sh)
 	{
 		if (!add_file(nodes, ps, 2, sh))
 			return (0);
-		printf("add outfile name\n");
 	}
 	else
 		return (ret_err(0, NO_FILE));
@@ -121,7 +114,7 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		ps->i++;
 	}
 	expand_dollar_value_cmd(nodes, ps , sh);
-	// remove_quotes_cmd(nodes, ps);
+	remove_quotes_cmd(nodes, ps);
 	return (nodes);
 }
 

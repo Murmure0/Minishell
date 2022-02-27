@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 19:31:57 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/25 21:58:47 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/27 10:51:38 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	get_key_len(char *s, int pos)
 
 int	get_next_dollar(char *s, int pos)
 {
-	printf("pos : %d\n", pos);
 	while (s && s[pos])
 	{
 		if (s[pos] == '$')
@@ -81,8 +80,7 @@ void	replace_dollar(t_node *n, t_parsing *ps, t_shell *sh, int *pos)
 	n[ps->i].cmd[ps->j] = replace_in_str(tmp, value, *pos, key_len);
 	if (ft_strcmp(value, ""))
 		ps->k = *pos + ft_strlen(value) - 1;
-	free(value);
-	free(tmp);
+	free_value_tmp(value, tmp);
 	if (!n[ps->i].cmd[ps->j])
 		ft_exit(sh, ps, n, "Fail to malloc node cmd in replace dollar\n");
 }
