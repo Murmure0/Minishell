@@ -1,46 +1,6 @@
 #include "../../includes/minishell.h"
 
-int g_exit_st;
-
-static char	*adj_av(char *tmp)
-{
-	char	*str;
-	int		len_tmp;
-	int		i;
-
-	i = -1;
-	len_tmp = ft_strlen(tmp);
-	str = malloc(sizeof(char) * len_tmp + 2);
-	if (!str)
-		return (NULL);
-	while (++i < len_tmp)
-		str[i] = tmp[i];
-	str[len_tmp] = '\n';
-	str[len_tmp + 1] = '\0';
-	return (str);
-}
-
-static char *get_delimiter(t_parsing *ps)
-{
-	int		pos_start;
-	char	*del;
-	char	*tmp;
-
-	ps->j++;
-	skip_spaces(ps);
-	pos_start = ps->j;
-	while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j])
-	{
-		if (is_space(ps->nodes[ps->i][ps->j]) ||
-			is_chevron(ps->nodes[ps->i][ps->j]))
-			break ;
-		ps->j++;
-	}
-	tmp = str_slice(ps->nodes[ps->i], pos_start, ps->j);
-	del = adj_av(tmp);
-	free(tmp);
-	return (del);
-}
+extern int	g_exit_st;
 
 static void	here_doc_reading(char *line, int pipe_hd, char *del)
 {
@@ -60,171 +20,70 @@ static void	here_doc_reading(char *line, int pipe_hd, char *del)
 	close(pipe_hd);
 }
 
-int	add_heredoc_file(t_node *nodes, t_parsing *ps)
+static void	in_fork_heredoc(int pipe_in, int pipe_out, char *delimiter)
 {
-
-	int		pipe_hd[2];
-	char	*delimiter;
 	char	*line;
-	int status;
-	pid_t fork_pid;
 
-	status = 0;
-
-	if (pipe(pipe_hd) == -1)
-	{
-		write(2, "Error: pipe failed\n", 19);
-		//free_cmds_path(script, path_env);
-		exit(1);
-	}
-	nodes[ps->i].infile_hd = pipe_hd[0];
-	delimiter = get_delimiter(ps);
-
-	fork_pid = fork();
-	if (fork_pid < 0)
-	{
-		write(2, "Child fork failed", 18);
-		perror(": ");
-	}
-	if (fork_pid == 0)
-	{
-
-		signal(SIGQUIT, SIG_IGN);
-		signal(SIGINT, handle_sig_heredoc);
-		
-		line = get_next_line(STDIN_FILENO);
-		if (!line)
-			exit (0); //trouver le bon status
-		if (!ft_strcmp(line, delimiter))
-		{
-			free(delimiter);
-			free(line);
-			close(pipe_hd[0]);
-			close(pipe_hd[1]);
-			exit (0); //toruver le bon status
-		}
-		else
-			write(pipe_hd[1], line, ft_strlen(line));
-		here_doc_reading(line, pipe_hd[1], delimiter);
-		exit (0);
-	}
-	// waitpid(fork_pid, &status, 0);
-	close(pipe_hd[1]);
-	wait(&status);
-	if (status != 0)
-	{
-		g_exit_st = status / 256;
-		printf("valeur de status : %d\n", status);
-		printf("valeur de gexitst : %d\n", g_exit_st);
-		return (1);
-	}
-	// if (WIFSIGNALED(status))
-	// {
-	// 	write(1, "RAAAAH\n", 8);
-
-	// 	g_exit_st = 130;
-	// 	printf("valeur de gexitst : %d\n", g_exit_st);
-	// }
-
-	return (0);
-}
-
-
-// wait(&g_exit_status);
-// 	if (WIFSIGNALED(g_exit_status))
-// 		g_exit_status = 128 + WTERMSIG(g_exit_status);
-
-// int	add_heredoc_file(t_node *nodes, t_parsing *ps)
-// {
-
-// 	int		pipe_hd[2];
-// 	char	*delimiter;
-// 	char	*line;
-
-// 	if (pipe(pipe_hd) == -1)
-// 	{
-// 		write(2, "Error: pipe failed\n", 19);
-// 		//free_cmds_path(script, path_env);
-// 		//exit(1);
-// 	}
-// 	signal(SIGQUIT, SIG_IGN);
-// 	signal(SIGINT, handle_sig_heredoc);
-// 	nodes[ps->i].infile_hd = pipe_hd[0];
-// 	delimiter = get_delimiter(ps);
-// 	line = get_next_line(STDIN_FILENO);
-// 	if (!line)
-// 		return (ret_err(0, NULL));
-// 	if (!ft_strcmp(line, delimiter))
-// 	{
-// 		free(delimiter);
-// 		free(line);
-// 		close(pipe_hd[0]);
-// 		close(pipe_hd[1]);
-// 		return (0);
-// 	}
-// 	else
-// 		write(pipe_hd[1], line, ft_strlen(line));
-// 	here_doc_reading(line, pipe_hd[1], delimiter);
-// 	return (0);
-// }
-
-
-/*
-static void	here_doc_reading(char *line, int fd_hd, char *del)
-{
-	while (line)
-	{
-		line = get_next_line(STDIN_FILENO);
-		if (!line)
-			break ;
-		if (!ft_strcmp(line, del))
-			break ;
-		else
-			write(fd_hd, line, ft_strlen(line));
-	}
-	free(line);
-	free(del);
-	close(fd_hd);
-}
-
-static int	add_hd_infile(t_node *nodes, t_parsing *ps, char add_infile)
-{
-	int fd_hd;
-	char *delimiter;
-	char *line;
-
-	delimiter = get_delimiter(ps);
-	fd_hd = open("/tmp/tmp.txt", O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	if (!fd_hd)
-		return (ret_err(0, NULL));
-	if (add_infile == 'y')
-	{
-		printf("addinfile EOF\n");
-		nodes[ps->i].infiles = ft_strdup("/tmp/tmp.txt");
-	}
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, handle_sig_heredoc);
 	line = get_next_line(STDIN_FILENO);
 	if (!line)
-		return (ret_err(0, NULL));
-	printf("Line is : |%s|\n", line);
-	printf("return strcmp : %d\n", ft_strcmp(line, delimiter));
+		exit (0);
 	if (!ft_strcmp(line, delimiter))
 	{
 		free(delimiter);
 		free(line);
-		close(fd_hd);
-		return (0);
+		close(pipe_in);
+		close(pipe_out);
+		exit (0);
 	}
 	else
-		write(fd_hd, line, ft_strlen(line));
-	here_doc_reading(line, fd_hd, delimiter);
-	return (0);
+		write(pipe_out, line, ft_strlen(line));
+	here_doc_reading(line, pipe_out, delimiter);
+	exit (0);
+}
+
+static void	forking_heredoc(int pipe_in, int pipe_out, t_parsing *ps)
+{
+	pid_t	fork_pid;
+	char	*delimiter;
+
+	delimiter = get_delimiter(ps);
+	fork_pid = fork();
+	if (fork_pid < 0)
+	{
+		g_exit_st = -1;
+		free(delimiter);
+		close(pipe_in);
+		write(2, "Fork failed", 12);
+		perror(": ");
+	}	
+	if (fork_pid != 0)
+		signal(SIGINT, SIG_IGN);
+	else if (fork_pid == 0)
+		in_fork_heredoc(pipe_in, pipe_out, delimiter);
+	close(pipe_out);
 }
 
 int	add_heredoc_file(t_node *nodes, t_parsing *ps)
 {
-	if (!nodes->invalid_infile)
-		add_hd_infile(nodes, ps,'y');
-	else if (nodes->invalid_infile)
-		add_hd_infile(nodes, ps,'n');
-	return (1);
-}*/
+	int		pipe_hd[2];
+	int		status;
+
+	status = 0;
+	if (pipe(pipe_hd) == -1)
+	{
+		write(2, "Error: pipe failed\n", 19);
+		g_exit_st = -1;
+		return (1);
+	}
+	nodes[ps->i].infile_hd = pipe_hd[0];
+	forking_heredoc(pipe_hd[0], pipe_hd[1], ps);
+	wait(&status);
+	if (status != 0)
+	{
+		g_exit_st = status << 8;
+		return (1);
+	}
+	return (0);
+}

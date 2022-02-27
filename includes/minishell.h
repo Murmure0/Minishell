@@ -36,8 +36,8 @@
 typedef struct s_node
 {
     char     *infiles;
-	int		infile_hd; //
-	int		in_id; //
+	int		infile_hd;
+	int		in_id;
     char     *outfiles;
 	int		 append;
 	int		 invalid_infile;
@@ -75,7 +75,7 @@ typedef struct s_shell
 typedef struct s_exec
 {
 	int	fd_in;
-	int	fd_out; //si plusieurs cmd fd_out = fds;
+	int	fd_out;
 	int pfd_out;
 	int pfd_in;
 	int num_cmd;
@@ -194,6 +194,9 @@ void	free_value_tmp(char *value, char *tmp);
 /* ------------------------------------ parse_heredoc.c ------------------------------ */
 int		add_heredoc_file(t_node *nodes, t_parsing *ps);
 
+/* ------------------------------------ parse_heredoc.c ------------------------------ */
+char	*get_delimiter(t_parsing *ps);
+
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ EXEC --------------------------------------- */
 /* --------------------------------------------------------------------------------- */
@@ -209,24 +212,36 @@ void	free_all(t_node *first_node, t_shell *shell);
 void	fd_dup(int fd, int std);
 
 /* ------------------------------------ exec_utils.c ------------------------------- */
-int		find_builtin(t_node *first_node, t_shell *shell, char exec);
-void	redir_solo_builtin(t_node *first_node, t_shell *shell, t_exec	*exec_st);
+t_exec	*init_exec_st(t_node *first_node);
+void	fd_dup(int fd, int std);
+int		path_finder(t_node *first_node, t_shell *shell);
+int		exec_cmd(t_node *first_node, t_shell *shell);
 
 /* ---------------------------------- exec_process_child.c ------------------------- */
-void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node, t_shell *shell);
 int		find_fd_in(t_node *first_node);
 int		find_fd_out(t_node *first_node, t_exec *exec_st);
 pid_t	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st);
 
 /* ---------------------------------- exec_process_parent.c ------------------------- */
-void	parent_process(t_exec *exec_st, t_node *second_node, t_shell *shell);
-// void	parent_process(pid_t	child_pid, t_exec *exec_st, t_node *second_node, t_shell *shell);
+void	parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell);
+int		find_fd_in_parent(t_node *last_node, t_exec *exec_st);
+int		find_fd_out_parent(t_node *last_node);
+t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st);
+
+/* ---------------------------------- exec_process_brother_fd.c ------------------------- */
+t_exec	*init_exec_st_bro(t_node *middle_node, t_exec *prev_exec_st);
 
 /* ---------------------------------- exec_process_brother.c ------------------------- */
-void	brother_process(t_exec *exec_st, t_node *last_node, t_shell *shell);
-// void	brother_process(pid_t	child_pid, t_exec *exec_st, t_node *last_node, t_shell *shell);
+void	brother_process(t_exec *prev_exec_st, t_node *middle_node,
+	t_shell *shell);
 
-//
+/* ------------------------------------ exec_builtins_redir.c ------------------------------- */
+int		redir_solo_builtin(t_node *first_node, t_shell *shell,
+		t_exec	*exec_st);
+
+/* ------------------------------------ exec_builtins.c ------------------------------- */
+int		find_builtin(t_node *first_node, t_shell *shell, char exec);
+
 /* --------------------------------------------------------------------------------- */
 /* ------------------------------------ BUILTINS ----------------------------------- */
 /* --------------------------------------------------------------------------------- */

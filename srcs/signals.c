@@ -1,12 +1,6 @@
 #include "../includes/minishell.h"
 
-extern pid_t g_pid;
-
-/* 
-	CTRL + C = SIGINT
-	CTRL + \ = SIGQUIT
-	CTRL + D = 
-*/
+extern int	g_exit_st;
 
 void	handle_signal(int sig)
 {
@@ -16,6 +10,7 @@ void	handle_signal(int sig)
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_redisplay();
+		g_exit_st = 130;
 	}
 	else if (sig == SIGQUIT)
 	{
@@ -44,7 +39,7 @@ void handle_sig_heredoc(int sig)
 {
 	if (sig == SIGINT)
 	{
-		write(1, "KAPOUE\n", 8);
+		write(1, "\n", 1);
 		exit(130);
 	}
 }

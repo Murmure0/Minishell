@@ -24,10 +24,13 @@ MAIN = 	srcs/main.c			\
 		srcs/parsing/parse_dollar_utils.c \
 		srcs/parsing/remove_quotes.c \
 		srcs/exec/parse_heredoc.c \
+		srcs/exec/parse_heredoc_del.c \
 		srcs/exec/gnl.c \
 		srcs/exec/exec.c \
+		srcs/exec/exec_builtins_redir.c \
 		srcs/exec/exec_process_child.c \
 		srcs/exec/exec_process_brother.c \
+		srcs/exec/exec_process_brother_fd.c \
 		srcs/exec/exec_process_parent.c \
 		srcs/exec/exec_utils.c \
 		srcs/exec/exec_builtins.c \

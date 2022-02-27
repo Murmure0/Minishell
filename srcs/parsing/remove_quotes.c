@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:42:59 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/27 10:24:25 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/27 16:01:07 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,15 @@ void	remove_quotes_cmd(t_node *nodes, t_parsing *ps)
 			while (pos_quote > -1)
 			{
 				set_quotes_for_cmd_in_quote(ps, nodes);
-				if ((!(ps->is_d_quote && ps->quote == '\'')
-						&& !(ps->is_s_quote && ps->quote == '"')))
+				if (!(ps->is_d_quote && ps->quote == '\'')
+						&& !(ps->is_s_quote && ps->quote == '"'))
+				{
 						nodes[ps->i].cmd[ps->j] = remove_quote(
 							nodes[ps->i].cmd[ps->j], pos_quote);
-				ps->k = pos_quote + 1;
+					ps->k = pos_quote;
+				}
+				else
+					ps->k = pos_quote + 1;
 				pos_quote = get_next_quote(ps, nodes[ps->i].cmd[ps->j], ps->k);
 			}
 		}
