@@ -79,6 +79,8 @@ static void	parent_fork_process(t_node *last_node, t_exec *exec_st,
 		fd_dup(exec_st_parent->fd_out, STDOUT_FILENO);
 	close(exec_st->pfd_in);
 	close(exec_st->pfd_out);
+	free(exec_st);
+	free(exec_st_parent);
 	if (!find_builtin(last_node, shell, 'y'))
 	{
 		exec_cmd(last_node, shell);
@@ -100,9 +102,14 @@ void	parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
 	{
 		write(2, "Parent fork failed", 19);
 		perror(": ");
+		free(prev_exec_st);
+		free(exec_st_parent);
+		exit(EXIT_FAILURE);
 	}
 	if (parent_pid == 0)
 		parent_fork_process(last_node, prev_exec_st, exec_st_parent, shell);
 	close(prev_exec_st->pfd_in);
 	close(prev_exec_st->pfd_out);
+	free(prev_exec_st);
+	free(exec_st_parent);
 }
