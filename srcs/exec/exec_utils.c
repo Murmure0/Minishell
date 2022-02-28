@@ -41,7 +41,7 @@ int	path_finder(t_node *first_node, t_shell *shell)
 	if (first_node[0].cmd)
 	{
 		execve(first_node[0].cmd[0], first_node[0].cmd, shell->env);
-		while (shell->path[++i])
+		while (shell->path && shell->path[++i])
 		{
 			cmd = ft_strjoin(shell->path[i], first_node[0].cmd[0]);
 			if (!cmd)

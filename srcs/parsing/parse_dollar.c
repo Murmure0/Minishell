@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 19:31:57 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/28 12:59:46 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/28 17:30:32 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	set_quotes_for_cmd(t_parsing *ps, t_node *n)
 	}
 }
 
-void	replace_dollar_exit_st_cmd(t_node *n, t_parsing *ps, t_shell *sh, int *pos)
+void	replace_exit_st_cmd(t_node *n, t_parsing *ps, t_shell *sh, int *pos)
 {
 	char	*status;
 	char	*tmp;
@@ -116,7 +116,7 @@ void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh)
 			{
 				set_quotes_for_cmd(ps, nodes);
 				if (nodes[ps->i].cmd[ps->j][pos_dollar + 1] == '?')
-					replace_dollar_exit_st_cmd(nodes, ps, sh, &pos_dollar);	
+					replace_exit_st_cmd(nodes, ps, sh, &pos_dollar);	
 				else
 					replace_dollar(nodes, ps, sh, &pos_dollar);
 				pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], ps->k);

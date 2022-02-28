@@ -177,6 +177,7 @@ int		get_next_dollar(char *s, int pos);
 void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh);
 void	replace_dollar(t_node *n, t_parsing *ps, t_shell *sh, int *pos);
 void	set_quotes_for_cmd(t_parsing *ps, t_node *n);
+void	replace_exit_st_cmd(t_node *n, t_parsing *ps, t_shell *sh, int *pos);
 
 /* ---------------------------- parse_dollar_utils.c ---------------------- */
 void	free_value_tmp(char *value, char *tmp);

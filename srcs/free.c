@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 13:14:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/27 19:24:27 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/28 17:09:37 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ void	free_shellstruct(t_shell *sh)
 	i = -1;
 	if (sh)
 	{
-		while (sh->env[++i])
+		while (sh->env && sh->env[++i])
 			free(sh->env[i]);
 		i = -1;
-		while (sh->path[++i])
+		while (sh->path && sh->path[++i])
 			free(sh->path[i]);
 		free(sh->env);
 		free(sh->path);
