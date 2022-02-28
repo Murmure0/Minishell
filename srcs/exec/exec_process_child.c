@@ -107,7 +107,9 @@ pid_t	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st)
 	{
 		free(exec_st);
 		waitpid(child_pid, &status, 0);
-		if (WIFSIGNALED(status))
+		if (WIFEXITED(status))
+			g_exit_st = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
 			g_exit_st = 128 + WTERMSIG(status);
 	}
 	return (child_pid);

@@ -1,5 +1,7 @@
 #include "../../includes/minishell.h"
 
+extern int	g_exit_st;
+
 void	fd_dup(int fd, int std)
 {
 	if (dup2(fd, std) < 0)
@@ -50,7 +52,7 @@ int	path_finder(t_node *first_node, t_shell *shell)
 		write(2, "minishell: ", 12);
 		write(2, first_node[0].cmd[0], ft_strlen(first_node[0].cmd[0]));
 		write(2, ": command not found\n", 21);
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
 	return (0);
 }

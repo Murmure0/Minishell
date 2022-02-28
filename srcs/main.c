@@ -83,6 +83,8 @@ static void	process_readline(t_parsing *parstruct, t_node *nodes, t_shell *shell
 		if (nodes)
 		{
 			exec(nodes, shell);
+			printf("after : %d\n", g_exit_st);
+			
 			free_nodestruct(nodes);
 		}
 	}

@@ -23,7 +23,6 @@ int	exec(t_node *first_node, t_shell *shell)
 	int		nb_cmd;
 	int		status;
 
-	status = 0;
 	nb_cmd = first_node[0].node_nb;
 	exec_st = init_exec_st(first_node);
 	if (!exec_st)
@@ -34,9 +33,13 @@ int	exec(t_node *first_node, t_shell *shell)
 		execution(first_node, shell, exec_st);
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &shell->termios_p);
 	if (nb_cmd > 1)
+	{
 		while ((nb_cmd--) > 0)
 			wait(&status);
-	if (WIFSIGNALED(status))
-		g_exit_st = 128 + WTERMSIG(status);
+		if (WIFEXITED(status))
+			g_exit_st = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_exit_st = 128 + WTERMSIG(status);
+	}
 	return (0);
 }

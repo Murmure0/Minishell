@@ -16,15 +16,13 @@
 # include <errno.h>
 # include <termios.h>
 
-// # include <wait.h>
+# include <wait.h>
 
 /* ERROR MESSAGES */
 
 # define PERR		"minishell: "
 # define NO_FILE	"minishell: syntax error near unexpected symbol « newline »"
 # define HOME_UNSET	"minishell: cd: « HOME » not set"
-
-// int	g_exit_st;
 
 typedef struct s_node
 {
@@ -177,12 +175,12 @@ void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh);
 /* ---------------------------- parse_dollar.c ---------------------- */
 int		get_next_dollar(char *s, int pos);
 void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh);
-int		get_key_len(char *s, int pos);
 void	replace_dollar(t_node *n, t_parsing *ps, t_shell *sh, int *pos);
 void	set_quotes_for_cmd(t_parsing *ps, t_node *n);
 
 /* ---------------------------- parse_dollar_utils.c ---------------------- */
 void	free_value_tmp(char *value, char *tmp);
+int		get_key_len(char *s, int pos);
 
 /* ---------------------------- parse_heredoc.c ---------------------- */
 int		add_heredoc_file(t_node *nodes, t_parsing *ps);
