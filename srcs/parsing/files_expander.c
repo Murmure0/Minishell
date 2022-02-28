@@ -6,11 +6,13 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 15:19:07 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/27 10:13:11 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/28 17:30:44 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+extern int	g_exit_st;
 
 void	skip_spaces_local(t_parsing *ps, int *j)
 {
@@ -72,6 +74,28 @@ void	replace_dollar_files(t_node *n, t_parsing *ps, t_shell *sh, int *pos)
 		ft_exit(sh, ps, n, "Fail to malloc node cmd in replace dollar files\n");
 }
 
+void	replace_exit_st_files(t_node *n, t_parsing *ps, t_shell *sh, int *pos)
+{
+	char	*status;
+	char	*tmp;
+
+	status = ft_itoa(g_exit_st);
+	if (!status)
+		ft_exit(sh, ps, n, "Fail to malloc status in replace dollar exit st");
+	tmp = ft_strdup(ps->nodes[ps->i]);
+	free(ps->nodes[ps->i]);
+	if (!tmp)
+	{
+		free(status);
+		ft_exit(sh, ps, n, "Fail to malloc tmp in replace dollar exit st");
+	}
+	ps->nodes[ps->i] = replace_in_str(tmp, status, *pos, 1);
+	free(tmp);
+	free(status);
+	if (!ps->nodes[ps->i])
+		ft_exit(sh, ps, n, "Fail to malloc nodes in replace dollar exit st");
+}
+
 void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh)
 {
 	int	j;
@@ -82,11 +106,15 @@ void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh)
 	set_quotes_for_files(ps, &j);
 	pos_dollar = get_next_dollar(ps->nodes[ps->i], j);
 	while (pos_dollar > -1 && !ps->is_s_quote
-		&& ft_isalnum(ps->nodes[ps->i][j + 1])
-		&& !is_space(ps->nodes[ps->i][j]))
+		&& !is_space(ps->nodes[ps->i][j])
+		&& (ft_isalnum(ps->nodes[ps->i][j + 1])
+		|| ps->nodes[ps->i][j + 1] == '_' || ps->nodes[ps->i][j + 1] == '?'))
 	{
 		set_quotes_for_files(ps, &j);
-		replace_dollar_files(nodes, ps, sh, &pos_dollar);
+		if (ps->nodes[ps->i][j + 1] == '?')
+			replace_exit_st_files(nodes, ps, sh, &pos_dollar);	
+		else
+			replace_dollar_files(nodes, ps, sh, &pos_dollar);
 		pos_dollar = get_next_dollar(ps->nodes[ps->i], j);
 	}
 	remove_quotes_files(ps);
