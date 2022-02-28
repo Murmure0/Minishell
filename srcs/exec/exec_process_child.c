@@ -12,7 +12,7 @@ int	find_fd_in(t_node *first_node)
 		fd_in = open(first_node[0].infiles, O_RDONLY);
 		if (fd_in < 0)
 		{
-			g_exit_st = -1;
+			g_exit_st = 1;
 			write(2, first_node[0].infiles, ft_strlen(first_node[0].infiles));
 			perror(": ");
 			return (-1);
@@ -96,7 +96,7 @@ pid_t	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st)
 	child_pid = fork();
 	if (child_pid < 0)
 	{
-		write(2, "Child fork failed", 18);
+		g_exit_st = -1;
 		perror(": ");
 	}
 	if (child_pid == 0)

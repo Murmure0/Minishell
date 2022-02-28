@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 15:47:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/25 20:30:35 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:38:50 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,23 @@ int	my_unset(t_shell *sh, char **var)
 	while (var && *var)
 	{
 		if (!*var || contains_equal(*var))
-			return (-1);
+		{
+			write(2, "minishell : unset : '", 21);
+			write(2, *var, ft_strlen(*var));
+			write(2, "' : not a valid identifier\n", 27);
+			return (1);
+		}
 		i = -1;
 		while (sh->env[++i])
 		{
 			env_key = str_slice(sh->env[i], 0, get_equal(sh->env[i]));
 			if (!env_key)
-				return (-1);
+				return (1);
 			if (!ft_strcmp(env_key, *var))
 			{
 				free(env_key);
 				if (!shift_vars(sh, i) && !update_env_paths(sh))
-					return (-1);
+					return (1);
 				break ;
 			}
 			free(env_key);

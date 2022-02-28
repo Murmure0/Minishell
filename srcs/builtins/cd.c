@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:26:20 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/27 18:36:26 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:20:48 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,9 @@ static int	try_chdir(char *dir, char *home)
 	}
 	if (chdir(tmp) < 0)
 	{
-		perror(":");
+		write(2, "minishell : ", 12);
+		write(2, tmp, ft_strlen(tmp));
+		perror(" ");
 		free(tmp);
 		return (0);
 	}

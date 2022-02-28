@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 19:12:37 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/27 18:38:19 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:26:18 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,18 +82,18 @@ int	my_export(t_shell *sh, char **cmd)
 	while (cmd[++cmd_pos])
 	{
 		if (!get_key_value_export(&key, &value, cmd[cmd_pos]))
-			return (-1);
+			return (1);
 		if (!validate_var(key, cmd[cmd_pos]))
 		{
 			free_export(key, value);
-			continue ;
+			return (1);
 		}
 		if (check_has_key(sh->env, key))
 			sh->env = update_env_var(sh->env, key, value);
 		else
 			sh->env = add_env_var(sh->env, cmd[cmd_pos]);
 		if (!sh->env)
-			return (-1);
+			return (1);
 		free_export(key, value);
 	}
 	return (0);

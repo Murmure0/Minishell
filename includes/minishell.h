@@ -16,7 +16,7 @@
 # include <errno.h>
 # include <termios.h>
 
-# include <wait.h>
+//# include <wait.h>
 
 /* ERROR MESSAGES */
 

@@ -10,7 +10,7 @@ void	handle_signal(int sig)
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_redisplay();
-		g_exit_st = 130;
+		g_exit_st = 1;
 	}
 	else if (sig == SIGQUIT)
 	{
