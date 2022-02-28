@@ -6,7 +6,7 @@ void	fd_dup(int fd, int std)
 	{
 		close(fd);
 		perror(": ");
-		exit (errno);
+		exit(errno);
 	}
 	close(fd);
 }
@@ -38,6 +38,7 @@ int	path_finder(t_node *first_node, t_shell *shell)
 	i = -1;
 	if (first_node[0].cmd)
 	{
+		execve(first_node[0].cmd[0], first_node[0].cmd, shell->env);
 		while (shell->path[++i])
 		{
 			cmd = ft_strjoin(shell->path[i], first_node[0].cmd[0]);
