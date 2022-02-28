@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int g_exit_st;
+int	g_exit_st;
 
 int	ret_err(int ret, char *msg)
 {
@@ -18,13 +18,12 @@ void	ft_exit(t_shell *sh, t_parsing *ps, t_node *n, char *err)
 	(void)n;
 	if (err)
 		write(2, err, ft_strlen(err));
-	// final_free(sh, ps, n);
 	exit(EXIT_FAILURE);
 }
 
-int not_emptycmd(char *cmd)
+static int	not_emptycmd(char *cmd)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	if (cmd == NULL)
@@ -68,7 +67,33 @@ int not_emptycmd(char *cmd)
 // 	}
 // }
 
-int main(int argc, char **argv, char **env)
+static void	process_readline(t_parsing *parstruct, t_node *nodes, t_shell *shell)
+{
+	add_history(parstruct->prompt);
+	if (not_emptycmd(parstruct->prompt))
+	{
+		nodes = parse(&parstruct, shell);
+		if (parstruct->stop_err)
+		{
+			final_free(NULL, &parstruct, nodes);
+			return ;
+		}
+		// print_debug(parstruct, nodes, shell);
+		free_parstruct(&parstruct);
+		if (nodes)
+		{
+			exec(nodes, shell);
+			free_nodestruct(nodes);
+		}
+	}
+	else
+	{
+		free(parstruct->prompt);
+		parstruct->prompt = NULL;
+	}
+}
+
+int	main(int argc, char **argv, char **env)
 {
 	t_parsing	parstruct;
 	t_node		*nodes;
@@ -85,33 +110,12 @@ int main(int argc, char **argv, char **env)
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, handle_signal);
 		parstruct.prompt = readline("minishell$ ");
-		if(!parstruct.prompt)
+		if (!parstruct.prompt)
 		{
 			write(1, "exit\n", 5);
 			break ;
 		}
-		add_history(parstruct.prompt);
-		if (not_emptycmd(parstruct.prompt))
-		{
-			nodes = parse(&parstruct, &shell);
-			if (parstruct.stop_err)
-			{
-				final_free(NULL, &parstruct, nodes);
-				continue ;
-			}
-			// print_debug(parstruct, nodes, shell);
-			free_parstruct(&parstruct);
-			if (nodes)
-			{
-				exec(nodes, &shell);
-				free_nodestruct(nodes);
-			}
-		}
-		else
-		{
-			free(parstruct.prompt);
-			parstruct.prompt = NULL;
-		}
+		process_readline(&parstruct, nodes, &shell);
 	}
 	free_shellstruct(&shell);
 	return (0);

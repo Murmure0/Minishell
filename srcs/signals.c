@@ -20,7 +20,7 @@ void	handle_signal(int sig)
 	}
 }
 
-void handle_sig_fork(int sig)
+void	handle_sig_fork(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -35,7 +35,7 @@ void handle_sig_fork(int sig)
 	}
 }
 
-void handle_sig_heredoc(int sig)
+void	handle_sig_heredoc(int sig)
 {
 	if (sig == SIGINT)
 	{
