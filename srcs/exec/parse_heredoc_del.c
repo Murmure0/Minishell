@@ -35,7 +35,9 @@ char	*get_delimiter(t_parsing *ps)
 		ps->j++;
 	}
 	tmp = str_slice(ps->nodes[ps->i], pos_start, ps->j);
+	// protect
 	del = adj_av(tmp);
+	// protect
 	free(tmp);
 	return (del);
 }

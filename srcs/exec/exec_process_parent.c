@@ -7,10 +7,8 @@ int	find_fd_in_parent(t_node *last_node, t_exec *exec_st)
 	fd_in = 0;
 	if (last_node->infiles || last_node->infile_hd)
 	{
-		printf("valeur inid : %d\n", last_node->in_id);
 		if (last_node->infiles && last_node->in_id == 2)
 		{
-			// write(1, "POUET\n", 6);
 			fd_in = open(last_node->infiles, O_RDONLY);
 			if (fd_in < 0)
 			{

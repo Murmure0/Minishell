@@ -72,14 +72,14 @@ static void	process_readline(t_parsing *parstruct, t_node *nodes, t_shell *shell
 	add_history(parstruct->prompt);
 	if (not_emptycmd(parstruct->prompt))
 	{
-		nodes = parse(&parstruct, shell);
+		nodes = parse(parstruct, shell);
 		if (parstruct->stop_err)
 		{
-			final_free(NULL, &parstruct, nodes);
+			final_free(NULL, parstruct, nodes);
 			return ;
 		}
 		// print_debug(parstruct, nodes, shell);
-		free_parstruct(&parstruct);
+		free_parstruct(parstruct);
 		if (nodes)
 		{
 			exec(nodes, shell);
