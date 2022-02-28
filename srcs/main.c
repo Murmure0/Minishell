@@ -78,7 +78,7 @@ static void	process_readline(t_parsing *parstruct, t_node *nodes, t_shell *shell
 			final_free(NULL, parstruct, nodes);
 			return ;
 		}
-		// print_debug(parstruct, nodes, shell);
+		// print_debug(*parstruct, nodes, *shell);
 		free_parstruct(parstruct);
 		if (nodes)
 		{

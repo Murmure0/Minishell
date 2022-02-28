@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse_dollar.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 19:31:57 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/27 18:41:56 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/02/28 11:26:03 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+extern int	g_exit_st;
 
 int	get_key_len(char *s, int pos)
 {
@@ -100,10 +102,14 @@ void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh)
 			pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], ps->k);
 			while (pos_dollar > -1 && !ps->is_s_quote
 				&& (ft_isalnum(nodes[ps->i].cmd[ps->j][pos_dollar + 1])
-				|| nodes[ps->i].cmd[ps->j][pos_dollar + 1] == '_'))
+				|| nodes[ps->i].cmd[ps->j][pos_dollar + 1] == '_'
+				|| nodes[ps->i].cmd[ps->j][pos_dollar + 1] == '?'))
 			{
 				set_quotes_for_cmd(ps, nodes);
-				replace_dollar(nodes, ps, sh, &pos_dollar);
+				if (nodes[ps->i].cmd[ps->j][pos_dollar + 1] == '?')
+					nodes[ps->i].cmd[ps->j] = replace_in_str(nodes[ps->i].cmd[ps->j], ft_itoa(g_exit_st), pos_dollar, 1);
+				else
+					replace_dollar(nodes, ps, sh, &pos_dollar);
 				pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], ps->k);
 			}
 		}
