@@ -67,7 +67,6 @@ static int	not_emptycmd(char *cmd)
 // 	}
 // }
 
-
 void	add_spaces(t_parsing *ps)
 {
 	int	i;
@@ -93,7 +92,13 @@ void	add_spaces(t_parsing *ps)
 
 static void	process_readline(t_parsing *parstruct, t_node *nodes, t_shell *shell)
 {
-	add_history(parstruct->prompt);
+	char	*tmp;
+
+	tmp = str_slice(parstruct->prompt, 1, ft_strlen(parstruct->prompt) - 1);
+	if (!tmp)
+		exit(EXIT_FAILURE);
+	add_history(tmp);
+	free(tmp);
 	if (not_emptycmd(parstruct->prompt))
 	{
 		nodes = parse(parstruct, shell);
@@ -145,3 +150,6 @@ int	main(int argc, char **argv, char **env)
 	free_shellstruct(&shell);
 	return (g_exit_st);
 }
+
+// export avec non alnum
+// retour si on quitte 

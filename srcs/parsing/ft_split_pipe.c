@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:29:40 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/01 13:43:17 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/01 16:28:36 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static	char	**fill_arr(char const *s, char **arr, char c, t_split *st)
 			st->k = 0;
 			set_quote(s[st->i], st);
 			elem_len = count_elem_len(s, c, st->i, st->is_quote);
-			arr[st->j] = (char *)malloc((elem_len + 1) * sizeof(char));
+			arr[st->j] = (char *)malloc((elem_len + 1 + 2) * sizeof(char));
 			if (!arr[st->j])
 				return (free_arr(arr));
 			while (s[st->i] && (s[st->i] != c || st->is_quote))
@@ -67,10 +67,28 @@ static	char	**fill_arr(char const *s, char **arr, char c, t_split *st)
 	return (arr);
 }
 
+static	int	count_elems(char const *s, char c, t_split *st)
+{
+	int	i;
+	int	nb_elems;
+
+	nb_elems = 0;
+	i = 0;
+	while (s[i])
+	{
+		set_quote(c, st);
+		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0') && !st->is_quote)
+			nb_elems++;
+		i++;
+	}
+	return (nb_elems);
+}
+
 char	**ft_split_pipe(char const *s, char c, t_parsing *ps)
 {
 	char	**arr;
 	t_split	*st;
+	int		elem_nb;
 
 	if (!s)
 		return (NULL);
@@ -78,7 +96,8 @@ char	**ft_split_pipe(char const *s, char c, t_parsing *ps)
 	if (!st)
 		return (NULL);
 	init_struct(st);
-	arr = (char **)malloc((100) * sizeof(char *));
+	elem_nb = count_elems(s, c, st);
+	arr = (char **)malloc((elem_nb + 1) * sizeof(char *));
 	if (!arr)
 	{
 		free(st);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:35:18 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/01 13:35:29 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/01 15:20:43 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,8 @@ static int	write_n(char **str)
 static void	exec_echo(char **str)
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	j = 0;
 	while (str && str[i] && str[i][0] == '-' &&
 		(str[i][1] == 'n' || str[i][1] == 'e' || str[i][1] == 'E'))
 	{
