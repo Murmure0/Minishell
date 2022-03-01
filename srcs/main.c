@@ -67,9 +67,25 @@ static int	not_emptycmd(char *cmd)
 // 	}
 // }
 
+char	*remove_spaces(char *s)
+{
+	char	*tmp;
+
+	tmp = str_slice(s, 1, ft_strlen(s) - 1);
+	if (!tmp)
+		exit(EXIT_FAILURE);
+	return (tmp);
+}
+
 static void	process_readline(t_parsing *parstruct, t_node *nodes, t_shell *shell)
 {
-	add_history(parstruct->prompt);
+	char	*tmp;
+
+	tmp = str_slice(parstruct->prompt, 1, ft_strlen(parstruct->prompt) - 1);
+	if (!tmp)
+		exit(EXIT_FAILURE);
+	add_history(tmp);
+	free(tmp);
 	if (not_emptycmd(parstruct->prompt))
 	{
 		nodes = parse(parstruct, shell);
@@ -133,14 +149,17 @@ int	main(int argc, char **argv, char **env)
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, handle_signal);
 		parstruct.prompt = readline("minishell$ ");
-		add_spaces(&parstruct);
 		if (!parstruct.prompt)
 		{
 			write(1, "exit\n", 5);
 			break ;
 		}
+		add_spaces(&parstruct);
 		process_readline(&parstruct, nodes, &shell);
 	}
 	free_shellstruct(&shell);
 	return (0);
 }
+
+// export avec non alnum
+// retour si on quitte 
