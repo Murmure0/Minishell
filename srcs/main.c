@@ -100,13 +100,18 @@ void	add_spaces(t_parsing *ps)
 
 	i = -1;
 	tmp = ft_strdup(ps->prompt);
+	if (!tmp)
+		exit(EXIT_FAILURE);
 	free(ps->prompt);
 	ps->prompt = malloc(sizeof(char) * ft_strlen(tmp) + 3);
+	if (!ps->prompt)
+		exit(EXIT_FAILURE);
 	ps->prompt[0] = ' ';
 	while (tmp && tmp[++i])
 	{
 		ps->prompt[i + 1] = tmp[i];
 	}
+	free(tmp);
 	ps->prompt[i + 1] = ' ';
 	ps->prompt[i + 2] = 0;
 }
@@ -129,7 +134,6 @@ int	main(int argc, char **argv, char **env)
 		signal(SIGINT, handle_signal);
 		parstruct.prompt = readline("minishell$ ");
 		add_spaces(&parstruct);
-		printf("|%s|\n", parstruct.prompt);
 		if (!parstruct.prompt)
 		{
 			write(1, "exit\n", 5);
@@ -140,10 +144,3 @@ int	main(int argc, char **argv, char **env)
 	free_shellstruct(&shell);
 	return (0);
 }
-
-// ls |
-// ls | | => invalid syntax error 139
-// bash: erreur de syntaxe près du symbole inattendu « | » => 258
-
-// echo "ipfeajf | aepjae" ou echo " "
-// => avec au moins un espace ou un pipe

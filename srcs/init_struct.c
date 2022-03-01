@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/01 11:06:40 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/01 11:10:09 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	init_global_struct(t_parsing *ps, t_shell *sh)
 		if (!ps->nodes[ps->i] || (is_space(ps->nodes[ps->i][0]) && !ps->nodes[ps->i][1]))
 		{
 			printf("minishell: syntax error near unexpected token `|'\n");
-			g_exit_st = 258;
+			g_exit_st = 2;
 			return (0);
 		}
 	}

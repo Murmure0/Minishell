@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:29:40 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/01 11:04:55 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/01 11:49:34 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ static	char	**fill_arr(char const *s, char **arr, char c, t_split *st)
 
 	while (s[++(st->i)])
 	{
-		// if (s[st->i] == c && (st->i == 0 || !s[st->i + 1]))
-		// 	arr[st->j++] = NULL;
 		if (s[st->i] != c)
 		{
 			st->k = 0;
@@ -90,7 +88,6 @@ char	**ft_split_pipe(char const *s, char c, t_parsing *ps)
 	ps->pipe_nb = st->j - 1;
 	if (ps->pipe_nb == -1)
 		ps->pipe_nb++;
-	printf("inside : %d\n", ps->pipe_nb);
 	free(st);
 	return (arr);
 }
