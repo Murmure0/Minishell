@@ -21,6 +21,8 @@ MAIN = 	srcs/main.c			\
 		srcs/parsing/parse_files.c \
 		srcs/parsing/parse_dollar.c \
 		srcs/parsing/parse_dollar_utils.c \
+		srcs/parsing/ft_split_pipe.c \
+		srcs/parsing/ft_split_utils.c \
 		srcs/parsing/remove_quotes.c \
 		srcs/parsing/files_expander.c \
 		srcs/exec/parse_heredoc.c \

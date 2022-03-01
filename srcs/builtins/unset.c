@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 15:47:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/28 18:38:50 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/02/28 19:10:39 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ int	my_unset(t_shell *sh, char **var)
 
 	while (var && *var)
 	{
-		if (!*var || contains_equal(*var))
+		if (!*var || contains_equal(*var) || ft_isdigit(*var[0]))
+		// rajouter is alnum sur chaque char ? U____U
 		{
 			write(2, "minishell : unset : '", 21);
 			write(2, *var, ft_strlen(*var));
