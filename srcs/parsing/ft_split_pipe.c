@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_pipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:29:40 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/01 16:28:36 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/01 18:19:37 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,15 @@ static	int	count_elems(char const *s, char c, t_split *st)
 
 	nb_elems = 0;
 	i = 0;
+	st->is_quote = 0;
 	while (s[i])
 	{
-		set_quote(c, st);
+		set_quote(s[i], st);
 		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0') && !st->is_quote)
 			nb_elems++;
 		i++;
 	}
+	st->is_quote = 0;
 	return (nb_elems);
 }
 
