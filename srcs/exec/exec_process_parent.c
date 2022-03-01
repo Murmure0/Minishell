@@ -51,6 +51,8 @@ t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st)
 	t_exec	*exec_st_parent;
 
 	exec_st_parent = malloc(sizeof(t_exec));
+	// if (!exec_st_parent)
+	// 	return (NULL);
 	// return if !exec_st_parent
 	exec_st_parent->pfd_in = 0;
 	exec_st_parent->pfd_out = 0;
@@ -94,6 +96,8 @@ void	parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
 	pid_t	parent_pid;
 
 	exec_st_parent = init_exec_st_parent(last_node, prev_exec_st);
+	// if (!exec_st_parent)
+	// 	return (NULL);
 	// return err if malloc failed
 	parent_pid = fork();
 	if (parent_pid < 0)

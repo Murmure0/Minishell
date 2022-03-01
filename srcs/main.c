@@ -67,6 +67,30 @@ static int	not_emptycmd(char *cmd)
 // 	}
 // }
 
+
+void	add_spaces(t_parsing *ps)
+{
+	int	i;
+	char	*tmp;
+
+	i = -1;
+	tmp = ft_strdup(ps->prompt);
+	if (!tmp)
+		exit(EXIT_FAILURE);
+	free(ps->prompt);
+	ps->prompt = malloc(sizeof(char) * ft_strlen(tmp) + 3);
+	if (!ps->prompt)
+		exit(EXIT_FAILURE);
+	ps->prompt[0] = ' ';
+	while (tmp && tmp[++i])
+	{
+		ps->prompt[i + 1] = tmp[i];
+	}
+	free(tmp);
+	ps->prompt[i + 1] = ' ';
+	ps->prompt[i + 2] = 0;
+}
+
 static void	process_readline(t_parsing *parstruct, t_node *nodes, t_shell *shell)
 {
 	add_history(parstruct->prompt);
@@ -93,29 +117,6 @@ static void	process_readline(t_parsing *parstruct, t_node *nodes, t_shell *shell
 	}
 }
 
-void	add_spaces(t_parsing *ps)
-{
-	int	i;
-	char	*tmp;
-
-	i = -1;
-	tmp = ft_strdup(ps->prompt);
-	if (!tmp)
-		exit(EXIT_FAILURE);
-	free(ps->prompt);
-	ps->prompt = malloc(sizeof(char) * ft_strlen(tmp) + 3);
-	if (!ps->prompt)
-		exit(EXIT_FAILURE);
-	ps->prompt[0] = ' ';
-	while (tmp && tmp[++i])
-	{
-		ps->prompt[i + 1] = tmp[i];
-	}
-	free(tmp);
-	ps->prompt[i + 1] = ' ';
-	ps->prompt[i + 2] = 0;
-}
-
 int	main(int argc, char **argv, char **env)
 {
 	t_parsing	parstruct;
@@ -133,14 +134,14 @@ int	main(int argc, char **argv, char **env)
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, handle_signal);
 		parstruct.prompt = readline("minishell$ ");
-		add_spaces(&parstruct);
 		if (!parstruct.prompt)
 		{
 			write(1, "exit\n", 5);
 			break ;
 		}
+		add_spaces(&parstruct);
 		process_readline(&parstruct, nodes, &shell);
 	}
 	free_shellstruct(&shell);
-	return (0);
+	return (g_exit_st);
 }

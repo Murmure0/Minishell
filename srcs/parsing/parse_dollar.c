@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_dollar.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 19:31:57 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/01 13:38:44 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/01 13:47:49 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh)
 		ps->j = -1;
 		while (nodes[ps->i].cmd[++(ps->j)])
 		{
-			printf("|%s|\n", nodes[ps->i].cmd[ps->j]);
 			ps->k = 0;
 			set_quotes_for_cmd(ps, nodes);
 			pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], ps->k);

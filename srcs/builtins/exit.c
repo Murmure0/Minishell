@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:26:18 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/27 18:37:16 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/01 16:24:07 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	my_exit(t_shell *sh, t_node *n)
+extern int	g_exit_st;
+
+void	my_exit(void)
 {
-	ft_exit(sh, NULL, n, NULL);
+	exit(g_exit_st);
 }

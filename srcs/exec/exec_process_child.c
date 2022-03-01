@@ -31,7 +31,7 @@ static int	pipe_case(t_exec *exec_st)
 	{
 		g_exit_st = -1;
 		perror(": ");
-		return (g_exit_st);
+		exit (g_exit_st);
 	}
 	exec_st->pfd_out = pfd[1];
 	exec_st->pfd_in = pfd[0];
@@ -66,24 +66,21 @@ int	find_fd_out(t_node *first_node, t_exec *exec_st)
 	return (fd_out);
 }
 
-static void	child_process(pid_t child_pid, t_exec *exec_st, t_node *first_node,
+static void	child_process(t_exec *exec_st, t_node *first_node,
 		t_shell *shell)
 {
-	if (child_pid == 0)
+	if (exec_st->fd_in > 0)
+		fd_dup(exec_st->fd_in, STDIN_FILENO);
+	if (exec_st->fd_out > 1)
+		fd_dup(exec_st->fd_out, STDOUT_FILENO);
+	if (first_node[0].node_nb > 1)
 	{
-		if (exec_st->fd_in > 0)
-			fd_dup(exec_st->fd_in, STDIN_FILENO);
-		if (exec_st->fd_out > 1)
-			fd_dup(exec_st->fd_out, STDOUT_FILENO);
-		if (first_node[0].node_nb > 1)
-		{
-			close(exec_st->pfd_in);
-			close(exec_st->pfd_out);
-		}
-		if (!find_builtin(first_node, shell, 'y'))
-		{
-			exec_cmd(first_node, shell);
-		}
+		close(exec_st->pfd_in);
+		close(exec_st->pfd_out);
+	}
+	if (!find_builtin(first_node, shell, 'y'))
+	{
+		exec_cmd(first_node, shell);
 	}
 }
 
@@ -98,9 +95,10 @@ pid_t	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st)
 	{
 		g_exit_st = -1;
 		perror(": ");
+		return (-1);
 	}
 	if (child_pid == 0)
-		child_process(child_pid, exec_st, first_node, shell);
+		child_process(exec_st, first_node, shell);
 	if (exec_st->pfd_out > 0)
 		close(exec_st->pfd_out);
 	if (first_node[0].node_nb == 1)

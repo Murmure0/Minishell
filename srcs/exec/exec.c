@@ -9,7 +9,8 @@ static int	execution(t_node *first_node, t_shell *shell, t_exec *exec_st)
 	nb_cmd = first_node[0].node_nb;
 	signal(SIGQUIT, handle_sig_fork);
 	signal(SIGINT, handle_sig_fork);
-	exec_child_proc(first_node, shell, exec_st);
+	if (exec_child_proc(first_node, shell, exec_st) < 0)
+		return (-1);
 	if (nb_cmd == 2)
 		parent_process(exec_st, first_node + 1, shell);
 	else if (nb_cmd > 2)
@@ -30,7 +31,8 @@ int	exec(t_node *first_node, t_shell *shell)
 	if (nb_cmd == 1 && find_builtin(first_node, shell, 'n'))
 		redir_solo_builtin(first_node, shell, exec_st);
 	else
-		execution(first_node, shell, exec_st);
+		if (execution(first_node, shell, exec_st) < 0)
+			return (-1);
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &shell->termios_p);
 	if (nb_cmd > 1)
 	{

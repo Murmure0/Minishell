@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-extern int g_exit_st;
+extern int	g_exit_st;
 
 static int	find_echo_cd(t_node *first_node, t_shell *shell, char exec)
 {
@@ -91,7 +91,7 @@ int	find_builtin(t_node *first_node, t_shell *shell, char exec)
 		{
 			if (exec == 'y')
 			{
-				my_exit(shell, first_node);
+				my_exit();
 				if (first_node->node_nb > 1)
 					exit(EXIT_SUCCESS);
 			}

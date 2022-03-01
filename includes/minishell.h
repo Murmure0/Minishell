@@ -16,7 +16,7 @@
 # include <errno.h>
 # include <termios.h>
 
-# include <wait.h>
+//# include <wait.h>
 
 /* ERROR MESSAGES */
 
@@ -249,7 +249,7 @@ int		my_cd(t_shell *shell, char *dir);
 int		my_export(t_shell *shell, char **var);
 int		my_unset(t_shell *sh, char **var);
 int		my_env(t_shell *sh);
-void	my_exit(t_shell *sh, t_node *n);
+void	my_exit(void);
 int		my_pwd(void);
 char	*get_var_value(char *cmd);
 char	*get_var_key(char *cmd);

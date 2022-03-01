@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/01 13:36:04 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/01 13:46:25 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,6 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		ps->i++;
 	}
 	expand_dollar_value_cmd(nodes, ps , sh);
-	//remove_quotes_cmd(nodes, ps);
+	remove_quotes_cmd(nodes, ps);
 	return (nodes);
 }
