@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 19:12:37 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/28 18:26:18 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/01 17:54:00 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,27 @@ int	my_export(t_shell *sh, char **cmd)
 	int		cmd_pos;
 	char	*key;
 	char	*value;
+	int		i;
 
 	cmd_pos = 0;
+	i = -1;
 	while (cmd[++cmd_pos])
 	{
-		if (!get_key_value_export(&key, &value, cmd[cmd_pos]))
+		if (++i == 0 && cmd[cmd_pos][i] != '_' && !ft_isalpha(cmd[cmd_pos][i]))
+		{
+			printf("minishell: export: « %s » : not a valid identifier\n", cmd[cmd_pos]);
 			return (1);
+		}
+		while (cmd[cmd_pos][++i])
+		{
+			if (cmd[cmd_pos][i] != '_' && !ft_isalnum(cmd[cmd_pos][i]))
+			{
+				printf("minishell: export: « %s » : not a valid identifier\n", cmd[cmd_pos]);
+				return (1);
+			}
+		}
+		if (!get_key_value_export(&key, &value, cmd[cmd_pos]))
+			return (0);
 		if (!validate_var(key, cmd[cmd_pos]))
 		{
 			free_export(key, value);

@@ -152,4 +152,4 @@ int	main(int argc, char **argv, char **env)
 }
 
 // export avec non alnum
-// retour si on quitte 
+//  echo ""
