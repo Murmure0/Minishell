@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/01 18:01:18 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/01 22:02:18 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,21 @@ void	init_shell_struct(t_shell *shell, char **env)
 	shell->path = get_env_paths(env);
 	if (!shell->path)
 		ft_exit(shell, NULL, NULL, "Fail to get path in init_shell_struct\n");
+}
+
+int	check_empty_before_pipe(char *s)
+{
+	int	i;
+
+	i = -1;
+	while (s[++i] && s[i] != '|')
+	{
+		if (!is_space(s[i]))
+		{
+			return (0);
+		}
+	}
+	return (1);
 }
 
 int	init_global_struct(t_parsing *ps, t_shell *sh)
@@ -41,14 +56,14 @@ int	init_global_struct(t_parsing *ps, t_shell *sh)
 		ft_exit(sh, ps, NULL, "Fail to split nodes in init_global_struct\n");
 	while (++(ps->i) <= ps->pipe_nb)
 	{
-		if (!ps->nodes[ps->i] || (is_space(ps->nodes[ps->i][0]) && !ps->nodes[ps->i][1]))
+		printf("i : %d\n", ps->i);
+		if (!ps->nodes[ps->i] || check_empty_before_pipe(ps->nodes[ps->i]))
 		{
 			printf("minishell: syntax error near unexpected token `|'\n");
 			g_exit_st = 2;
 			return (0);
 		}
 	}
-	ps->pipe_nb = arr_len(ps->nodes) - 1;
 	ps->i = 0;
 	return (1);
 }
