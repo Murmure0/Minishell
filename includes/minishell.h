@@ -16,7 +16,7 @@
 # include <errno.h>
 # include <termios.h>
 
-//# include <wait.h>
+# include <wait.h>
 
 /* ERROR MESSAGES */
 
@@ -71,6 +71,14 @@ typedef struct s_exec
 	int	pfd_in;
 	int	num_cmd;
 }				t_exec;
+
+typedef struct s_split
+{
+	int	i;
+	int	j;
+	int	k;
+	int	is_quote;
+}	t_split;
 
 /* -------------------------- init_struct.c ----------------------- */
 void	init_shell_struct(t_shell *shell, char **env);
@@ -188,6 +196,11 @@ int		add_heredoc_file(t_node *nodes, t_parsing *ps);
 
 /* ---------------------------- parse_heredoc_del.c ---------------------- */
 char	*get_delimiter(t_parsing *ps);
+
+/* ---------------------------- ft_split_pipe.c ---------------------- */
+char	**ft_split_pipe(char const *s, char c, t_parsing *ps);
+void	set_quote(char c, t_split *st);
+void	init_struct(t_split *st);
 
 /* ----------------------------------------------------------------- */
 /* ---------------------------- EXEC ------------------------------- */

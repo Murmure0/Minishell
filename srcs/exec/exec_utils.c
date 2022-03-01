@@ -40,6 +40,13 @@ int	path_finder(t_node *first_node, t_shell *shell)
 	i = -1;
 	if (first_node[0].cmd)
 	{
+		if (!strcmp(first_node[0].cmd[0], "") || !strcmp(first_node[0].cmd[0], " "))
+		{
+			write(2, "minishell: ", 12);
+			write(2, first_node[0].cmd[0], ft_strlen(first_node[0].cmd[0]));
+			write(2, ": command not found\n", 21);
+			exit(127);
+		}
 		execve(first_node[0].cmd[0], first_node[0].cmd, shell->env);
 		while (shell->path && shell->path[++i])
 		{

@@ -6,11 +6,13 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/27 18:41:03 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/01 11:06:40 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+extern int	g_exit_st;
 
 void	init_shell_struct(t_shell *shell, char **env)
 {
@@ -28,16 +30,26 @@ int	init_global_struct(t_parsing *ps, t_shell *sh)
 	ps->is_s_quote = 0;
 	ps->is_d_quote = 0;
 	ps->quote = 0;
-	ps->i = 0;
+	ps->i = -1;
 	ps->k = 0;
 	ps->nodes = NULL;
 	ps->pipe_nb = 0;
 	if (!check_quotes_for_pipe_split(ps))
 		return (0);
-	ps->nodes = ft_split_pipe(ps->prompt, '|');
-	if (!ps->nodes)
+	ps->nodes = ft_split_pipe(ps->prompt, '|', ps);
+	if (!ps->nodes) 
 		ft_exit(sh, ps, NULL, "Fail to split nodes in init_global_struct\n");
+	while (++(ps->i) <= ps->pipe_nb)
+	{
+		if (!ps->nodes[ps->i] || (is_space(ps->nodes[ps->i][0]) && !ps->nodes[ps->i][1]))
+		{
+			printf("minishell: syntax error near unexpected token `|'\n");
+			g_exit_st = 258;
+			return (0);
+		}
+	}
 	ps->pipe_nb = arr_len(ps->nodes) - 1;
+	ps->i = 0;
 	return (1);
 }
 

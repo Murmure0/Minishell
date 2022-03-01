@@ -93,6 +93,24 @@ static void	process_readline(t_parsing *parstruct, t_node *nodes, t_shell *shell
 	}
 }
 
+void	add_spaces(t_parsing *ps)
+{
+	int	i;
+	char	*tmp;
+
+	i = -1;
+	tmp = ft_strdup(ps->prompt);
+	free(ps->prompt);
+	ps->prompt = malloc(sizeof(char) * ft_strlen(tmp) + 3);
+	ps->prompt[0] = ' ';
+	while (tmp && tmp[++i])
+	{
+		ps->prompt[i + 1] = tmp[i];
+	}
+	ps->prompt[i + 1] = ' ';
+	ps->prompt[i + 2] = 0;
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	t_parsing	parstruct;
@@ -110,6 +128,8 @@ int	main(int argc, char **argv, char **env)
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, handle_signal);
 		parstruct.prompt = readline("minishell$ ");
+		add_spaces(&parstruct);
+		printf("|%s|\n", parstruct.prompt);
 		if (!parstruct.prompt)
 		{
 			write(1, "exit\n", 5);
@@ -123,8 +143,7 @@ int	main(int argc, char **argv, char **env)
 
 // ls |
 // ls | | => invalid syntax error 139
+// bash: erreur de syntaxe près du symbole inattendu « | » => 258
 
 // echo "ipfeajf | aepjae" ou echo " "
 // => avec au moins un espace ou un pipe
-
-// 

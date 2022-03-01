@@ -6,27 +6,11 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:29:40 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/27 19:57:41 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/01 11:04:55 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
-
-static	int	count_elems(char const *s, char c)
-{
-	int	i;
-	int	nb_elems;
-
-	nb_elems = 0;
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
-			nb_elems++;
-		i++;
-	}
-	return (nb_elems);
-}
+#include "../../includes/minishell.h"
 
 static	int	count_elem_len(char const *s, char c, int i, int is_quote)
 {
@@ -58,6 +42,8 @@ static	char	**fill_arr(char const *s, char **arr, char c, t_split *st)
 
 	while (s[++(st->i)])
 	{
+		// if (s[st->i] == c && (st->i == 0 || !s[st->i + 1]))
+		// 	arr[st->j++] = NULL;
 		if (s[st->i] != c)
 		{
 			st->k = 0;
@@ -73,31 +59,38 @@ static	char	**fill_arr(char const *s, char **arr, char c, t_split *st)
 			}
 			arr[st->j++][st->k] = '\0';
 			if (!s[st->i])
+			{
+				arr[st->j] = '\0';
 				return (arr);
+			}
 		}
 	}
+	arr[st->j] = '\0';
 	return (arr);
 }
 
-char	**ft_split_pipe(char const *s, char c)
+char	**ft_split_pipe(char const *s, char c, t_parsing *ps)
 {
 	char	**arr;
-	int		nb_elems;
 	t_split	*st;
 
 	if (!s)
 		return (NULL);
 	st = malloc(sizeof(t_split));
+	if (!st)
+		return (NULL);
 	init_struct(st);
-	nb_elems = count_elems(s, c);
-	arr = (char **)malloc((nb_elems + 1) * sizeof(char *));
+	arr = (char **)malloc((100) * sizeof(char *));
 	if (!arr)
 	{
 		free(st);
 		return (NULL);
 	}
-	arr[nb_elems] = 0;
 	arr = fill_arr(s, arr, c, st);
+	ps->pipe_nb = st->j - 1;
+	if (ps->pipe_nb == -1)
+		ps->pipe_nb++;
+	printf("inside : %d\n", ps->pipe_nb);
 	free(st);
 	return (arr);
 }
