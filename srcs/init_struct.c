@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/27 18:41:03 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/01 13:34:20 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,6 @@ void	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh)
 	free(tmp);
 	if (!(*ps)->nodes[(*ps)->i])
 		ft_exit(sh, *ps, *nodes, "Fail to trim in init_local_struct\n");
-	(*ps)->cmd_nb = get_cmds_nb((*ps)->nodes[(*ps)->i]);
+	(*ps)->cmd_nb = get_cmds_nb((*ps), (*ps)->nodes[(*ps)->i]);
 	init_nodestruct(nodes, ps, sh);
 }
