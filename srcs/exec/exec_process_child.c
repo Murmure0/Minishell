@@ -46,7 +46,7 @@ int	find_fd_out(t_node *first_node, t_exec *exec_st)
 	fd_out = 1;
 	if (first_node[0].node_nb > 1)
 		if (pipe_case(exec_st) < 0)
-			return (-1);
+			return (g_exit_st);
 	if (first_node[0].node_nb > 1 && !first_node[0].outfiles)
 		fd_out = exec_st->pfd_out;
 	else if (first_node[0].outfiles)

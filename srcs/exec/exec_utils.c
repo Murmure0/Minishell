@@ -8,7 +8,14 @@ void	fd_dup(int fd, int std)
 	{
 		close(fd);
 		perror(": ");
-		exit(errno);
+		if (errno == EBADF)
+			exit(9);
+		if (errno == EBUSY)
+			exit(16);
+		if (errno == EINTR)
+			exit(4);
+		if (errno == EMFILE)
+			exit(24);
 	}
 	close(fd);
 }
