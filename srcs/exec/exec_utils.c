@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:22:31 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/02 13:22:36 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:37:29 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,7 @@ t_exec	*init_exec_st(t_node *first_node)
 	exec_st->pfd_in = 0;
 	exec_st->pfd_out = 0;
 	exec_st->fd_in = find_fd_in(first_node);
-	if (exec_st->fd_in < 0)
-		return (NULL);
 	exec_st->fd_out = find_fd_out(first_node, exec_st);
-	if (exec_st->fd_out < 0)
-		return (NULL);
 	return (exec_st);
 }
 

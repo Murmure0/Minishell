@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:22:02 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/02 13:32:23 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:33:35 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ extern int	g_exit_st;
 static void	child_process(t_exec *exec_st, t_node *first_node,
 		t_shell *shell)
 {
+	if (exec_st->fd_in < 0 || exec_st->fd_out < 0)
+		exit(0);
 	if (exec_st->fd_in > 0)
 		fd_dup(exec_st->fd_in, STDIN_FILENO);
 	if (exec_st->fd_out > 1)

@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:31:26 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/02 13:32:26 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:37:28 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	find_fd_in(t_node *first_node)
 			g_exit_st = 1;
 			write(2, first_node[0].infiles, ft_strlen(first_node[0].infiles));
 			perror(": ");
-			return (-1);
 		}
 	}
 	else if (first_node->in_id == 1 && !first_node->invalid_infile)
@@ -72,7 +71,6 @@ int	find_fd_out(t_node *first_node, t_exec *exec_st)
 			g_exit_st = 13;
 			write(2, first_node[0].outfiles, ft_strlen(first_node[0].outfiles));
 			perror(": ");
-			return (g_exit_st);
 		}
 	}
 	return (fd_out);

@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:21:48 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/02 13:21:51 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:37:21 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ static int	find_fd_in_bro(t_node *middle_node, t_exec *prev_exec_st)
 		if (middle_node->infiles && middle_node->in_id == 2)
 		{
 			fd_in = open(middle_node->infiles, O_RDONLY);
+			printf(" valeur fdin bro : %d",fd_in);
 			if (fd_in < 0)
 			{
 				g_exit_st = 13;
 				write(2, middle_node->infiles, ft_strlen(middle_node->infiles));
 				perror(": ");
-				return (-1);
 			}
 		}
 		else if (middle_node->in_id == 1 && !middle_node->invalid_infile)
@@ -70,7 +70,6 @@ static int	find_fd_out_bro(t_node *middle_node, t_exec *exec_st_bro)
 			g_exit_st = 13;
 			write(2, middle_node->outfiles, ft_strlen(middle_node->outfiles));
 			perror(": ");
-			return (-1);
 		}
 	}
 	return (fd_out);
@@ -88,10 +87,6 @@ t_exec	*init_exec_st_bro(t_node *middle_node, t_exec *prev_exec_st)
 	}
 	exec_st_bro->num_cmd = prev_exec_st->num_cmd;
 	exec_st_bro->fd_in = find_fd_in_bro(middle_node, prev_exec_st);
-	if (exec_st_bro->fd_in < 0)
-		return (NULL);
 	exec_st_bro->fd_out = find_fd_out_bro(middle_node, exec_st_bro);
-	if (exec_st_bro->fd_out < 0)
-		return (NULL);
 	return (exec_st_bro);
 }

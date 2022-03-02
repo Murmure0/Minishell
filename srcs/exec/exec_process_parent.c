@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:22:16 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/02 13:22:19 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:55:33 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static int	find_fd_in_parent(t_node *last_node, t_exec *exec_st)
 	int	fd_in;
 
 	fd_in = 0;
+		printf("infile : %s\n", last_node->infiles);
 	if (last_node->infiles || last_node->infile_hd)
 	{
 		if (last_node->infiles && last_node->in_id == 2)
@@ -29,7 +30,6 @@ static int	find_fd_in_parent(t_node *last_node, t_exec *exec_st)
 				g_exit_st = 13;
 				write(2, last_node->infiles, ft_strlen(last_node->infiles));
 				perror(": ");
-				return (-1);
 			}
 		}
 		else if (last_node->in_id == 1 && !last_node->invalid_infile)
@@ -56,7 +56,6 @@ static int	find_fd_out_parent(t_node *last_node)
 			g_exit_st = 13;
 			write(2, last_node[0].outfiles, ft_strlen(last_node[0].outfiles));
 			perror(": ");
-			return (-1);
 		}
 	}
 	return (fd_out);
@@ -76,17 +75,16 @@ static t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st)
 	exec_st_parent->pfd_in = 0;
 	exec_st_parent->pfd_out = 0;
 	exec_st_parent->fd_in = find_fd_in_parent(last_node, exec_st);
-	if (exec_st_parent->fd_in < 0)
-		return (NULL);
 	exec_st_parent->fd_out = find_fd_out_parent(last_node);
-	if (exec_st_parent->fd_out < 0)
-		return (NULL);
 	return (exec_st_parent);
 }
 
 static void	parent_fork_process(t_node *last_node, t_exec *exec_st,
 	t_exec *exec_st_parent, t_shell *shell)
 {
+	if (exec_st_parent->fd_in < 0 || exec_st_parent->fd_out < 0)
+		exit (0);
+	printf("Valleur fdin : %d\n",exec_st_parent->fd_in);
 	if (exec_st_parent->fd_in > 0)
 		fd_dup(exec_st_parent->fd_in, STDIN_FILENO);
 	if (exec_st_parent->fd_out > 1)

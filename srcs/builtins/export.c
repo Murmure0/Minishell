@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 19:12:37 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/02 06:58:41 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/02 19:02:50 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,19 @@ static int	check_has_key(char **env, char *key)
 	return (0);
 }
 
-int	first_export_var_check(char *cmd)
+int	first_export_var_check(char *cmd) //change
 {
 	int	i;
 
-	i = -1;
-	if (++i == 0 && cmd[i] != '_' && !ft_isalpha(cmd[i]))
+	if (cmd[0] != '_' && !ft_isalpha(cmd[0]))
 	{
 		printf("minishell: export: « %s » : not a valid identifier\n", cmd);
 		return (0);
 	}
+	i = 0;
 	while (cmd[++i])
 	{
-		if (cmd[i] != '_' && !ft_isalnum(cmd[i]))
+		if (cmd[i] != '_' && cmd[i] != '=' && !ft_isalnum(cmd[i]))
 		{
 			printf("minishell: export: « %s » : not a valid identifier\n", cmd);
 			return (0);
