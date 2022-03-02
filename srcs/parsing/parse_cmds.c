@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 16:25:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/02 06:39:23 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/02 07:43:35 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,11 @@ int	check_for_command_args(t_parsing *ps, int *pos_start, int *stop)
 	set_quotes_for_prompt(ps);
 	if (ps->nodes[ps->i][ps->j] == '"' || ps->nodes[ps->i][ps->j] == '\'')
 		ps->j++;
-	
 	while (ps->nodes[ps->i][ps->j] && (!is_space(ps->nodes[ps->i][ps->j])
 		|| (ps->is_d_quote && ps->nodes[ps->i][ps->j] != '"')
 			|| (ps->is_s_quote && ps->nodes[ps->i][ps->j] != '\'')))
 	{
 		set_quotes_for_prompt(ps);
-		printf("|%c| %d %d\n", ps->nodes[ps->i][ps->j], ps->is_d_quote, ps->is_s_quote);
 		if (is_chevron(ps->nodes[ps->i][ps->j])
 			&& !ps->is_d_quote && !ps->is_s_quote)
 		{
@@ -72,14 +70,11 @@ void	add_command_args(t_node **nodes, t_parsing *ps, t_shell *sh)
 				pos_start, ps->j);
 		if (!(*nodes)[ps->i].cmd[ps->pos_cmd])
 			ft_exit(sh, ps, *nodes, "Fail to malloc args in add_command_args\n");
+		ps->pos_cmd++;
 		if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1])
 			ps->j++;
 		else
-		{
-			ps->pos_cmd++;
 			break ;
-		}
-		ps->pos_cmd++;
 	}
 	(*nodes)[ps->i].cmd[ps->cmd_nb] = 0;
 }
@@ -89,7 +84,6 @@ void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh)
 	int		pos_start;
 
 	skip_spaces(ps);
-	printf("%d %d\n", ps->is_d_quote, ps->is_s_quote);
 	pos_start = ps->j;
 	while (ps->nodes[ps->i][ps->j])
 	{
@@ -106,5 +100,4 @@ void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh)
 		ft_exit(sh, ps, *nodes, "Fail to malloc nodes cmd in add_command\n");
 	ps->pos_cmd++;
 	add_command_args(nodes, ps, sh);
-	printf("%s\n", (*nodes)[ps->i].cmd[1]);
 }

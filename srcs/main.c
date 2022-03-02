@@ -1,75 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/02 06:59:26 by vmasse            #+#    #+#             */
+/*   Updated: 2022/03/02 07:48:50 by vmasse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 int	g_exit_st;
 
-int	ret_err(int ret, char *msg)
+static void	add_spaces(t_parsing *ps)
 {
-	if (!msg)
-		perror(PERR);
-	else
-		printf("%s\n", msg);
-	return (ret);
-}
-
-void	ft_exit(t_shell *sh, t_parsing *ps, t_node *n, char *err)
-{
-	(void)sh;
-	(void)ps;
-	(void)n;
-	if (err)
-		write(2, err, ft_strlen(err));
-	exit(EXIT_FAILURE);
-}
-
-static int	not_emptycmd(char *cmd)
-{
-	int	i;
-
-	i = -1;
-	if (cmd == NULL)
-		return (1);
-	while (cmd[++i])
-	{
-		if (!is_space(cmd[i]))
-			return (1);
-	}
-	return (0);
-}
-
-static void print_debug(t_parsing parstruct, t_node *nodes, t_shell shell)
-{
-	(void)shell;
-	/*		PRINT CMDS		*/
-
-	int i = -1;
-	while (++i < parstruct.pipe_nb + 1)
-	{
-		int j = -1;
-		if (nodes[i].cmd)
-			while (nodes[i].cmd[++j])
-				printf("Node %d cmd % d : |%s|\n", i, j, nodes[i].cmd[j]);
-	}
-
-		/*		PRINT INFILES		*/
-
-	i = -1;
-	while (++i < parstruct.pipe_nb + 1)
-	{
-		printf("Node %d infile : |%s|\n", i, nodes[i].infiles);
-	}
-
-	// 	/*		PRINT OUTFILES		*/
-	
-	i = -1;
-	while (++i < parstruct.pipe_nb + 1)
-	{
-		printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
-	}
-}
-
-void	add_spaces(t_parsing *ps)
-{
-	int	i;
+	int		i;
 	char	*tmp;
 
 	i = -1;
@@ -90,25 +37,31 @@ void	add_spaces(t_parsing *ps)
 	ps->prompt[i + 2] = 0;
 }
 
-static void	process_readline(t_parsing *parstruct, t_node *nodes, t_shell *shell)
+static void	custom_add_history(t_parsing *ps)
 {
 	char	*tmp;
 
-	tmp = str_slice(parstruct->prompt, 1, ft_strlen(parstruct->prompt) - 1);
+	tmp = str_slice(ps->prompt, 1, ft_strlen(ps->prompt) - 1);
 	if (!tmp)
 		exit(EXIT_FAILURE);
 	add_history(tmp);
 	free(tmp);
-	if (not_emptycmd(parstruct->prompt))
+}
+
+static void	process_readline(t_parsing *ps, t_node *nodes, t_shell *shell)
+{
+	custom_add_history(ps);
+	if (not_emptycmd(ps->prompt))
 	{
-		nodes = parse(parstruct, shell);
-		if (parstruct->stop_err)
+		if (!init_global_struct(ps, shell))
+			return ;
+		nodes = parse(ps, shell);
+		if (ps->stop_err)
 		{
-			final_free(NULL, parstruct, nodes);
+			final_free(NULL, ps, nodes);
 			return ;
 		}
-		print_debug(*parstruct, nodes, *shell);
-		free_parstruct(parstruct);
+		free_parstruct(ps);
 		if (nodes)
 		{
 			exec(nodes, shell);
@@ -117,8 +70,8 @@ static void	process_readline(t_parsing *parstruct, t_node *nodes, t_shell *shell
 	}
 	else
 	{
-		free(parstruct->prompt);
-		parstruct->prompt = NULL;
+		free(ps->prompt);
+		ps->prompt = NULL;
 	}
 }
 
@@ -150,6 +103,3 @@ int	main(int argc, char **argv, char **env)
 	free_shellstruct(&shell);
 	return (g_exit_st);
 }
-
-// echo ""
-// echo "<"

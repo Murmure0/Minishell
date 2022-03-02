@@ -86,9 +86,14 @@ int		init_global_struct(t_parsing *ps, t_shell *sh);
 void	init_nodestruct(t_node **nodes, t_parsing **ps, t_shell *sh);
 void	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh);
 
-/* ---------------------------- main.c ------------------------------------ */
+/* -------------------------- init_struct_utils.c ----------------------- */
+int		check_empty_before_pipe(char *s);
+int		check_empty_pipe(t_parsing *ps);
+
+/* ---------------------------- utils.c ------------------------------------ */
 int		ret_err(int ret, char *msg);
 void	ft_exit(t_shell *sh, t_parsing *ps, t_node *n, char *err);
+int		not_emptycmd(char *cmd);
 
 /* ---------------------------- free.c ------------------------------------ */
 void	free_parstruct(t_parsing *ps);
@@ -124,7 +129,6 @@ char	*get_env_var_value(char **env, char *key);
 
 /* ---------------------------- shlvl.c --------------------------- */
 char	*update_shell_lvl(char *env);
-int		get_equal(char *s);
 
 /* ----------------------------------------------------------------- */
 /* ---------------------------- PARSING ---------------------------- */
@@ -174,6 +178,10 @@ void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n);
 void	set_quotes_for_files_in_quote(t_parsing *ps, int j);
 void	remove_quotes_files(t_parsing *ps);
 
+/* ---------------------------- remove_quotes.c ---------------------- */
+void	set_quotes_for_files_in_quote(t_parsing *ps, int j);
+void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n);
+
 /* ---------------------------- files_expander.c ---------------------- */
 void	skip_spaces_local(t_parsing *ps, int *j);
 void	set_quotes_for_files(t_parsing *ps, int *j);
@@ -201,6 +209,7 @@ char	*get_delimiter(t_parsing *ps);
 char	**ft_split_pipe(char const *s, char c, t_parsing *ps);
 void	set_quote(char c, t_split *st);
 void	init_struct(t_split *st);
+int		check_end(t_split *st, char const *s, char **arr);
 
 /* ----------------------------------------------------------------- */
 /* ---------------------------- EXEC ------------------------------- */
@@ -253,6 +262,7 @@ void	my_exit(void);
 int		my_pwd(void);
 char	*get_var_value(char *cmd);
 char	*get_var_key(char *cmd);
+int		get_equal(char *s);
 
 /* -------------------------- builtins_utils.c ------------------*/
 void	free_export(char *key, char *value);
