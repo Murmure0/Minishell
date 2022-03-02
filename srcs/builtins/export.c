@@ -3,40 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 19:12:37 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/28 18:26:18 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/02 06:58:41 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-char	*get_var_value(char *cmd)
-{
-	int	i;
-
-	i = -1;
-	while (cmd[++i])
-	{
-		if (cmd[i] == '=')
-			return (str_slice(cmd, i + 1, ft_strlen(cmd)));
-	}
-	return (NULL);
-}
-
-char	*get_var_key(char *cmd)
-{
-	int	i;
-
-	i = -1;
-	while (cmd[++i])
-	{
-		if (cmd[i] == '=')
-			return (str_slice(cmd, 0, i + 1));
-	}
-	return (NULL);
-}
 
 static int	validate_var(char *key, char *cmd)
 {
@@ -72,6 +46,27 @@ static int	check_has_key(char **env, char *key)
 	return (0);
 }
 
+int	first_export_var_check(char *cmd)
+{
+	int	i;
+
+	i = -1;
+	if (++i == 0 && cmd[i] != '_' && !ft_isalpha(cmd[i]))
+	{
+		printf("minishell: export: « %s » : not a valid identifier\n", cmd);
+		return (0);
+	}
+	while (cmd[++i])
+	{
+		if (cmd[i] != '_' && !ft_isalnum(cmd[i]))
+		{
+			printf("minishell: export: « %s » : not a valid identifier\n", cmd);
+			return (0);
+		}
+	}
+	return (1);
+}
+
 int	my_export(t_shell *sh, char **cmd)
 {
 	int		cmd_pos;
@@ -81,8 +76,10 @@ int	my_export(t_shell *sh, char **cmd)
 	cmd_pos = 0;
 	while (cmd[++cmd_pos])
 	{
-		if (!get_key_value_export(&key, &value, cmd[cmd_pos]))
+		if (!first_export_var_check(cmd[cmd_pos]))
 			return (1);
+		if (!get_key_value_export(&key, &value, cmd[cmd_pos]))
+			return (0);
 		if (!validate_var(key, cmd[cmd_pos]))
 		{
 			free_export(key, value);

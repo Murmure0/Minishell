@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 15:47:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/28 19:10:39 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/02 06:54:48 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,6 @@ static int	update_env_paths(t_shell *sh)
 	return (1);
 }
 
-static int	contains_equal(char *s)
-{
-	int	i;
-
-	i = -1;
-	while (s[++i])
-	{
-		if (s[i] == '=')
-			return (1);
-	}
-	return (0);
-}
-
 static int	shift_vars(t_shell *sh, int i)
 {
 	while (sh->env[i])
@@ -52,6 +39,19 @@ static int	shift_vars(t_shell *sh, int i)
 	return (1);
 }
 
+int	get_equal(char *s)
+{
+	int	i;
+
+	i = -1;
+	while (s[++i])
+	{
+		if (s[i] == '=')
+			return (i);
+	}
+	return (-1);
+}
+
 int	my_unset(t_shell *sh, char **var)
 {
 	int		i;
@@ -59,14 +59,6 @@ int	my_unset(t_shell *sh, char **var)
 
 	while (var && *var)
 	{
-		if (!*var || contains_equal(*var) || ft_isdigit(*var[0]))
-		// rajouter is alnum sur chaque char ? U____U
-		{
-			write(2, "minishell : unset : '", 21);
-			write(2, *var, ft_strlen(*var));
-			write(2, "' : not a valid identifier\n", 27);
-			return (1);
-		}
 		i = -1;
 		while (sh->env[++i])
 		{

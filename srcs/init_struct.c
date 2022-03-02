@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/01 16:28:49 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/02 09:22:37 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,13 @@ int	init_global_struct(t_parsing *ps, t_shell *sh)
 	if (!check_quotes_for_pipe_split(ps))
 		return (0);
 	ps->nodes = ft_split_pipe(ps->prompt, '|', ps);
-	if (!ps->nodes) 
+	if (!ps->nodes)
 		ft_exit(sh, ps, NULL, "Fail to split nodes in init_global_struct\n");
-	while (++(ps->i) <= ps->pipe_nb)
-	{
-		if (!ps->nodes[ps->i] || (is_space(ps->nodes[ps->i][0]) && !ps->nodes[ps->i][1]))
-		{
-			printf("minishell: syntax error near unexpected token `|'\n");
-			g_exit_st = 2;
-			return (0);
-		}
-	}
-	ps->pipe_nb = arr_len(ps->nodes) - 1;
+	if (!check_empty_pipe(ps))
+		return (0);
 	ps->i = 0;
+	ps->is_s_quote = 0;
+	ps->is_d_quote = 0;
 	return (1);
 }
 
@@ -90,4 +84,6 @@ void	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh)
 		ft_exit(sh, *ps, *nodes, "Fail to trim in init_local_struct\n");
 	(*ps)->cmd_nb = get_cmds_nb((*ps), (*ps)->nodes[(*ps)->i]);
 	init_nodestruct(nodes, ps, sh);
+	(*ps)->is_d_quote = 0;
+	(*ps)->is_s_quote = 0;
 }
