@@ -36,36 +36,36 @@ static int	not_emptycmd(char *cmd)
 	return (0);
 }
 
-// static void print_debug(t_parsing parstruct, t_node *nodes, t_shell shell)
-// {
-// 	(void)shell;
-// 	/*		PRINT CMDS		*/
+static void print_debug(t_parsing parstruct, t_node *nodes, t_shell shell)
+{
+	(void)shell;
+	/*		PRINT CMDS		*/
 
-// 	int i = -1;
-// 	while (++i < parstruct.pipe_nb + 1)
-// 	{
-// 		int j = -1;
-// 		if (nodes[i].cmd)
-// 			while (nodes[i].cmd[++j])
-// 				printf("Node %d cmd % d : |%s|\n", i, j, nodes[i].cmd[j]);
-// 	}
+	int i = -1;
+	while (++i < parstruct.pipe_nb + 1)
+	{
+		int j = -1;
+		if (nodes[i].cmd)
+			while (nodes[i].cmd[++j])
+				printf("Node %d cmd % d : |%s|\n", i, j, nodes[i].cmd[j]);
+	}
 
-// 		/*		PRINT INFILES		*/
+		/*		PRINT INFILES		*/
 
-// 	i = -1;
-// 	while (++i < parstruct.pipe_nb + 1)
-// 	{
-// 		printf("Node %d infile : |%s|\n", i, nodes[i].infiles);
-// 	}
+	i = -1;
+	while (++i < parstruct.pipe_nb + 1)
+	{
+		printf("Node %d infile : |%s|\n", i, nodes[i].infiles);
+	}
 
-// 	// 	/*		PRINT OUTFILES		*/
+	// 	/*		PRINT OUTFILES		*/
 	
-// 	i = -1;
-// 	while (++i < parstruct.pipe_nb + 1)
-// 	{
-// 		printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
-// 	}
-// }
+	i = -1;
+	while (++i < parstruct.pipe_nb + 1)
+	{
+		printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
+	}
+}
 
 void	add_spaces(t_parsing *ps)
 {
@@ -107,7 +107,7 @@ static void	process_readline(t_parsing *parstruct, t_node *nodes, t_shell *shell
 			final_free(NULL, parstruct, nodes);
 			return ;
 		}
-		// print_debug(*parstruct, nodes, *shell);
+		print_debug(*parstruct, nodes, *shell);
 		free_parstruct(parstruct);
 		if (nodes)
 		{
@@ -152,3 +152,4 @@ int	main(int argc, char **argv, char **env)
 }
 
 // echo ""
+// echo "<"

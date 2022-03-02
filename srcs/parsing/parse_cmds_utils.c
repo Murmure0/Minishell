@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 11:38:50 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/02 04:51:00 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/02 06:38:50 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,8 @@ int	get_cmds_nb(t_parsing *ps, char *node)
 	{
 		set_quotes(ps, node, &i);
 		if ((!is_space(node[i]) && !is_chevron(node[i]))
-			|| (is_space(node[i]) && (ps->is_d_quote || ps->is_s_quote)))
+			|| (is_space(node[i]) && (ps->is_d_quote || ps->is_s_quote))
+				|| (is_chevron(node[i]) && (ps->is_d_quote || ps->is_s_quote)))
 		{
 			while ((node[i] && !is_space(node[i]))
 					|| (is_space(node[i]) && (ps->is_d_quote || ps->is_s_quote)))
