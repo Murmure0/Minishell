@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_pipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:29:40 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/02 10:29:26 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/02 14:47:48 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ char	**ft_split_pipe(char const *s, char c, t_parsing *ps)
 		return (NULL);
 	}
 	arr = fill_arr(s, arr, c, st);
-	printf("%d %d\n", elem_nb, st->j);
 	ps->pipe_nb = st->j - 1;
 	free(st);
 	return (arr);
