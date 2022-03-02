@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/02 13:22:31 by mberthet          #+#    #+#             */
+/*   Updated: 2022/03/02 13:22:36 by mberthet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 extern int	g_exit_st;
@@ -26,7 +38,11 @@ t_exec	*init_exec_st(t_node *first_node)
 
 	exec_st = malloc(sizeof(t_exec));
 	if (!exec_st)
+	{
+		g_exit_st = -1;
+		write(2, "Memory allocation failed.\n", 26);
 		return (NULL);
+	}
 	exec_st->num_cmd = 1;
 	exec_st->pfd_in = 0;
 	exec_st->pfd_out = 0;
@@ -53,7 +69,7 @@ int	path_finder(t_node *first_node, t_shell *shell)
 	int		i;
 
 	i = -1;
-	if (first_node[0].cmd)
+	if (first_node[0].cmd[0])
 	{
 		if (!strcmp(first_node[0].cmd[0], "")
 			|| !strcmp(first_node[0].cmd[0], " "))
@@ -69,12 +85,10 @@ int	path_finder(t_node *first_node, t_shell *shell)
 		}
 		exit_err(first_node);
 	}
-	return (0);
-}
-
-int	exec_cmd(t_node *first_node, t_shell *shell)
-{
-	if (!path_finder(first_node, shell))
-		return (-1);
+	else
+	{
+		g_exit_st = 0;
+		exit(0);
+	}
 	return (0);
 }

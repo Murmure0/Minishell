@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_builtins.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/02 11:22:22 by mberthet          #+#    #+#             */
+/*   Updated: 2022/03/02 12:13:26 by mberthet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 extern int	g_exit_st;
@@ -79,7 +91,7 @@ static int	find_env_pwd(t_node *first_node, t_shell *shell, char exec)
 
 int	find_builtin(t_node *first_node, t_shell *shell, char exec)
 {
-	if (first_node[0].cmd)
+	if (first_node[0].cmd[0])
 	{
 		if (find_echo_cd(first_node, shell, exec))
 			return (1);

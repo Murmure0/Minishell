@@ -219,19 +219,16 @@ void	fd_dup(int fd, int std);
 /* -------------------------- exec_process_child.c ----------------- */
 int		find_fd_in(t_node *first_node);
 int		find_fd_out(t_node *first_node, t_exec *exec_st);
-pid_t	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st);
+int		exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st);
 
 /* -------------------------- exec_process_parent.c ----------------- */
-void	parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell);
-int		find_fd_in_parent(t_node *last_node, t_exec *exec_st);
-int		find_fd_out_parent(t_node *last_node);
-t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st);
+int		parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell);
 
 /* -------------------------- exec_process_brother_fd.c ----------------- */
 t_exec	*init_exec_st_bro(t_node *middle_node, t_exec *prev_exec_st);
 
 /* -------------------------- exec_process_brother.c ----------------- */
-void	brother_process(t_exec *prev_exec_st, t_node *middle_node,
+int	brother_process(t_exec *prev_exec_st, t_node *middle_node,
 			t_shell *shell);
 
 /* ---------------------------- exec_builtins_redir.c ----------------------- */

@@ -1,4 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_heredoc_del.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/02 13:22:55 by mberthet          #+#    #+#             */
+/*   Updated: 2022/03/02 13:22:57 by mberthet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
+
+extern int	g_exit_st;
 
 static char	*adj_av(char *tmp)
 {
@@ -10,7 +24,10 @@ static char	*adj_av(char *tmp)
 	len_tmp = ft_strlen(tmp);
 	str = malloc(sizeof(char) * len_tmp + 2);
 	if (!str)
+	{
+		g_exit_st = -1;
 		return (NULL);
+	}
 	while (++i < len_tmp)
 		str[i] = tmp[i];
 	str[len_tmp] = '\n';
@@ -35,9 +52,11 @@ char	*get_delimiter(t_parsing *ps)
 		ps->j++;
 	}
 	tmp = str_slice(ps->nodes[ps->i], pos_start, ps->j);
-	// protect
+	if(!tmp)
+		return(NULL);
 	del = adj_av(tmp);
-	// protect
+	if(!del)
+		return(NULL);
 	free(tmp);
 	return (del);
 }

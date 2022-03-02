@@ -1,4 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_process_brother_fd.c                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/02 13:21:48 by mberthet          #+#    #+#             */
+/*   Updated: 2022/03/02 13:21:51 by mberthet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
+
+extern int	g_exit_st;
 
 static int	find_fd_in_bro(t_node *middle_node, t_exec *prev_exec_st)
 {
@@ -12,6 +26,7 @@ static int	find_fd_in_bro(t_node *middle_node, t_exec *prev_exec_st)
 			fd_in = open(middle_node->infiles, O_RDONLY);
 			if (fd_in < 0)
 			{
+				g_exit_st = 13;
 				write(2, middle_node->infiles, ft_strlen(middle_node->infiles));
 				perror(": ");
 				return (-1);
@@ -52,6 +67,7 @@ static int	find_fd_out_bro(t_node *middle_node, t_exec *exec_st_bro)
 			fd_out = open(middle_node->outfiles, O_WRONLY | O_APPEND);
 		if (fd_out < 0)
 		{
+			g_exit_st = 13;
 			write(2, middle_node->outfiles, ft_strlen(middle_node->outfiles));
 			perror(": ");
 			return (-1);
@@ -67,8 +83,8 @@ t_exec	*init_exec_st_bro(t_node *middle_node, t_exec *prev_exec_st)
 	exec_st_bro = malloc(sizeof(t_exec));
 	if (!exec_st_bro)
 	{
-		write(2, "Memory allocation failed\n", 26);
-		perror(": ");
+		g_exit_st = -1;
+		return (NULL);
 	}
 	exec_st_bro->num_cmd = prev_exec_st->num_cmd;
 	exec_st_bro->fd_in = find_fd_in_bro(middle_node, prev_exec_st);
