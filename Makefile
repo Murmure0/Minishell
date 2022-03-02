@@ -4,7 +4,7 @@ CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror -I/Users/$(USER)/.brew/opt/readline/include
 
-# CFLAGS += -g 
+CFLAGS += -g 
 # CFLAGS += -fsanitize=address
 
 MAIN = 	srcs/main.c			\

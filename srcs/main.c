@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 06:59:26 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/02 07:48:50 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/02 10:24:38 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,10 @@ static void	process_readline(t_parsing *ps, t_node *nodes, t_shell *shell)
 	if (not_emptycmd(ps->prompt))
 	{
 		if (!init_global_struct(ps, shell))
+		{
+			free_parstruct(ps);
 			return ;
+		}
 		nodes = parse(ps, shell);
 		if (ps->stop_err)
 		{
