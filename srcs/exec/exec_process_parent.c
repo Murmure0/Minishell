@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:22:16 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/02 16:55:33 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/02 19:06:44 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static int	find_fd_in_parent(t_node *last_node, t_exec *exec_st)
 	int	fd_in;
 
 	fd_in = 0;
-		printf("infile : %s\n", last_node->infiles);
 	if (last_node->infiles || last_node->infile_hd)
 	{
 		if (last_node->infiles && last_node->in_id == 2)
@@ -84,7 +83,6 @@ static void	parent_fork_process(t_node *last_node, t_exec *exec_st,
 {
 	if (exec_st_parent->fd_in < 0 || exec_st_parent->fd_out < 0)
 		exit (0);
-	printf("Valleur fdin : %d\n",exec_st_parent->fd_in);
 	if (exec_st_parent->fd_in > 0)
 		fd_dup(exec_st_parent->fd_in, STDIN_FILENO);
 	if (exec_st_parent->fd_out > 1)
