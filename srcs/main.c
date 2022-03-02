@@ -151,5 +151,4 @@ int	main(int argc, char **argv, char **env)
 	return (g_exit_st);
 }
 
-// echo "cat|cat" | => no print
-// | => segfault
+// echo ""

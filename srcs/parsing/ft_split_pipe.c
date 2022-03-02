@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:29:40 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/01 20:14:28 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/02 04:55:16 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,7 @@ char	**ft_split_pipe(char const *s, char c, t_parsing *ps)
 	}
 	arr = fill_arr(s, arr, c, st);
 	ps->pipe_nb = st->j - 1;
-	// if (ps->pipe_nb == -1)
-	// 	ps->pipe_nb++;
+	printf("pipes : %d, nb elems : %d\n", ps->pipe_nb, elem_nb);
 	free(st);
 	return (arr);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmds_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 11:38:50 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/01 13:29:30 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/02 04:51:00 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	set_quotes(t_parsing *ps, char *n, int *i)
 	}
 }
 
-int	get_cmds_nb( t_parsing *ps, char *node)
+int	get_cmds_nb(t_parsing *ps, char *node)
 {
 	int	i;
 	int	nb;
@@ -83,17 +83,18 @@ int	get_cmds_nb( t_parsing *ps, char *node)
 	while (node && node[i])
 	{
 		set_quotes(ps, node, &i);
-		if (node[i] != ' ' && node[i] != '\t'
-			&& node[i] != '<' && node[i] != '>' && !ps->is_d_quote && !ps->is_s_quote)
+		if ((!is_space(node[i]) && !is_chevron(node[i]))
+			|| (is_space(node[i]) && (ps->is_d_quote || ps->is_s_quote)))
 		{
-			while (node[i] && (node[i] != ' ' && node[i] != '\t' && !ps->is_d_quote && !ps->is_s_quote))
+			while ((node[i] && !is_space(node[i]))
+					|| (is_space(node[i]) && (ps->is_d_quote || ps->is_s_quote)))
 			{
 				i++;
 				set_quotes(ps, node, &i);
 			}
 			nb++;
 		}
-		else if (node[i] == '<' || node[i] == '>')
+		else if (is_chevron(node[i]))
 			get_cmds_nb_case_chevron(node, &i);
 		if (node[i] && node[i + 1])
 			i++;

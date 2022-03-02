@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/01 22:02:18 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/02 04:55:12 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,10 @@ int	init_global_struct(t_parsing *ps, t_shell *sh)
 	if (!check_quotes_for_pipe_split(ps))
 		return (0);
 	ps->nodes = ft_split_pipe(ps->prompt, '|', ps);
-	if (!ps->nodes) 
+	if (!ps->nodes)
 		ft_exit(sh, ps, NULL, "Fail to split nodes in init_global_struct\n");
 	while (++(ps->i) <= ps->pipe_nb)
 	{
-		printf("i : %d\n", ps->i);
 		if (!ps->nodes[ps->i] || check_empty_before_pipe(ps->nodes[ps->i]))
 		{
 			printf("minishell: syntax error near unexpected token `|'\n");
@@ -104,5 +103,6 @@ void	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh)
 	if (!(*ps)->nodes[(*ps)->i])
 		ft_exit(sh, *ps, *nodes, "Fail to trim in init_local_struct\n");
 	(*ps)->cmd_nb = get_cmds_nb((*ps), (*ps)->nodes[(*ps)->i]);
+	printf("nb cmds : %d\n" ,(*ps)->cmd_nb);
 	init_nodestruct(nodes, ps, sh);
 }

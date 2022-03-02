@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 16:25:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/27 18:41:40 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/01 22:50:37 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ int	check_for_command_args(t_parsing *ps, int *pos_start, int *stop)
 	if (!ps->nodes[ps->i][ps->j])
 		return (0);
 	ps->pos_tmp = ps->j;
+	set_quotes_for_prompt(ps);
+	if (ps->nodes[ps->i][ps->j] == '"' || ps->nodes[ps->i][ps->j] == '\'')
+		ps->j++;
 	while (ps->nodes[ps->i][ps->j] && ((ps->nodes[ps->i][ps->j] != '\t'
 		&& ps->nodes[ps->i][ps->j] != ' ')
 			|| (ps->is_d_quote && ps->nodes[ps->i][ps->j] != '"')
