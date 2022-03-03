@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 15:19:07 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/02 07:14:45 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/03 13:23:40 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,14 @@ void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh)
 	int	j;
 	int	pos_dollar;
 
-	j = ps->j + 1;
+	if (ps->nodes[ps->i][ps->j] == '>')
+		j = ps->j + 2;
+	else
+		j = ps->j + 1;
 	skip_spaces_local(ps, &j);
+	// printf("|%c| before 1st : %d\n", ps->nodes[ps->i][j], ps->is_d_quote);
 	set_quotes_for_files(ps, &j);
+	// printf("|%c| after 1st : %d\n", ps->nodes[ps->i][j], ps->is_d_quote);
 	pos_dollar = get_next_dollar(ps->nodes[ps->i], j);
 	while (pos_dollar > -1 && !ps->is_s_quote
 		&& !is_space(ps->nodes[ps->i][j])
@@ -118,5 +123,7 @@ void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh)
 			replace_dollar_files(nodes, ps, sh, &pos_dollar);
 		pos_dollar = get_next_dollar(ps->nodes[ps->i], j);
 	}
+	ps->is_d_quote = 0;
+	ps->is_s_quote = 0;
 	remove_quotes_files(ps);
 }
