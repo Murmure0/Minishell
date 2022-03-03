@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 16:25:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/03 10:48:36 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/03 17:30:09 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@ int	check_for_command_args(t_parsing *ps, int *pos_start, int *stop)
 	if (!ps->nodes[ps->i][ps->j])
 		return (0);
 	ps->pos_tmp = ps->j;
-	// printf("before : |%c|\n", ps->nodes[ps->i][ps->j]);
 	set_quotes_for_prompt(ps);
-	// printf("before : %d\n", ps->is_d_quote);
 	if (ps->nodes[ps->i][ps->j] == '"' || ps->nodes[ps->i][ps->j] == '\'')
 		ps->j++;
 	while (ps->nodes[ps->i][ps->j] && (!is_space(ps->nodes[ps->i][ps->j])
@@ -29,7 +27,6 @@ int	check_for_command_args(t_parsing *ps, int *pos_start, int *stop)
 			|| (ps->is_s_quote && ps->nodes[ps->i][ps->j] != '\'')))
 	{
 		set_quotes_for_prompt(ps);
-		// printf("after : %d\n", ps->is_d_quote);
 		if (is_chevron(ps->nodes[ps->i][ps->j])
 			&& !ps->is_d_quote && !ps->is_s_quote)
 		{
@@ -63,6 +60,7 @@ void	add_command_args(t_node **nodes, t_parsing *ps, t_shell *sh)
 	int		stop;
 
 	stop = 0;
+	// printf("|%c|\n", ps->nodes[ps->i][ps->j ]);
 	while (ps->nodes[ps->i][ps->j] && (!is_chevron(ps->nodes[ps->i][ps->j])
 			|| (ps->is_d_quote || ps->is_s_quote)))
 	{
@@ -103,6 +101,7 @@ void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh)
 			pos_start, ps->j);
 	if (!(*nodes)[ps->i].cmd[ps->pos_cmd])
 		ft_exit(sh, ps, *nodes, "Fail to malloc nodes cmd in add_command\n");
+	
 	ps->pos_cmd++;
 	add_command_args(nodes, ps, sh);
 }

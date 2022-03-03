@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_heredoc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:23:01 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/02 13:23:03 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/03 16:25:07 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ static void	forking_heredoc(int pipe_in, int pipe_out, t_parsing *ps)
 	char	*delimiter;
 
 	delimiter = get_delimiter(ps);
+	if (!delimiter)
+		exit(EXIT_FAILURE);
 	fork_pid = fork();
 	if (fork_pid < 0)
 	{
@@ -75,6 +77,7 @@ static void	forking_heredoc(int pipe_in, int pipe_out, t_parsing *ps)
 	else if (fork_pid == 0)
 		in_fork_heredoc(pipe_in, pipe_out, delimiter);
 	close(pipe_out);
+	free(delimiter);
 }
 
 int	add_heredoc_file(t_node *nodes, t_parsing *ps)

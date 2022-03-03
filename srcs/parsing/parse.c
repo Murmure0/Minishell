@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/02 17:15:53 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/03 17:36:20 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,12 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 				continue ;
 			else
 				break ;
+	printf("ici\n");
 		}
 		ps->i++;
 	}
 	expand_dollar_value_cmd(nodes, ps, sh);
+			printf("rm %d %d\n", ps->is_d_quote, ps->is_s_quote);
 	remove_quotes_cmd(nodes, ps);
 	return (nodes);
 }
