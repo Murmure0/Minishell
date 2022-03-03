@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 19:31:57 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/03 11:04:26 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/03 15:21:51 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh)
 		ps->j = -1;
 		while (nodes[ps->i].cmd[++(ps->j)])
 		{
-			printf("cmd : |%s|\n", nodes[ps->i].cmd[ps->j]);
 			ps->k = 0;
 			set_quotes_for_cmd(ps, nodes);
 			pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], ps->k);
