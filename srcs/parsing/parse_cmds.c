@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 16:25:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/02 07:43:35 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/03 10:48:36 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ int	check_for_command_args(t_parsing *ps, int *pos_start, int *stop)
 	if (!ps->nodes[ps->i][ps->j])
 		return (0);
 	ps->pos_tmp = ps->j;
+	// printf("before : |%c|\n", ps->nodes[ps->i][ps->j]);
 	set_quotes_for_prompt(ps);
+	// printf("before : %d\n", ps->is_d_quote);
 	if (ps->nodes[ps->i][ps->j] == '"' || ps->nodes[ps->i][ps->j] == '\'')
 		ps->j++;
 	while (ps->nodes[ps->i][ps->j] && (!is_space(ps->nodes[ps->i][ps->j])
@@ -27,6 +29,7 @@ int	check_for_command_args(t_parsing *ps, int *pos_start, int *stop)
 			|| (ps->is_s_quote && ps->nodes[ps->i][ps->j] != '\'')))
 	{
 		set_quotes_for_prompt(ps);
+		// printf("after : %d\n", ps->is_d_quote);
 		if (is_chevron(ps->nodes[ps->i][ps->j])
 			&& !ps->is_d_quote && !ps->is_s_quote)
 		{
@@ -35,6 +38,8 @@ int	check_for_command_args(t_parsing *ps, int *pos_start, int *stop)
 		}
 		ps->j++;
 	}
+	ps->is_d_quote = 0;
+	ps->is_s_quote = 0;
 	return (1);
 }
 

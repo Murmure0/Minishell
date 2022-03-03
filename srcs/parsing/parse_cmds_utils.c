@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 11:38:50 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/02 07:48:14 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/03 13:28:30 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void	get_cmds_nb_case_chevron(char *node, int *i)
 			&& node[*i] != '<' && node[*i] != '>')
 			(*i)++;
 	}
-	if (node[*i] && node[*i + 1] && is_space(node[*i + 1]))
+	if (node[*i] && node[*i + 1] && (is_space(node[*i])
+		|| is_space(node[*i + 1])))
 	{
 		(*i)++;
 		while (node[*i] && is_space(node[*i]))
@@ -93,6 +94,7 @@ int	get_cmds_nb(t_parsing *ps, char *node)
 	nb = 0;
 	while (node && node[i])
 	{
+		// printf("at |%c| quote : %d\n", node[i], ps->is_d_quote);
 		set_quotes(ps, node, &i);
 		if ((!is_space(node[i]) && !is_chevron(node[i]))
 			|| (is_space(node[i]) && (ps->is_d_quote || ps->is_s_quote))

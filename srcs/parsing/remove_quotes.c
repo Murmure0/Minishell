@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:42:59 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/02 07:19:50 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/03 10:39:32 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,12 @@ void	remove_quotes_files(t_parsing *ps)
 
 	j = ps->j + 1;
 	set_quotes_for_files_in_quote(ps, j);
+	// printf("|%c| before : %d\n", ps->nodes[ps->i][j], ps->is_d_quote);
 	pos_quote = get_next_quote(ps, ps->nodes[ps->i], j);
 	while (pos_quote > -1)
 	{
 		set_quotes_for_files_in_quote(ps, j);
+		// printf("|%c| after : %d\n", ps->nodes[ps->i][j], ps->is_d_quote);
 		if ((!(ps->is_d_quote && ps->quote == '\'')
 				&& !(ps->is_s_quote && ps->quote == '"')))
 					ps->nodes[ps->i] = remove_quote(
@@ -80,4 +82,6 @@ void	remove_quotes_files(t_parsing *ps)
 		j = pos_quote + 1;
 		pos_quote = get_next_quote(ps, ps->nodes[ps->i], j);
 	}
+	ps->is_d_quote = 0;
+	ps->is_s_quote = 0;
 }
