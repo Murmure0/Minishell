@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:26:20 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/28 18:20:48 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/03 16:55:14 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,26 @@ static int	get_pwds(t_shell *s, char **pwd, char **home)
 {
 	int		i;
 
+	*pwd = getcwd(NULL, 0);
+	if(!pwd)
+		return (0);
 	i = -1;
 	while (s->env[++i])
 	{
-		if (!ft_strncmp(s->env[i], "PWD", 3))
-		{
-			*pwd = ft_strdup(s->env[i]);
-			if (!*pwd)
-				return (0);
-		}
-		else if (!ft_strncmp(s->env[i], "HOME", 4))
+		if (!ft_strncmp(s->env[i], "HOME=", 5))
 		{
 			*home = ft_strdup(s->env[i]);
 			if (!*home)
+			{
+				free(*pwd);
 				return (0);
+			}
+			return (1);
 		}
 	}
-	return (1);
+	write(2, "minishell : cd: HOME not set\n", 29);
+	free(*pwd);
+	return (0);
 }
 
 static void	update_env(char **env, char *pwd, char *old_pwd)
@@ -42,14 +45,14 @@ static void	update_env(char **env, char *pwd, char *old_pwd)
 	i = -1;
 	while (env[++i])
 	{
-		if (!ft_strncmp(env[i], "OLDPWD", 6))
+		if (!ft_strncmp(env[i], "OLDPWD=", 7))
 		{
 			free(env[i]);
-			env[i] = ft_strjoin("OLD", old_pwd);
+			env[i] = ft_strjoin("OLDPWD=", old_pwd);
 			if (!env[i])
 				return ;
 		}
-		else if (!ft_strncmp(env[i], "PWD", 3))
+		else if (!ft_strncmp(env[i], "PWD=", 4))
 		{	
 			free(env[i]);
 			env[i] = ft_strjoin("PWD=", pwd);
@@ -105,11 +108,11 @@ int	my_cd(t_shell *shell, char *dir)
 	char	*home;
 
 	if (!get_pwds(shell, &pwd, &home))
-		return (ret_free(-1, pwd, NULL, home));
+		return (-1);
 	old_pwd = ft_strdup(pwd);
 	if (!old_pwd)
 		return (ret_free(-1, pwd, NULL, home));
-	if (!dir)
+	if (!dir || !ft_strcmp("", dir))
 	{
 		if (!try_chdir(NULL, home))
 			return (ret_free(-1, pwd, old_pwd, home));

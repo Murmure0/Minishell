@@ -16,7 +16,7 @@
 # include <errno.h>
 # include <termios.h>
 
-# include <wait.h>
+//# include <wait.h>
 
 /* ERROR MESSAGES */
 
@@ -162,7 +162,7 @@ void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh);
 
 /* ---------------------------- parse_cmds_utils.c ---------------------- */
 void	set_quotes_for_prompt(t_parsing *ps);
-void	get_cmds_nb_case_chevron(char *node, int *i, t_parsing *ps);
+void	get_cmds_nb_case_chevron(char *node, int *i);
 int		get_cmds_nb(t_parsing *ps, char *node);
 
 /* ---------------------------- parse_quotes.c ---------------------- */
