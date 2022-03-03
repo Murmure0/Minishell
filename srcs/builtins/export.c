@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 19:12:37 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/02 19:02:50 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/03 14:41:24 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ int	first_export_var_check(char *cmd) //change
 	i = 0;
 	while (cmd[++i])
 	{
-		if (cmd[i] != '_' && cmd[i] != '=' && !ft_isalnum(cmd[i]))
+		if (cmd[i] != '_' && cmd[i] != '=' && !ft_isalnum(cmd[i])
+			&& cmd[i] != '/' && cmd[i] != '.' && cmd[i] != ' ')
 		{
 			printf("minishell: export: « %s » : not a valid identifier\n", cmd);
 			return (0);

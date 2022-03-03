@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:21:48 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/02 16:37:21 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/03 12:16:56 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static int	find_fd_in_bro(t_node *middle_node, t_exec *prev_exec_st)
 		if (middle_node->infiles && middle_node->in_id == 2)
 		{
 			fd_in = open(middle_node->infiles, O_RDONLY);
-			printf(" valeur fdin bro : %d",fd_in);
 			if (fd_in < 0)
 			{
 				g_exit_st = 13;
