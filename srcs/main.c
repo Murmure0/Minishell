@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 06:59:26 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/03 17:30:41 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/04 10:51:56 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,36 +48,36 @@ static void	custom_add_history(t_parsing *ps)
 	free(tmp);
 }
 
-static void print_debug(t_parsing parstruct, t_node *nodes, t_shell shell)
-{
-	(void)shell;
-	/*		PRINT CMDS		*/
+// static void print_debug(t_parsing parstruct, t_node *nodes, t_shell shell)
+// {
+// 	(void)shell;
+// 	/*		PRINT CMDS		*/
 
-	int i = -1;
-	while (++i < parstruct.pipe_nb + 1)
-	{
-		int j = -1;
-		if (nodes[i].cmd)
-			while (nodes[i].cmd[++j])
-				printf("Node %d cmd % d : |%s|\n", i, j, nodes[i].cmd[j]);
-	}
+// 	int i = -1;
+// 	while (++i < parstruct.pipe_nb + 1)
+// 	{
+// 		int j = -1;
+// 		if (nodes[i].cmd)
+// 			while (nodes[i].cmd[++j])
+// 				printf("Node %d cmd % d : |%s|\n", i, j, nodes[i].cmd[j]);
+// 	}
 
-		/*		PRINT INFILES		*/
+// 		/*		PRINT INFILES		*/
 
-	i = -1;
-	while (++i < parstruct.pipe_nb + 1)
-	{
-		printf("Node %d infile : |%s|\n", i, nodes[i].infiles);
-	}
+// 	i = -1;
+// 	while (++i < parstruct.pipe_nb + 1)
+// 	{
+// 		printf("Node %d infile : |%s|\n", i, nodes[i].infiles);
+// 	}
 
-	// 	/*		PRINT OUTFILES		*/
+// 	// 	/*		PRINT OUTFILES		*/
 	
-	i = -1;
-	while (++i < parstruct.pipe_nb + 1)
-	{
-		printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
-	}
-}
+// 	i = -1;
+// 	while (++i < parstruct.pipe_nb + 1)
+// 	{
+// 		printf("Node %d outfile : |%s|\n", i, nodes[i].outfiles);
+// 	}
+// }
 
 static void	process_readline(t_parsing *ps, t_node *nodes, t_shell *shell)
 {
@@ -90,7 +90,7 @@ static void	process_readline(t_parsing *ps, t_node *nodes, t_shell *shell)
 			return ;
 		}
 		nodes = parse(ps, shell);
-		print_debug(*ps, nodes, *shell);
+		// print_debug(*ps, nodes, *shell);
 		if (ps->stop_err)
 		{
 			final_free(NULL, ps, nodes);
@@ -99,7 +99,7 @@ static void	process_readline(t_parsing *ps, t_node *nodes, t_shell *shell)
 		free_parstruct(ps);
 		if (nodes)
 		{
-			exec(nodes, shell);
+			// exec(nodes, shell);
 			free_nodestruct(nodes);
 		}
 	}

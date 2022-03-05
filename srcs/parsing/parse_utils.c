@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:08:35 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/28 21:24:31 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/03 17:49:14 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ char	*replace_in_str(char *s, char *value, int pos, int len)
 	if (!tmp)
 		return (NULL);
 	tmp_two = ft_strdup(s);
+	free(s);
 	if (!tmp_two)
 	{
 		free(tmp);

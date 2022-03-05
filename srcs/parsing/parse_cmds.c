@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 16:25:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/03 17:30:09 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/04 11:00:00 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	add_command_args(t_node **nodes, t_parsing *ps, t_shell *sh)
 	int		stop;
 
 	stop = 0;
-	// printf("|%c|\n", ps->nodes[ps->i][ps->j ]);
 	while (ps->nodes[ps->i][ps->j] && (!is_chevron(ps->nodes[ps->i][ps->j])
 			|| (ps->is_d_quote || ps->is_s_quote)))
 	{
@@ -86,6 +85,7 @@ void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh)
 {
 	int		pos_start;
 
+	// printf("%c %c |%c| %d\n", ps->nodes[ps->i][ps->j - 2], ps->nodes[ps->i][ps->j -1], ps->nodes[ps->i][ps->j], ps->j);
 	skip_spaces(ps);
 	pos_start = ps->j;
 	while (ps->nodes[ps->i][ps->j])

@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/03 17:36:20 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/04 10:49:47 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,12 +108,10 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 				continue ;
 			else
 				break ;
-	printf("ici\n");
 		}
 		ps->i++;
 	}
 	expand_dollar_value_cmd(nodes, ps, sh);
-			printf("rm %d %d\n", ps->is_d_quote, ps->is_s_quote);
 	remove_quotes_cmd(nodes, ps);
 	return (nodes);
 }
