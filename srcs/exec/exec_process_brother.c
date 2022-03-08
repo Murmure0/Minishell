@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:22:58 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/02 16:40:20 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/07 16:38:59 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ extern int	g_exit_st;
 static void	brother_fork_process(t_node *middle_node, t_exec *prev_exec_st,
 	t_exec *exec_st_bro, t_shell *shell)
 {
-	// if (exec_st_bro->fd_in < 0 || exec_st_bro->fd_out < 0)
-	// 	exit (0);
 	if (exec_st_bro->fd_in > 0)
 		fd_dup(exec_st_bro->fd_in, STDIN_FILENO);
 	if (exec_st_bro->fd_out > 1)

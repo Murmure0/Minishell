@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:22:22 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/02 12:13:26 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/07 11:26:00 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	find_env_pwd(t_node *first_node, t_shell *shell, char exec)
 	{
 		if (exec == 'y')
 		{
-			g_exit_st = my_env(shell);
+			g_exit_st = my_env(shell, first_node);
 			if (first_node->node_nb > 1)
 				exit(g_exit_st);
 		}
@@ -103,9 +103,9 @@ int	find_builtin(t_node *first_node, t_shell *shell, char exec)
 		{
 			if (exec == 'y')
 			{
-				my_exit();
+				g_exit_st = my_exit(first_node);
 				if (first_node->node_nb > 1)
-					exit(EXIT_SUCCESS);
+					exit(g_exit_st);
 			}
 			return (1);
 		}

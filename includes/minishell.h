@@ -162,7 +162,7 @@ void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh);
 
 /* ---------------------------- parse_cmds_utils.c ---------------------- */
 void	set_quotes_for_prompt(t_parsing *ps);
-void	get_cmds_nb_case_chevron(char *node, int *i);
+void	get_cmds_nb_case_chevron(char *node, int *i, t_parsing *ps);
 int		get_cmds_nb(t_parsing *ps, char *node);
 
 /* ---------------------------- parse_quotes.c ---------------------- */
@@ -233,9 +233,14 @@ int		exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st);
 /* -------------------------- exec_process_parent.c ----------------- */
 int		parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell);
 
+/* -------------------------- exec_process_parent_fd.c ----------------- */
+int	find_fd_in_parent(t_node *last_node, t_exec *exec_st);
+
+
 /* -------------------------- exec_process_brother_fd.c ----------------- */
 t_exec	*init_exec_st_bro(t_node *middle_node, t_exec *prev_exec_st);
-
+int		find_fd_out_parent(t_node *last_node);
+t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st);
 /* -------------------------- exec_process_brother.c ----------------- */
 int	brother_process(t_exec *prev_exec_st, t_node *middle_node,
 			t_shell *shell);
@@ -254,8 +259,9 @@ int		my_echo(char **str);
 int		my_cd(t_shell *shell, char *dir);
 int		my_export(t_shell *shell, char **var);
 int		my_unset(t_shell *sh, char **var);
-int		my_env(t_shell *sh);
-void	my_exit(void);
+int		my_env(t_shell *sh, t_node *first_node);
+// void	my_exit(void);
+int	my_exit(t_node *first_node);
 int		my_pwd(void);
 char	*get_var_value(char *cmd);
 char	*get_var_key(char *cmd);

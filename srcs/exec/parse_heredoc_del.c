@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:22:55 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/02 13:22:57 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/07 17:30:56 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ char	*get_delimiter(t_parsing *ps)
 		ps->j++;
 	}
 	tmp = str_slice(ps->nodes[ps->i], pos_start, ps->j);
-	if(!tmp)
-		return(NULL);
+	if (!tmp)
+		return (NULL);
 	del = adj_av(tmp);
-	if(!del)
-		return(NULL);
+	if (!del)
+		return (NULL);
 	free(tmp);
 	return (del);
 }

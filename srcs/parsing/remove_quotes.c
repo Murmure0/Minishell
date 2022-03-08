@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   remove_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:42:59 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/03 10:39:32 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/08 10:31:22 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	remove_quotes_files(t_parsing *ps)
 				&& !(ps->is_s_quote && ps->quote == '"')))
 					ps->nodes[ps->i] = remove_quote(
 					ps->nodes[ps->i], pos_quote);
-		j = pos_quote + 1;
+		j = pos_quote;
 		pos_quote = get_next_quote(ps, ps->nodes[ps->i], j);
 	}
 	ps->is_d_quote = 0;

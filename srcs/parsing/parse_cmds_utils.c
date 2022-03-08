@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmds_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 11:38:50 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/03 16:06:57 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/07 16:46:39 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	get_cmds_nb_case_chevron(char *node, int *i, t_parsing *ps)
 		set_quotes_without_move(ps, node, *i);
 		(*i)++;
 	}
-	printf("at |%c| q : %d\n", node[*i], ps->is_d_quote);
+	//printf("at |%c| q : %d\n", node[*i], ps->is_d_quote);
 }
 
 void	process_get_cmds_nb(t_parsing *ps, char *node, int *i)

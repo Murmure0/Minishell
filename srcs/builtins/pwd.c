@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:26:10 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/28 18:26:43 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/07 11:12:27 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int	my_pwd(void)
 	pwd = getcwd(pwd, 0);
 	if (!pwd)
 		return (1);
-	printf("%s\n", pwd);
+	write(1, pwd, ft_strlen(pwd));
+	write(1, "\n", 1);
 	free(pwd);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 14:05:56 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/02 17:19:42 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/07 17:11:16 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*get_file_name(t_parsing *ps, t_node *nodes, int redir)
 			break ;
 		ps->j++;
 	}
-	if (redir == 1 && nodes[ps->i].invalid_infile) //change
+	if (redir == 1 && nodes[ps->i].invalid_infile)
 		return (NULL);
 	return (str_slice(ps->nodes[ps->i], pos_start, ps->j));
 }
@@ -58,7 +58,7 @@ void	add_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 	if (!nodes[ps->i].infiles)
 		ft_exit(sh, ps, nodes, "Fail to malloc infiles in add_file\n");
 	if (access(nodes[ps->i].infiles, F_OK) != 0)
-		nodes[ps->i].invalid_infile = 1; //change
+		nodes[ps->i].invalid_infile = 1;
 }
 
 int	add_outfile(t_node *nodes, t_parsing *ps, int redir, t_shell *sh)
@@ -86,9 +86,9 @@ int	add_outfile(t_node *nodes, t_parsing *ps, int redir, t_shell *sh)
 
 int	add_file(t_node *nodes, t_parsing *ps, int redir, t_shell *sh)
 {
-	if (redir == 1 && !nodes[ps->i].invalid_infile) //change
+	if (redir == 1 && !nodes[ps->i].invalid_infile)
 		add_infile(nodes, ps, sh);
-	else if (redir == 1 && nodes[ps->i].invalid_infile) //change
+	else if (redir == 1 && nodes[ps->i].invalid_infile)
 		get_file_name(ps, nodes, 1);
 	else if (redir == 2 || redir == 3)
 		return (add_outfile(nodes, ps, redir, sh));

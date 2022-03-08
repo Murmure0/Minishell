@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 19:12:37 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/03 14:41:24 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/03 18:24:37 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,18 @@ static int	validate_var(char *key, char *cmd)
 	i = -1;
 	if (!ft_strncmp(key, "=", 1))
 	{
-		printf("minishell: export: « %s » : not a valid identifier\n", cmd);
+		write(2, "minishell: export:", 19);
+		write(2, cmd, ft_strlen(cmd));
+		write(2, ": not a valid identifier\n", 25);
 		return (0);
 	}
 	while (key && key[++i])
 	{
 		if (!ft_isalnum(key[i]) && key[i] != '_' && key[i] != '=')
 		{
-			printf("minishell: export: « %s » : not a valid identifier\n", cmd);
+			write(2, "minishell: export:", 19);
+			write(2, cmd, ft_strlen(cmd));
+			write(2, ": not a valid identifier\n", 25);
 			return (0);
 		}
 	}
@@ -46,13 +50,15 @@ static int	check_has_key(char **env, char *key)
 	return (0);
 }
 
-int	first_export_var_check(char *cmd) //change
+int	first_export_var_check(char *cmd)
 {
 	int	i;
 
 	if (cmd[0] != '_' && !ft_isalpha(cmd[0]))
 	{
-		printf("minishell: export: « %s » : not a valid identifier\n", cmd);
+		write(2, "minishell: export:", 19);
+		write(2, cmd, ft_strlen(cmd));
+		write(2, ": not a valid identifier\n", 25);
 		return (0);
 	}
 	i = 0;
@@ -61,7 +67,9 @@ int	first_export_var_check(char *cmd) //change
 		if (cmd[i] != '_' && cmd[i] != '=' && !ft_isalnum(cmd[i])
 			&& cmd[i] != '/' && cmd[i] != '.' && cmd[i] != ' ')
 		{
-			printf("minishell: export: « %s » : not a valid identifier\n", cmd);
+			write(2, "minishell: export:", 19);
+			write(2, cmd, ft_strlen(cmd));
+			write(2, ": not a valid identifier\n", 25);
 			return (0);
 		}
 	}

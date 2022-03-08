@@ -37,6 +37,7 @@ MAIN = 	srcs/main.c			\
 		srcs/exec/exec_process_brother.c \
 		srcs/exec/exec_process_brother_fd.c \
 		srcs/exec/exec_process_parent.c \
+		srcs/exec/exec_process_parent_fd.c \
 		srcs/exec/exec_utils.c \
 		srcs/exec/exec_builtins.c \
 		srcs/exec/exec_builtins_redir.c \

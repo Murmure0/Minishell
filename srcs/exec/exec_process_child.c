@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:22:02 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/02 16:33:35 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/07 16:57:37 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,16 @@ static void	child_process(t_exec *exec_st, t_node *first_node,
 		path_finder(first_node, shell);
 }
 
+static void	free_signal(t_exec *exec_st, int child_pid, int status)
+{
+	free(exec_st);
+	waitpid(child_pid, &status, 0);
+	if (WIFEXITED(status))
+		g_exit_st = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_exit_st = 128 + WTERMSIG(status);
+}
+
 int	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st)
 {
 	int		status;
@@ -52,13 +62,6 @@ int	exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st)
 	if (exec_st->pfd_out > 0)
 		close(exec_st->pfd_out);
 	if (first_node[0].node_nb == 1)
-	{
-		free(exec_st);
-		waitpid(child_pid, &status, 0);
-		if (WIFEXITED(status))
-			g_exit_st = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			g_exit_st = 128 + WTERMSIG(status);
-	}
+		free_signal(exec_st, child_pid, status);
 	return (0);
 }

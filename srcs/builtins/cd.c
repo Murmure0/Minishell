@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:26:20 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/03 16:55:14 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/07 17:33:00 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	get_pwds(t_shell *s, char **pwd, char **home)
 	int		i;
 
 	*pwd = getcwd(NULL, 0);
-	if(!pwd)
+	if (!pwd)
 		return (0);
 	i = -1;
 	while (s->env[++i])

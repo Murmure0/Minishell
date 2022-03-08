@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:22:31 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/02 16:37:29 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/07 17:26:12 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,32 +59,36 @@ static void	exit_err(t_node *first_node)
 	exit(127);
 }
 
-int	path_finder(t_node *first_node, t_shell *shell)
+static int	find_path(t_node *first_node, t_shell *shell)
 {
 	char	*cmd;
 	int		i;
 
 	i = -1;
+	while (shell->path && shell->path[++i])
+	{
+		cmd = ft_strjoin(shell->path[i], first_node[0].cmd[0]);
+		if (!cmd)
+			return (-1);
+		execve(cmd, first_node[0].cmd, shell->env);
+		free(cmd);
+	}
+	return (0);
+}
+
+int	path_finder(t_node *first_node, t_shell *shell)
+{
 	if (first_node[0].cmd[0])
 	{
 		if (!strcmp(first_node[0].cmd[0], "")
 			|| !strcmp(first_node[0].cmd[0], " "))
 			exit_err(first_node);
 		execve(first_node[0].cmd[0], first_node[0].cmd, shell->env);
-		while (shell->path && shell->path[++i])
-		{
-			cmd = ft_strjoin(shell->path[i], first_node[0].cmd[0]);
-			if (!cmd)
-				return (-1);
-			execve(cmd, first_node[0].cmd, shell->env);
-			free(cmd);
-		}
+		if (find_path(first_node, shell))
+			return (-1);
 		exit_err(first_node);
 	}
 	else
-	{
-		g_exit_st = 0;
 		exit(0);
-	}
 	return (0);
 }
