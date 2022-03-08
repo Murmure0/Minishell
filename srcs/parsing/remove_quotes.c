@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:42:59 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/04 11:07:22 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/08 10:04:14 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,20 +71,32 @@ void	remove_quotes_files(t_parsing *ps)
 	int		j;
 
 	j = ps->j + 1;
-	// set_quotes_for_files_in_quote(ps, j);
-	// printf("|%c| before : %d\n", ps->nodes[ps->i][j], ps->is_d_quote);
+	skip_spaces_local(ps, &j);
+	set_quotes_for_files_in_quote(ps, j);
 	pos_quote = get_next_quote(ps, ps->nodes[ps->i], j);
+	// ps->nodes[ps->i] = remove_quote(ps->nodes[ps->i], pos_quote);
+	// j = pos_quote;
+	// pos_quote = get_next_quote(ps, ps->nodes[ps->i], j);
 	while (pos_quote > -1)
 	{
-		set_quotes_for_files_in_quote(ps, j);
-		// printf("|%c| after : %d\n", ps->nodes[ps->i][j], ps->is_d_quote);
-		if ((!(ps->is_d_quote && ps->quote == '\'')
-				&& !(ps->is_s_quote && ps->quote == '"')))
+		if ((ps->nodes[ps->i][j] == '"' && (!ps->is_s_quote || ps->is_d_quote))
+		|| (ps->nodes[ps->i][j] == '\'' && (!ps->is_d_quote || ps->is_s_quote)))
+		{
 					ps->nodes[ps->i] = remove_quote(
 					ps->nodes[ps->i], pos_quote);
-		j = pos_quote + 1;
+		}
+		j = pos_quote;
+		printf("|%c| while : %d\n", ps->nodes[ps->i][j], ps->is_d_quote);
+		if ((!ps->is_d_quote && !ps->is_s_quote) && (!is_quote(ps->nodes[ps->i][j])
+				|| is_space(ps->nodes[ps->i][j])))
+		{
+			printf("|%c| break at : %d\n", ps->nodes[ps->i][j], ps->is_d_quote);
+			break ;
+		}
+		set_quotes_for_files_in_quote(ps, j);
 		pos_quote = get_next_quote(ps, ps->nodes[ps->i], j);
 	}
+	printf("|%s| after : %d\n", ps->nodes[ps->i], ps->is_d_quote);
 	ps->is_d_quote = 0;
 	ps->is_s_quote = 0;
 }

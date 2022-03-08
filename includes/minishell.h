@@ -16,13 +16,15 @@
 # include <errno.h>
 # include <termios.h>
 
-//# include <wait.h>
+# include <wait.h>
 
 /* ERROR MESSAGES */
 
 # define PERR		"minishell: "
 # define NO_FILE	"minishell: syntax error near unexpected symbol « newline »"
 # define HOME_UNSET	"minishell: cd: « HOME » not set"
+# define NOT_QUOTED "!ps->is_d_quote && !ps->is_s_quote"
+# define QUOTED		"ps->is_d_quote || ps->is_s_quote"
 
 typedef struct s_node
 {
@@ -147,6 +149,8 @@ int		check_space_between_redirs(t_parsing *ps);
 void	skip_spaces(t_parsing *ps);
 void	modify_dollar_value(t_parsing *ps, t_shell *sh);
 
+int		is_quote(char c);
+
 /* ---------------------------- parse_files.c ---------------------- */
 int		get_files_nb(char *node, char chevron);
 char	*get_file_name(t_parsing *ps, t_node *nodes, int redir);
@@ -162,7 +166,7 @@ void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh);
 
 /* ---------------------------- parse_cmds_utils.c ---------------------- */
 void	set_quotes_for_prompt(t_parsing *ps);
-void	get_cmds_nb_case_chevron(char *node, int *i);
+void	get_cmds_nb_case_chevron(char *node, int *i, t_parsing *ps);
 int		get_cmds_nb(t_parsing *ps, char *node);
 
 /* ---------------------------- parse_quotes.c ---------------------- */
