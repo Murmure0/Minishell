@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   files_expander.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 15:19:07 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/03 17:41:36 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/08 17:44:44 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void	replace_exit_st_files(t_node *n, t_parsing *ps, t_shell *sh, int *pos)
 
 void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh)
 {
+
 	int	j;
 	int	pos_dollar;
 

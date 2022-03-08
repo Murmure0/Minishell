@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:16:28 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/02 10:29:16 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/08 15:29:13 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	init_struct(t_split *st)
 
 int	check_end(t_split *st, char const *s, char **arr)
 {
+	// printf("i : %d	j : %d	len : %d\n", st->i, st->j, ft_strlen(s)); //DELETE ME LATER
 	if (!s[st->i])
 	{
 		arr[st->j] = NULL;

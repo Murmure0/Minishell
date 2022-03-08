@@ -16,7 +16,7 @@
 # include <errno.h>
 # include <termios.h>
 
-# include <wait.h>
+//# include <wait.h>
 
 /* ERROR MESSAGES */
 
@@ -175,16 +175,18 @@ int		get_matching_quote_pos(t_parsing *parstruct, int start);
 int		check_quotes_for_pipe_split(t_parsing *parstruct);
 int		get_next_quote(t_parsing *ps, char *s, int pos);
 
+int	get_next_quote_here(t_parsing *ps, char *s, int pos); //a enlever
 /* ---------------------------- remove_quotes.c ---------------------- */
 char	*remove_quote(char *s, int pos);
 void	remove_quotes_cmd(t_node *nodes, t_parsing *ps);
 void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n);
-void	set_quotes_for_files_in_quote(t_parsing *ps, int j);
+// void	set_quotes_for_files_in_quote(t_parsing *ps, int j);
+void	set_quotes_for_files_in_quote(t_parsing *ps, int j, int *count_s, int *count_d);
 void	remove_quotes_files(t_parsing *ps);
 
 /* ---------------------------- remove_quotes.c ---------------------- */
-void	set_quotes_for_files_in_quote(t_parsing *ps, int j);
-void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n);
+// void	set_quotes_for_files_in_quote(t_parsing *ps, int j);
+// void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n);
 
 /* ---------------------------- files_expander.c ---------------------- */
 void	skip_spaces_local(t_parsing *ps, int *j);
