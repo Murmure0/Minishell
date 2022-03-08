@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 18:43:23 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/28 21:47:50 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/07 16:01:26 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,12 @@ int	check_quotes_for_pipe_split(t_parsing *parstruct)
 
 int	get_next_quote(t_parsing *ps, char *s, int pos)
 {
-	if (pos > ft_strlen(s))
+	(void)ps;
+	if (pos >= ft_strlen(s))
 		return (-1);
 	while (s && s[pos])
 	{
-		ps->quote = s[pos];
+		// ps->quote = s[pos];
 		if (s[pos] == '\'' || s[pos] == '"')
 			return (pos);
 		pos++;

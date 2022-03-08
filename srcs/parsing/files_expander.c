@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 15:19:07 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/03 13:23:40 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/03 17:41:36 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,7 @@ void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh)
 	else
 		j = ps->j + 1;
 	skip_spaces_local(ps, &j);
-	// printf("|%c| before 1st : %d\n", ps->nodes[ps->i][j], ps->is_d_quote);
 	set_quotes_for_files(ps, &j);
-	// printf("|%c| after 1st : %d\n", ps->nodes[ps->i][j], ps->is_d_quote);
 	pos_dollar = get_next_dollar(ps->nodes[ps->i], j);
 	while (pos_dollar > -1 && !ps->is_s_quote
 		&& !is_space(ps->nodes[ps->i][j])

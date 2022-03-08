@@ -6,7 +6,11 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 11:38:50 by vmasse            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/03/07 16:46:39 by mberthet         ###   ########.fr       */
+=======
+/*   Updated: 2022/03/03 16:11:06 by vmasse           ###   ########.fr       */
+>>>>>>> 147a7f142a2fe83ec0f622eb2ec247203b8b622d
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,11 +101,9 @@ void	get_cmds_nb_case_chevron(char *node, int *i, t_parsing *ps)
 	while (node[*i] && ((node[*i] != ' ' && node[*i] != '\t')
 			|| ps->is_d_quote || ps->is_s_quote))
 	{
-		// printf("|%c| |%c| %d\n", node[*i], node[*i - 1], ps->is_d_quote);
 		set_quotes_without_move(ps, node, *i);
 		(*i)++;
 	}
-	//printf("at |%c| q : %d\n", node[*i], ps->is_d_quote);
 }
 
 void	process_get_cmds_nb(t_parsing *ps, char *node, int *i)
@@ -124,7 +126,6 @@ int	get_cmds_nb(t_parsing *ps, char *node)
 	nb = 0;
 	while (node && node[i])
 	{
-		// printf("at |%c| quote : %d\n", node[i], ps->is_d_quote);
 		set_quotes(ps, node, &i);
 		if ((!is_space(node[i]) && !is_chevron(node[i]))
 			|| (is_space(node[i]) && (ps->is_d_quote || ps->is_s_quote))

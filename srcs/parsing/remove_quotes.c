@@ -6,7 +6,11 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:42:59 by vmasse            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/03/08 10:31:22 by mberthet         ###   ########.fr       */
+=======
+/*   Updated: 2022/03/08 10:04:14 by vmasse           ###   ########.fr       */
+>>>>>>> 147a7f142a2fe83ec0f622eb2ec247203b8b622d
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +60,11 @@ void	remove_quotes_cmd(t_node *nodes, t_parsing *ps)
 		while (nodes[ps->i].cmd[++(ps->j)])
 		{
 			ps->k = 0;
+			// printf("rm %d %d\n", ps->is_d_quote, ps->is_s_quote);
 			set_quotes_for_cmd_in_quote(ps, nodes);
+			// printf("|%s|\n", nodes[ps->i].cmd[ps->j]);
 			process_rm_quotes_cmd(ps, nodes);
+			// printf("|%s|\n", nodes[ps->i].cmd[ps->j]);
 		}
 	}
 }
@@ -68,20 +75,32 @@ void	remove_quotes_files(t_parsing *ps)
 	int		j;
 
 	j = ps->j + 1;
+	skip_spaces_local(ps, &j);
 	set_quotes_for_files_in_quote(ps, j);
-	// printf("|%c| before : %d\n", ps->nodes[ps->i][j], ps->is_d_quote);
 	pos_quote = get_next_quote(ps, ps->nodes[ps->i], j);
+	// ps->nodes[ps->i] = remove_quote(ps->nodes[ps->i], pos_quote);
+	// j = pos_quote;
+	// pos_quote = get_next_quote(ps, ps->nodes[ps->i], j);
 	while (pos_quote > -1)
 	{
-		set_quotes_for_files_in_quote(ps, j);
-		// printf("|%c| after : %d\n", ps->nodes[ps->i][j], ps->is_d_quote);
-		if ((!(ps->is_d_quote && ps->quote == '\'')
-				&& !(ps->is_s_quote && ps->quote == '"')))
+		if ((ps->nodes[ps->i][j] == '"' && (!ps->is_s_quote || ps->is_d_quote))
+		|| (ps->nodes[ps->i][j] == '\'' && (!ps->is_d_quote || ps->is_s_quote)))
+		{
 					ps->nodes[ps->i] = remove_quote(
 					ps->nodes[ps->i], pos_quote);
+		}
 		j = pos_quote;
+		printf("|%c| while : %d\n", ps->nodes[ps->i][j], ps->is_d_quote);
+		if ((!ps->is_d_quote && !ps->is_s_quote) && (!is_quote(ps->nodes[ps->i][j])
+				|| is_space(ps->nodes[ps->i][j])))
+		{
+			printf("|%c| break at : %d\n", ps->nodes[ps->i][j], ps->is_d_quote);
+			break ;
+		}
+		set_quotes_for_files_in_quote(ps, j);
 		pos_quote = get_next_quote(ps, ps->nodes[ps->i], j);
 	}
+	printf("|%s| after : %d\n", ps->nodes[ps->i], ps->is_d_quote);
 	ps->is_d_quote = 0;
 	ps->is_s_quote = 0;
 }

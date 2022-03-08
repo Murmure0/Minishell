@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 07:19:26 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/02 07:19:56 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/08 08:49:23 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,35 @@ void	set_quotes_for_files_in_quote(t_parsing *ps, int j)
 {
 	if (ps->nodes[ps->i][j] == '\'')
 	{
-		ps->quote = '\'';
 		if (ps->is_s_quote)
+		{
+			ps->quote = 0;
 			ps->is_s_quote = 0;
+		}
 		else
+		{
+			ps->quote = '\'';
 			ps->is_s_quote = 1;
+		}
 	}
 	else if (ps->nodes[ps->i][j] == '"')
 	{
-		ps->quote = '"';
 		if (ps->is_d_quote)
+		{
+			ps->quote = 0;
 			ps->is_d_quote = 0;
+		}
 		else
+		{
+			ps->quote = '"';
 			ps->is_d_quote = 1;
+		}
 	}
+}
+
+int	is_quote(char c)
+{
+	if (c == '"' || c == '\'')
+		return (1);
+	return (0);
 }
