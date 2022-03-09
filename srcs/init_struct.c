@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/08 10:58:13 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/09 09:53:39 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	init_global_struct(t_parsing *ps, t_shell *sh)
 	if (!check_empty_pipe(ps))
 		return (0);
 	ps->i = 0;
-	ps->is_s_quote = 0;
-	ps->is_d_quote = 0;
+	ps->is_s_quote = 0; //elle est initialisee 2 fois du coup?
+	ps->is_d_quote = 0; //pareil
 	return (1);
 }
 
@@ -62,6 +62,12 @@ void	init_nodestruct(t_node **nodes, t_parsing **ps, t_shell *sh)
 			"Fail to malloc nodes cmds in init_shell_struct\n");
 	(*nodes)[(*ps)->i].cmd[(*ps)->cmd_nb] = 0;
 }
+
+/*
+	~ERROR~: Les trims de l'espace et du tab devraient etre dans une boucle :
+	Tant qu'il a des ' ' ou des '\t' AU DEBUT OU A LA FIN de la string, continuer
+	de trim ces 2 elements.
+*/
 
 void	init_local_struct(t_node **nodes, t_parsing **ps, t_shell *sh)
 {

@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 07:19:26 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/08 14:53:27 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/09 10:28:00 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n)
 {
-	if (n[ps->i].cmd[ps->j][ps->k] == '\'')
+	if (n[ps->i].cmd[ps->j][ps->k] == '\'' && !ps->is_d_quote)
 	{
 		ps->quote = '\'';
 		if (ps->is_s_quote)
@@ -22,7 +22,7 @@ void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n)
 		else
 			ps->is_s_quote = 1;
 	}
-	else if (n[ps->i].cmd[ps->j][ps->k] == '"')
+	else if (n[ps->i].cmd[ps->j][ps->k] == '"' && !ps->is_s_quote)
 	{
 		ps->quote = '"';
 		if (ps->is_d_quote)

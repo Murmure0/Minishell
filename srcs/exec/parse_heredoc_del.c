@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:22:55 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/07 17:30:56 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/09 12:23:51 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*get_delimiter(t_parsing *ps)
 	char	*del;
 	char	*tmp;
 
-	ps->j++;
+	// ps->j++;
 	skip_spaces(ps);
 	pos_start = ps->j;
 	while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j])

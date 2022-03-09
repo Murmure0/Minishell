@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 14:05:56 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/08 10:54:10 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/09 12:09:07 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*get_file_name(t_parsing *ps, t_node *nodes, int redir)
 {
 	int		pos_start;
 
-	ps->j++;
+	//ps->j++;
 	skip_spaces(ps);
 	pos_start = ps->j;
 	while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j])

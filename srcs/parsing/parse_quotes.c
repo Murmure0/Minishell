@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 18:43:23 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/08 14:23:01 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/08 20:51:49 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ int	get_next_quote(t_parsing *ps, char *s, int pos)
 		return (-1);
 	while (s && s[pos])
 	{
-		printf("get next c = %c\n", ps->nodes[ps->i][pos]);
 		if (s[pos] == '\'' || s[pos] == '"')
 			return (pos);
 		pos++;

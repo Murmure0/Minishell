@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:29:40 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/08 17:24:37 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/09 10:50:52 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,22 @@ static	void set_quote_utils(char c, t_split *st)
 	return ;
 }
 
-static	int	count_elem_len(char const *s, char c, int i, int is_quote)
+static	int	count_elem_len(char const *s, char c, t_split *st)
 {
 	int	len;
+	int tmp;
+	int i;
 
 	len = 0;
-	while (s[i] && (s[i] != c || is_quote))
+	tmp = st->is_quote;
+	i = st->i;
+	while (s[i] && (s[i] != c || st->is_quote))
 	{
+		set_quote_utils(s[i], st);
 		len++;
 		i++;
 	}
+	st->is_quote = tmp;
 	return (len);
 }
 
@@ -52,14 +58,14 @@ static	char	**fill_arr(char const *s, char **arr, char c, t_split *st)
 {
 	int	elem_len;
 
-	while (s[++(st->i)])
+	while (s[++(st->i)]) //was initialized at -1
 	{
-		if (s[st->i] != c)
+		if (s[st->i] != c) //is not '|'
 		{
 			st->k = 0;
 			set_quote_utils(s[st->i], st);
-			elem_len = count_elem_len(s, c, st->i, st->is_quote);
-			arr[st->j] = (char *)malloc((elem_len + 1 + 2) * sizeof(char));
+			elem_len = count_elem_len(s, c, st);
+			arr[st->j] = (char *)malloc((elem_len + 1/* + 2*/) * sizeof(char));
 			if (!arr[st->j])
 				return (free_arr(arr));
 			while (s[st->i] && (s[st->i] != c || st->is_quote))
@@ -104,14 +110,12 @@ char	**ft_split_pipe(char const *s, char c, t_parsing *ps)
 	t_split	*st;
 	int		elem_nb;
 
-	if (!s)
-		return (NULL);
 	st = malloc(sizeof(t_split));
-	if (!st)
+	if (!s || !st)
 		return (NULL);
 	init_struct(st);
 	elem_nb = count_elems(s, c, st);
-	printf("Elem nb : %d\n", elem_nb); //DELETE ME LATER
+	// printf("Elem nb : %d\n", elem_nb); //DELETE ME LATER
 	arr = (char **)malloc((elem_nb + 1) * sizeof(char *));
 	if (!arr)
 	{

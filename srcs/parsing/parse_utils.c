@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:08:35 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/03 17:49:14 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/09 14:18:00 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ int	check_space_between_redirs(t_parsing *ps)
 	int	j;
 
 	j = ps->j;
-	if (ps->nodes[ps->i][j] && ps->nodes[ps->i][j + 1]
-		&& is_space(ps->nodes[ps->i][j + 1]))
+	// if (ps->nodes[ps->i][j] && ps->nodes[ps->i][j + 1]
+	// 	&& is_space(ps->nodes[ps->i][j + 1]))
+	if (is_space(ps->nodes[ps->i][j]))
 	{
 		j++;
 		while (ps->nodes[ps->i][j] && is_space(ps->nodes[ps->i][j]))
@@ -82,7 +83,6 @@ char	*replace_in_str(char *s, char *value, int pos, int len)
 	if (!tmp)
 		return (NULL);
 	tmp_two = ft_strdup(s);
-	free(s);
 	if (!tmp_two)
 	{
 		free(tmp);

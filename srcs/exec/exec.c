@@ -6,12 +6,12 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:14:49 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/08 17:57:50 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/08 18:01:04 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-//pouet
+
 extern int	g_exit_st;
 
 static int	execution(t_node *first_node, t_shell *shell, t_exec *exec_st)

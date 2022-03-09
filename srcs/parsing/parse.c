@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/08 10:58:11 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/09 17:17:02 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 		ps->stop_err = 1;
 		return (0);
 	}
-	if (ps->nodes[ps->i][ps->j + 1] && ps->nodes[ps->i][ps->j + 1] == '<')
+	if (ps->nodes[ps->i][ps->j] == '<')
 	{
 		if (!nodes[ps->i].invalid_infile)
 			nodes[ps->i].in_id = 1;
@@ -32,7 +32,7 @@ int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 			return (g_exit_st);
 		}
 	}
-	else if (ps->nodes[ps->i][ps->j + 1])
+	else if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1])
 	{
 		nodes[ps->i].in_id = 2;
 		add_file(nodes, ps, 1, sh);
@@ -49,13 +49,13 @@ int	parse_case_outfile(t_node *nodes, t_parsing *ps, t_shell *sh)
 		ps->stop_err = 1;
 		return (0);
 	}
-	if (ps->nodes[ps->i][ps->j + 1] && ps->nodes[ps->i][ps->j + 1] == '>')
+	if (ps->nodes[ps->i][ps->j] == '>')
 	{
 		ps->j++;
 		if (!add_file(nodes, ps, 3, sh))
 			return (0);
 	}
-	else if (ps->nodes[ps->i][ps->j + 1])
+	else if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1])
 	{
 		if (!add_file(nodes, ps, 2, sh))
 			return (0);
@@ -70,12 +70,14 @@ int	process_parse(t_node **nodes, t_parsing *ps, t_shell *sh)
 	skip_spaces(ps);
 	if (ps->nodes[ps->i][ps->j] == '<')
 	{
+		ps->j++;
 		quotes_and_dollar_files(*nodes, ps, sh);
 		if (!parse_case_infile(*nodes, ps, sh))
 			return (0);
 	}
 	else if (ps->nodes[ps->i][ps->j] == '>')
 	{
+		ps->j++;
 		quotes_and_dollar_files(*nodes, ps, sh);
 		if (!parse_case_outfile(*nodes, ps, sh))
 			return (0);
