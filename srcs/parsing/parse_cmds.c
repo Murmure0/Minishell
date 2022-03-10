@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 16:25:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/04 11:00:00 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/10 15:24:43 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh)
 {
 	int		pos_start;
 
-	// printf("%c %c |%c| %d\n", ps->nodes[ps->i][ps->j - 2], ps->nodes[ps->i][ps->j -1], ps->nodes[ps->i][ps->j], ps->j);
 	skip_spaces(ps);
 	pos_start = ps->j;
 	while (ps->nodes[ps->i][ps->j])
@@ -101,7 +100,6 @@ void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh)
 			pos_start, ps->j);
 	if (!(*nodes)[ps->i].cmd[ps->pos_cmd])
 		ft_exit(sh, ps, *nodes, "Fail to malloc nodes cmd in add_command\n");
-	
 	ps->pos_cmd++;
 	add_command_args(nodes, ps, sh);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/09 17:17:02 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/10 15:05:41 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	parse_case_outfile(t_node *nodes, t_parsing *ps, t_shell *sh)
 		if (!add_file(nodes, ps, 3, sh))
 			return (0);
 	}
-	else if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1])
+	else if (ps->nodes[ps->i][ps->j])
 	{
 		if (!add_file(nodes, ps, 2, sh))
 			return (0);
@@ -89,9 +89,27 @@ int	process_parse(t_node **nodes, t_parsing *ps, t_shell *sh)
 	return (1);
 }
 
+static int	inside_parse(t_node *nodes, t_parsing *ps, t_shell *sh)
+{
+	if (!process_parse(&nodes, ps, sh))
+	{
+		free_nodestruct(nodes);
+		return (-1);
+	}
+	if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1]
+		&& !is_chevron(ps->nodes[ps->i][ps->j]))
+			ps->j++;
+	else if (is_chevron(ps->nodes[ps->i][ps->j]))
+		return (1);
+	else
+		return (-2);
+	return (0);
+}
+
 t_node	*parse(t_parsing *ps, t_shell *sh)
 {
 	t_node	*nodes;
+	int		ret;
 
 	nodes = malloc(sizeof(t_node) * (ps->pipe_nb + 1));
 	if (!nodes)
@@ -101,14 +119,12 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		init_local_struct(&nodes, &ps, sh);
 		while (ps->nodes[ps->i][ps->j])
 		{
-			if (!process_parse(&nodes, ps, sh))
+			ret = inside_parse(nodes, ps, sh);
+			if (ret == -1)
 				return (NULL);
-			if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1]
-				&& !is_chevron(ps->nodes[ps->i][ps->j]))
-					ps->j++;
-			else if (is_chevron(ps->nodes[ps->i][ps->j]))
+			else if (ret == 1)
 				continue ;
-			else
+			else if (ret == -2)
 				break ;
 		}
 		ps->i++;

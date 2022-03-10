@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_quotes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 18:43:23 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/08 20:51:49 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/10 15:32:13 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,12 @@ int	get_next_quote_here(t_parsing *ps, char *s, int pos)
 		return (-1);
 	while (s && s[pos])
 	{
-		if ((s[pos] == '\'' && ps->is_s_quote) || (s[pos] == '"' && ps->is_d_quote))
+		if ((s[pos] == '\'' && ps->is_s_quote)
+			|| (s[pos] == '"' && ps->is_d_quote))
 			return (pos);
 		pos++;
 	}
 	return (-1);
-
 }
 
 int	get_next_quote(t_parsing *ps, char *s, int pos)

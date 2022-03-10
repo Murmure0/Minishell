@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:08:35 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/09 14:18:00 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/10 15:34:33 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ int	check_space_between_redirs(t_parsing *ps)
 	int	j;
 
 	j = ps->j;
-	// if (ps->nodes[ps->i][j] && ps->nodes[ps->i][j + 1]
-	// 	&& is_space(ps->nodes[ps->i][j + 1]))
 	if (is_space(ps->nodes[ps->i][j]))
 	{
 		j++;
@@ -62,12 +60,6 @@ void	skip_spaces(t_parsing *ps)
 	}
 }
 
-t_node	*parse_ret_free(t_node *nodes)
-{
-	free(nodes);
-	return (NULL);
-}
-
 char	*replace_in_str(char *s, char *value, int pos, int len)
 {
 	char	*before_dollar;
@@ -92,4 +84,10 @@ char	*replace_in_str(char *s, char *value, int pos, int len)
 	free(tmp);
 	free(tmp_two);
 	return (ret);
+}
+
+void	init_quote_states(t_parsing *ps)
+{
+	ps->is_d_quote = 0;
+	ps->is_s_quote = 0;
 }

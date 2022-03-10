@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/10 17:16:17 by vmasse            #+#    #+#             */
+/*   Updated: 2022/03/10 17:20:30 by vmasse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -20,11 +32,9 @@
 
 /* ERROR MESSAGES */
 
-# define PERR		"minishell: "
+# define PERR			"minishell: "
 # define NO_FILE	"minishell: syntax error near unexpected symbol « newline »"
 # define HOME_UNSET	"minishell: cd: « HOME » not set"
-# define NOT_QUOTED "!ps->is_d_quote && !ps->is_s_quote"
-# define QUOTED		"ps->is_d_quote || ps->is_s_quote"
 
 typedef struct s_node
 {
@@ -33,11 +43,11 @@ typedef struct s_node
 	int				invalid_infile;
 	int				node_nb;
 	int				append;
-    char			*infiles;
-	char			*outfiles;
-	char			**cmd;
-}				t_node;
+	char		*infiles;
+	char		*outfiles;
+}			t_node;
 
+	// char	**cmd;
 typedef struct s_parsing
 {
 	int		i;
@@ -148,8 +158,7 @@ char	*replace_in_str(char *s, char *value, int pos, int len);
 int		check_space_between_redirs(t_parsing *ps);
 void	skip_spaces(t_parsing *ps);
 void	modify_dollar_value(t_parsing *ps, t_shell *sh);
-
-int		is_quote(char c);
+void	init_quote_states(t_parsing *ps);
 
 /* ---------------------------- parse_files.c ---------------------- */
 int		get_files_nb(char *node, char chevron);
@@ -175,19 +184,33 @@ int		get_matching_quote_pos(t_parsing *parstruct, int start);
 int		check_quotes_for_pipe_split(t_parsing *parstruct);
 int		get_next_quote(t_parsing *ps, char *s, int pos);
 
-int	get_next_quote_here(t_parsing *ps, char *s, int pos); //a enlever
 /* ---------------------------- remove_quotes.c ---------------------- */
 char	*remove_quote(char *s, int pos);
 void	remove_quotes_cmd(t_node *nodes, t_parsing *ps);
 void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n);
-// void	set_quotes_for_files_in_quote(t_parsing *ps, int j);
-void	set_quotes_for_files_in_quote(t_parsing *ps, char *file, int *count_s, int *count_d);
+void	set_quotes_for_files_in_quote(t_parsing *ps,
+			char *file, int *count_s, int *count_d);
 char	*remove_quotes_files(t_parsing *ps, char *file);
 
+/* ---------------------------- remove_quotes_utils.c ---------------------- */
+int		is_removable(t_parsing *ps, char *file, int count_d, int count_s);
+void	init_var_rm_quotes_files(t_parsing *ps, int *s, int *d);
+void	increment_quotes_count(char c, int *d, int *s);
+int		gnq_rm_quotes_files(int *pos_quote, t_parsing *ps, char *file);
+char	*end_rm_quotes_files(t_parsing *ps, char *file);
+
 /* ---------------------------- set_quotes.c ---------------------- */
-// void	set_quotes_for_files_in_quote(t_parsing *ps, int j);
-// void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n);
-void	set_quotes_for_getfilename(t_parsing *ps, int j, int *count_s, int *count_d);
+void	set_quotes(t_parsing *ps, char *n, int *i);
+void	set_quotes_without_move(t_parsing *ps, char *n, int i);
+int		is_quote(char c);
+
+/* ---------------------------- set_quotes_two.c ---------------------- */
+void	set_quotes_for_getfilename(t_parsing *ps,
+			int j, int *count_s, int *count_d);
+void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n);
+void	set_quotes_for_files_in_quote(t_parsing *ps,
+			char *file, int *count_s, int *count_d);
+void	set_quotes_for_prompt(t_parsing *ps);
 
 /* ---------------------------- files_expander.c ---------------------- */
 void	skip_spaces_local(t_parsing *ps, int *j);
@@ -217,6 +240,7 @@ char	**ft_split_pipe(char const *s, char c, t_parsing *ps);
 void	set_quote(char c, t_split *st);
 void	init_struct(t_split *st);
 int		check_end(t_split *st, char const *s, char **arr);
+void	set_quote_utils(char c, t_split *st);
 
 /* ----------------------------------------------------------------- */
 /* ---------------------------- EXEC ------------------------------- */
@@ -241,15 +265,15 @@ int		exec_child_proc(t_node *first_node, t_shell *shell, t_exec *exec_st);
 int		parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell);
 
 /* -------------------------- exec_process_parent_fd.c ----------------- */
-int	find_fd_in_parent(t_node *last_node, t_exec *exec_st);
-
+int		find_fd_in_parent(t_node *last_node, t_exec *exec_st);
 
 /* -------------------------- exec_process_brother_fd.c ----------------- */
 t_exec	*init_exec_st_bro(t_node *middle_node, t_exec *prev_exec_st);
 int		find_fd_out_parent(t_node *last_node);
 t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st);
+
 /* -------------------------- exec_process_brother.c ----------------- */
-int	brother_process(t_exec *prev_exec_st, t_node *middle_node,
+int		brother_process(t_exec *prev_exec_st, t_node *middle_node,
 			t_shell *shell);
 
 /* ---------------------------- exec_builtins_redir.c ----------------------- */
@@ -267,8 +291,7 @@ int		my_cd(t_shell *shell, char *dir);
 int		my_export(t_shell *shell, char **var);
 int		my_unset(t_shell *sh, char **var);
 int		my_env(t_shell *sh, t_node *first_node);
-// void	my_exit(void);
-int	my_exit(t_node *first_node);
+int		my_exit(t_node *first_node);
 int		my_pwd(void);
 char	*get_var_value(char *cmd);
 char	*get_var_key(char *cmd);

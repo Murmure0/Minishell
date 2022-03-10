@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 14:05:56 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/10 13:36:37 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/10 15:56:25 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,22 @@ int	get_files_nb(char *node, char chevron)
 char	*get_file_name(t_parsing *ps, t_node *nodes, int redir)
 {
 	int		pos_start;
-	int		count_s = 0;
-	int		count_d = 0;
+	int		count_s;
+	int		count_d;
 
-	//ps->j++;
 	skip_spaces(ps);
 	pos_start = ps->j;
+	count_d = 0;
+	count_s = 0;
 	while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j])
 	{
 		if (ps->nodes[ps->i][ps->j] == '"')
 			count_d++;
 		if (ps->nodes[ps->i][ps->j] == '\'')
 			count_s++;
-		printf("gfn : |%c| %d %d\n", ps->nodes[ps->i][ps->j], count_d, count_s);
 		set_quotes_for_getfilename(ps, ps->j, &count_s, &count_d);
-		// printf("gfn : |%c| %d %d\n", ps->nodes[ps->i][ps->j], ps->is_d_quote, ps->is_s_quote);
-		if ((is_space(ps->nodes[ps->i][ps->j]) ||
-			is_chevron(ps->nodes[ps->i][ps->j]))
+		if ((is_space(ps->nodes[ps->i][ps->j])
+			|| is_chevron(ps->nodes[ps->i][ps->j]))
 			&& !ps->is_d_quote && !ps->is_s_quote)
 			break ;
 		ps->j++;
@@ -68,7 +67,6 @@ void	add_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 	nodes[ps->i].infiles = remove_quotes_files(ps, nodes[ps->i].infiles);
 	if (!nodes[ps->i].infiles)
 		ft_exit(sh, ps, nodes, "Fail to malloc infiles in add_file\n");
-	// printf("ici : %s\n", nodes[ps->i].infiles);
 	if (access(nodes[ps->i].infiles, F_OK) != 0)
 		nodes[ps->i].invalid_infile = 1;
 }

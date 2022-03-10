@@ -26,8 +26,10 @@ MAIN = 	srcs/main.c			\
 		srcs/parsing/ft_split_pipe.c \
 		srcs/parsing/ft_split_utils.c \
 		srcs/parsing/remove_quotes.c \
+		srcs/parsing/remove_quotes_utils.c \
 		srcs/parsing/files_expander.c \
 		srcs/parsing/set_quotes.c \
+		srcs/parsing/set_quotes_two.c \
 		srcs/exec/parse_heredoc.c \
 		srcs/exec/parse_heredoc_del.c \
 		srcs/exec/gnl.c \

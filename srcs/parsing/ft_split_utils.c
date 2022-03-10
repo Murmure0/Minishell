@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 16:16:28 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/08 15:29:13 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/10 15:15:59 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,18 @@ void	set_quote(char c, t_split *st)
 	}
 }
 
+void	set_quote_utils(char c, t_split *st)
+{
+	if (!st->is_quote && c == '\'')
+		st->is_quote = 1;
+	else if (!st->is_quote && c == '"')
+		st->is_quote = 2;
+	else if ((st->is_quote == 1 && c == '\'')
+		|| (st->is_quote == 2 && c == '"'))
+		st->is_quote = 0;
+	return ;
+}
+
 void	init_struct(t_split *st)
 {
 	st->i = -1;
@@ -33,7 +45,6 @@ void	init_struct(t_split *st)
 
 int	check_end(t_split *st, char const *s, char **arr)
 {
-	// printf("i : %d	j : %d	len : %d\n", st->i, st->j, ft_strlen(s)); //DELETE ME LATER
 	if (!s[st->i])
 	{
 		arr[st->j] = NULL;

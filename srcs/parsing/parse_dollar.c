@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_dollar.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 19:31:57 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/09 18:56:57 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/10 15:29:25 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	get_next_dollar(char *s, int pos)
 
 void	set_quotes_for_cmd(t_parsing *ps, t_node *n)
 {
-	// printf("Contenu char cmd : %c\n", n[ps->i].cmd[ps->j][ps->k]);
 	if (n[ps->i].cmd[ps->j][ps->k] == '\'' && !ps->is_d_quote)
 	{
 		if (ps->is_s_quote)
@@ -43,26 +42,6 @@ void	set_quotes_for_cmd(t_parsing *ps, t_node *n)
 			ps->is_d_quote = 1;
 	}
 }
-
-// void	set_quotes_for_cmd(t_parsing *ps, t_node *n)
-// {
-// 	if (n[ps->i].cmd[ps->j][ps->k] == '\'')
-// 	{
-// 		if (ps->is_s_quote)
-// 			ps->is_s_quote = 0;
-// 		else
-// 			ps->is_s_quote = 1;
-// 		ps->k++;
-// 	}
-// 	else if (n[ps->i].cmd[ps->j][ps->k] == '"')
-// 	{
-// 		if (ps->is_d_quote)
-// 			ps->is_d_quote = 0;
-// 		else
-// 			ps->is_d_quote = 1;
-// 		ps->k++;
-// 	}
-// }
 
 void	replace_exit_st_cmd(t_node *n, t_parsing *ps, t_shell *sh, int *pos)
 {
@@ -117,10 +96,7 @@ void	replace_dollar(t_node *n, t_parsing *ps, t_shell *sh, int *pos)
 
 void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh)
 {
-	// int		pos_dollar;
-
-	ps->is_d_quote = 0;
-	ps->is_s_quote = 0;
+	init_quote_states(ps);
 	ps->i = -1;
 	while (++(ps->i) < ps->pipe_nb + 1)
 	{
@@ -128,24 +104,20 @@ void	expand_dollar_value_cmd(t_node *nodes, t_parsing *ps, t_shell *sh)
 		while (nodes[ps->i].cmd[++(ps->j)])
 		{
 			ps->k = 0;
-			// set_quotes_for_cmd(ps, nodes);
-			// pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], ps->k);
-			while (nodes[ps->i].cmd[ps->j][ps->k]/*pos_dollar > -1 && !ps->is_s_quote
-				&& (ft_isalnum(nodes[ps->i].cmd[ps->j][pos_dollar + 1])
-				|| nodes[ps->i].cmd[ps->j][pos_dollar + 1] == '_'
-				|| nodes[ps->i].cmd[ps->j][pos_dollar + 1] == '?')*/)
+			while (nodes[ps->i].cmd[ps->j][ps->k])
 			{
 				set_quotes_for_cmd(ps, nodes);
 				if (nodes[ps->i].cmd[ps->j][ps->k] == '$'
-				&& nodes[ps->i].cmd[ps->j][ps->k+1] == '?')
+				&& nodes[ps->i].cmd[ps->j][ps->k + 1] == '?')
 					replace_exit_st_cmd(nodes, ps, sh, &ps->k);
-				else if (nodes[ps->i].cmd[ps->j][ps->k] == '$' && !ps->is_s_quote)
+				else if (nodes[ps->i].cmd[ps->j][ps->k] == '$'
+				&& !ps->is_s_quote)
 					replace_dollar(nodes, ps, sh, &ps->k);
-				// pos_dollar = get_next_dollar(nodes[ps->i].cmd[ps->j], ps->k);
 				ps->k++;
+				if (ps->k > ft_strlen(nodes[ps->i].cmd[ps->j]))
+					break ;
 			}
 		}
 	}
-	ps->is_d_quote = 0;
-	ps->is_s_quote = 0;
+	init_quote_states(ps);
 }
