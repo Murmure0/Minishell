@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_files.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 14:05:56 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/10 10:05:48 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/10 13:36:37 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,17 @@ char	*get_file_name(t_parsing *ps, t_node *nodes, int redir)
 	pos_start = ps->j;
 	while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j])
 	{
-		set_quotes_for_files_in_quote(ps, ps->j, &count_s, &count_d);
-		if ((is_space(ps->nodes[ps->i][ps->j]) ||
-			is_chevron(ps->nodes[ps->i][ps->j]))
-			&& !ps->is_d_quote && !ps->is_s_quote)
-			break ;
 		if (ps->nodes[ps->i][ps->j] == '"')
 			count_d++;
 		if (ps->nodes[ps->i][ps->j] == '\'')
 			count_s++;
+		printf("gfn : |%c| %d %d\n", ps->nodes[ps->i][ps->j], count_d, count_s);
+		set_quotes_for_getfilename(ps, ps->j, &count_s, &count_d);
+		// printf("gfn : |%c| %d %d\n", ps->nodes[ps->i][ps->j], ps->is_d_quote, ps->is_s_quote);
+		if ((is_space(ps->nodes[ps->i][ps->j]) ||
+			is_chevron(ps->nodes[ps->i][ps->j]))
+			&& !ps->is_d_quote && !ps->is_s_quote)
+			break ;
 		ps->j++;
 	}
 	if (redir == 1 && nodes[ps->i].invalid_infile)
@@ -63,9 +65,10 @@ void	add_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 	if (nodes[ps->i].infiles)
 		free(nodes[ps->i].infiles);
 	nodes[ps->i].infiles = get_file_name(ps, nodes, 1);
-	remove_quotes_files(ps, nodes[ps->i].infiles);
+	nodes[ps->i].infiles = remove_quotes_files(ps, nodes[ps->i].infiles);
 	if (!nodes[ps->i].infiles)
 		ft_exit(sh, ps, nodes, "Fail to malloc infiles in add_file\n");
+	// printf("ici : %s\n", nodes[ps->i].infiles);
 	if (access(nodes[ps->i].infiles, F_OK) != 0)
 		nodes[ps->i].invalid_infile = 1;
 }
@@ -78,7 +81,7 @@ int	add_outfile(t_node *nodes, t_parsing *ps, int redir, t_shell *sh)
 	if (nodes[ps->i].outfiles)
 		free(nodes[ps->i].outfiles);
 	nodes[ps->i].outfiles = get_file_name(ps, nodes, 2);
-	remove_quotes_files(ps, nodes[ps->i].outfiles);
+	nodes[ps->i].outfiles = remove_quotes_files(ps, nodes[ps->i].outfiles);
 	if (!nodes[ps->i].outfiles)
 		ft_exit(sh, ps, nodes, "Fail to malloc outfiles in add_outfiles\n");
 	nodes[ps->i].append = redir;

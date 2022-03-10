@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   remove_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:42:59 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/10 10:11:13 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/10 12:16:42 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	remove_quotes_cmd(t_node *nodes, t_parsing *ps)
 	}
 }
 
-void	remove_quotes_files(t_parsing *ps, char *file)
+char	*remove_quotes_files(t_parsing *ps, char *file)
 {
 	int		pos_quote;
 	int		count_s = 0;
@@ -78,7 +78,7 @@ void	remove_quotes_files(t_parsing *ps, char *file)
 	if (file[ps->k] == '>' || file[ps->k] == '<')
 		ps->k++;
 	// printf("CHAR : %c\n", ps->nodes[ps->i][ps->k]);
-	set_quotes_for_files_in_quote(ps, ps->k, &count_s, &count_d);
+	set_quotes_for_files_in_quote(ps, file, &count_s, &count_d);
 	pos_quote = get_next_quote(ps, file, ps->k);
 	while (pos_quote > -1)
 	{
@@ -106,11 +106,13 @@ void	remove_quotes_files(t_parsing *ps, char *file)
 		pos_quote = get_next_quote(ps, file, ps->k);
 		ps->k = pos_quote;
 		if (ps->k > -1)
-			set_quotes_for_files_in_quote(ps, ps->k, &count_s, &count_d);
+			set_quotes_for_files_in_quote(ps, file, &count_s, &count_d);
 	}
+	printf("ici : %s\n", file);
 	ps->is_d_quote = 0;
 	ps->is_s_quote = 0;
 	ps->k = 0;
+	return (file);
 }
 
 

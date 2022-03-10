@@ -16,7 +16,7 @@
 # include <errno.h>
 # include <termios.h>
 
-//# include <wait.h>
+# include <wait.h>
 
 /* ERROR MESSAGES */
 
@@ -182,11 +182,12 @@ void	remove_quotes_cmd(t_node *nodes, t_parsing *ps);
 void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n);
 // void	set_quotes_for_files_in_quote(t_parsing *ps, int j);
 void	set_quotes_for_files_in_quote(t_parsing *ps, char *file, int *count_s, int *count_d);
-void	remove_quotes_files(t_parsing *ps, char *file);
+char	*remove_quotes_files(t_parsing *ps, char *file);
 
-/* ---------------------------- remove_quotes.c ---------------------- */
+/* ---------------------------- set_quotes.c ---------------------- */
 // void	set_quotes_for_files_in_quote(t_parsing *ps, int j);
 // void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n);
+void	set_quotes_for_getfilename(t_parsing *ps, int j, int *count_s, int *count_d);
 
 /* ---------------------------- files_expander.c ---------------------- */
 void	skip_spaces_local(t_parsing *ps, int *j);

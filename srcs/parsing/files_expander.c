@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   files_expander.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 15:19:07 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/10 09:42:15 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/10 12:24:16 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh)
 		j = ps->j;
 	
 	skip_spaces_local(ps, &j);
-	printf("0 contenu j : %c\n", ps->nodes[ps->i][j]);
-	printf("1 contenu j : %c\n", ps->nodes[ps->i][j]);
+	// printf("0 contenu j : %c\n", ps->nodes[ps->i][j]);
+	// printf("1 contenu j : %c\n", ps->nodes[ps->i][j]);
 	// pos_dollar = get_next_dollar(ps->nodes[ps->i], j);
 	while (ps->nodes[ps->i][j]/*pos_dollar > -1 && !ps->is_s_quote &&*/ /*!is_space(ps->nodes[ps->i][j])*/ /*&& (ft_isalnum(ps->nodes[ps->i][j + 1])
 			|| ps->nodes[ps->i][j + 1] == '_' || ps->nodes[ps->i][j + 1] == '?'*/)
@@ -119,12 +119,12 @@ void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh)
 		else if (ps->nodes[ps->i][j] == '$' && !ps->is_s_quote)
 			replace_dollar_files(nodes, ps, sh, &j);
 		// pos_dollar = get_next_dollar(ps->nodes[ps->i], j);
-		printf("2 contenu j : %c\n", ps->nodes[ps->i][j]);
+		// printf("2 contenu j : %c\n", ps->nodes[ps->i][j]);
 		j++;
 	}
 	ps->is_d_quote = 0;
 	ps->is_s_quote = 0;
-	printf("3 contenu j : %s\n", ps->nodes[ps->i]);
+	// printf("3 contenu j : %s\n", ps->nodes[ps->i]);
 	// remove_quotes_files(ps);
-	printf("4 contenu j : %s\n", ps->nodes[ps->i]);
+	// printf("4 contenu j : %s\n", ps->nodes[ps->i]);
 }
