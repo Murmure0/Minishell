@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 15:19:07 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/09 18:46:41 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/10 09:42:15 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,6 @@ void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh)
 	ps->is_d_quote = 0;
 	ps->is_s_quote = 0;
 	printf("3 contenu j : %s\n", ps->nodes[ps->i]);
-	remove_quotes_files(ps);
+	// remove_quotes_files(ps);
 	printf("4 contenu j : %s\n", ps->nodes[ps->i]);
 }

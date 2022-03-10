@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 14:05:56 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/09 12:09:07 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/10 10:05:48 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,23 @@ int	get_files_nb(char *node, char chevron)
 char	*get_file_name(t_parsing *ps, t_node *nodes, int redir)
 {
 	int		pos_start;
+	int		count_s = 0;
+	int		count_d = 0;
 
 	//ps->j++;
 	skip_spaces(ps);
 	pos_start = ps->j;
 	while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j])
 	{
-		if (is_space(ps->nodes[ps->i][ps->j]) ||
+		set_quotes_for_files_in_quote(ps, ps->j, &count_s, &count_d);
+		if ((is_space(ps->nodes[ps->i][ps->j]) ||
 			is_chevron(ps->nodes[ps->i][ps->j]))
+			&& !ps->is_d_quote && !ps->is_s_quote)
 			break ;
+		if (ps->nodes[ps->i][ps->j] == '"')
+			count_d++;
+		if (ps->nodes[ps->i][ps->j] == '\'')
+			count_s++;
 		ps->j++;
 	}
 	if (redir == 1 && nodes[ps->i].invalid_infile)
@@ -55,6 +63,7 @@ void	add_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 	if (nodes[ps->i].infiles)
 		free(nodes[ps->i].infiles);
 	nodes[ps->i].infiles = get_file_name(ps, nodes, 1);
+	remove_quotes_files(ps, nodes[ps->i].infiles);
 	if (!nodes[ps->i].infiles)
 		ft_exit(sh, ps, nodes, "Fail to malloc infiles in add_file\n");
 	if (access(nodes[ps->i].infiles, F_OK) != 0)
@@ -69,6 +78,7 @@ int	add_outfile(t_node *nodes, t_parsing *ps, int redir, t_shell *sh)
 	if (nodes[ps->i].outfiles)
 		free(nodes[ps->i].outfiles);
 	nodes[ps->i].outfiles = get_file_name(ps, nodes, 2);
+	remove_quotes_files(ps, nodes[ps->i].outfiles);
 	if (!nodes[ps->i].outfiles)
 		ft_exit(sh, ps, nodes, "Fail to malloc outfiles in add_outfiles\n");
 	nodes[ps->i].append = redir;

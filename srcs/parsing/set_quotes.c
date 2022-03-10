@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 07:19:26 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/09 10:28:00 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/10 10:09:31 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	set_quotes_for_cmd_in_quote(t_parsing *ps, t_node *n)
 	}
 }
 
-void	set_quotes_for_files_in_quote(t_parsing *ps, int j, int *count_s, int *count_d)
+void	set_quotes_for_files_in_quote(t_parsing *ps, char *file, int *count_s, int *count_d)
 {
 	// (void)count;
 	if (*count_d == 2 || *count_s == 2)
@@ -42,7 +42,7 @@ void	set_quotes_for_files_in_quote(t_parsing *ps, int j, int *count_s, int *coun
 		*count_d = 0;
 		*count_s = 0;
 	}
-	if (ps->nodes[ps->i][j] == '\'')
+	if (file[ps->k] == '\'')
 	{
 		if (ps->is_s_quote)
 		{
@@ -55,7 +55,7 @@ void	set_quotes_for_files_in_quote(t_parsing *ps, int j, int *count_s, int *coun
 			ps->is_s_quote = 1;
 		}
 	}
-	else if (ps->nodes[ps->i][j] == '"')
+	else if (file[ps->k] == '"')
 	{
 		if (ps->is_d_quote)
 		{
