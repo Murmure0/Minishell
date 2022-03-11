@@ -1,33 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shlvl.c                                            :+:      :+:    :+:   */
+/*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/20 17:31:55 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 10:47:17 by vmasse           ###   ########.fr       */
+/*   Created: 2022/03/11 11:18:28 by vmasse            #+#    #+#             */
+/*   Updated: 2022/03/11 11:24:33 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*update_shell_lvl(char *env)
+int	create_oldpwd(t_shell *sh, int add_old, char *pwd)
 {
-	char	*lvl;
-	char	*lvl_char;
+	char	*tmp;
 
-	lvl = ft_substr(env, 6, ft_strlen(env) - 6);
-	if (!lvl)
-		return (NULL);
-	lvl_char = ft_itoa(ft_atoi(lvl) + 1);
-	if (!lvl_char)
+	tmp = NULL;
+	if (!add_old)
 	{
-		free(lvl);
-		return (NULL);
+		tmp = ft_strjoin("OLDPWD=", pwd);
+		if (!tmp)
+			return (0);
+		sh->env = add_env_var(sh->env, tmp);
+		free(tmp);
+		if (!sh->env)
+			return (0);
 	}
-	env = ft_strjoin("SHLVL=", lvl_char);
-	free(lvl);
-	free(lvl_char);
-	return (env);
+	return (1);
+}
+
+void	init_update_env_vars(int *i, int *add_old)
+{
+	*i = -1;
+	*add_old = 0;
 }

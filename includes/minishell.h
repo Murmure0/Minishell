@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 17:16:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 09:54:47 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/11 11:24:07 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,5 +300,7 @@ int		get_equal(char *s);
 /* -------------------------- builtins_utils.c ------------------*/
 void	free_export(char *key, char *value);
 int		get_key_value_export(char **key, char **value, char *cmd);
+int		create_oldpwd(t_shell *sh, int add_old, char *pwd);
+void	init_update_env_vars(int *i, int *add_old);
 
 #endif

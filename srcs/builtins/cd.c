@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:26:20 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/07 17:33:00 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/11 11:23:03 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,28 +38,33 @@ static int	get_pwds(t_shell *s, char **pwd, char **home)
 	return (0);
 }
 
-static void	update_env(char **env, char *pwd, char *old_pwd)
+static int	update_env(t_shell *sh, char *pwd, char *old_pwd)
 {
 	int	i;
+	int	add_old;
 
-	i = -1;
-	while (env[++i])
+	init_update_env_vars(&i, &add_old);
+	while (sh->env[++i])
 	{
-		if (!ft_strncmp(env[i], "OLDPWD=", 7))
+		if (!ft_strncmp(sh->env[i], "OLDPWD=", 7))
 		{
-			free(env[i]);
-			env[i] = ft_strjoin("OLDPWD=", old_pwd);
-			if (!env[i])
-				return ;
+			free(sh->env[i]);
+			sh->env[i] = ft_strjoin("OLDPWD=", old_pwd);
+			if (!sh->env[i])
+				return (0);
+			add_old = 1;
 		}
-		else if (!ft_strncmp(env[i], "PWD=", 4))
+		else if (!ft_strncmp(sh->env[i], "PWD=", 4))
 		{	
-			free(env[i]);
-			env[i] = ft_strjoin("PWD=", pwd);
-			if (!env[i])
-				return ;
+			free(sh->env[i]);
+			sh->env[i] = ft_strjoin("PWD=", pwd);
+			if (!sh->env[i])
+				return (0);
 		}
 	}
+	if (!create_oldpwd(sh, add_old, pwd))
+		return (0);
+	return (1);
 }
 
 static int	try_chdir(char *dir, char *home)
@@ -118,14 +123,13 @@ int	my_cd(t_shell *shell, char *dir)
 			return (ret_free(-1, pwd, old_pwd, home));
 	}
 	else
-	{
 		if (!try_chdir(dir, NULL))
 			return (ret_free(-1, pwd, old_pwd, home));
-	}
 	free(pwd);
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (ret_free(-1, NULL, old_pwd, home));
-	update_env(shell->env, pwd, old_pwd);
+	if (!update_env(shell, pwd, old_pwd))
+		return (ret_free(-1, pwd, old_pwd, home));
 	return (ret_free(0, pwd, old_pwd, home));
 }

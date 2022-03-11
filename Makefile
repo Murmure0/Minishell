@@ -45,6 +45,7 @@ MAIN = 	srcs/main.c			\
 		srcs/exec/exec_builtins_redir.c \
 		srcs/builtins/echo.c \
 		srcs/builtins/cd.c \
+		srcs/builtins/cd_utils.c \
 		srcs/builtins/export.c \
 		srcs/builtins/unset.c \
 		srcs/builtins/pwd.c \
