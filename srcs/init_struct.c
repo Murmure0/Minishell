@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/10 16:59:21 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/11 10:08:07 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern int	g_exit_st;
 
-void	init_shell_struct(t_shell *shell, char **env, t_node *nodes)
+void	init_shell_struct(t_shell *shell, char **env)
 {
 	shell->env = get_env(env);
 	if (!shell->env)
@@ -22,7 +22,6 @@ void	init_shell_struct(t_shell *shell, char **env, t_node *nodes)
 	shell->path = get_env_paths(env);
 	if (!shell->path)
 		ft_exit(shell, NULL, NULL, "Fail to get path in init_shell_struct\n");
-	nodes = NULL;
 }
 
 int	init_global_struct(t_parsing *ps, t_shell *sh)
@@ -85,6 +84,7 @@ static void	trim_spaces(t_node **nodes, t_parsing **ps, t_shell *sh)
 		free(tmp);
 		if (!(*ps)->nodes[(*ps)->i])
 			ft_exit(sh, *ps, *nodes, "Fail to trim in init_local_struct\n");
+		(*ps)->k = ft_strlen((*ps)->nodes[(*ps)->i]);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 17:16:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/10 17:20:30 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/11 09:54:47 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,16 @@
 
 typedef struct s_node
 {
-	int				infile_hd;
-	int				in_id;
-	int				invalid_infile;
-	int				node_nb;
-	int				append;
-	char		*infiles;
-	char		*outfiles;
+	int		infile_hd;
+	int		in_id;
+	int		invalid_infile;
+	int		node_nb;
+	int		append;
+	char	*infiles;
+	char	*outfiles;
+	char	**cmd;
 }			t_node;
 
-	// char	**cmd;
 typedef struct s_parsing
 {
 	int		i;
