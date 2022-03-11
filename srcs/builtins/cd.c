@@ -3,19 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:26:20 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 11:23:03 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/11 15:50:23 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	get_pwds(t_shell *s, char **pwd, char **home)
+static int	get_pwds(t_shell *s, char **pwd, char **home, char *dir)
 {
-	int		i;
+	int	i;
+	int	add_home;
 
+	add_home = 0;
 	*pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (0);
@@ -30,12 +32,24 @@ static int	get_pwds(t_shell *s, char **pwd, char **home)
 				free(*pwd);
 				return (0);
 			}
+			add_home = 1;
 			return (1);
 		}
 	}
-	write(2, "minishell : cd: HOME not set\n", 29);
-	free(*pwd);
-	return (0);
+	if (!add_home && !dir)
+	{
+		*home = ft_strdup("");
+		write(2, "minishell : cd: HOME not set\n", 29);
+		free(*pwd);
+		return (0);
+	}
+	else if (!add_home && dir)
+	{
+		*home = ft_strdup("");
+		if (!*home)
+			return (0);
+	}
+	return (1);
 }
 
 static int	update_env(t_shell *sh, char *pwd, char *old_pwd)
@@ -112,24 +126,26 @@ int	my_cd(t_shell *shell, char *dir)
 	char	*pwd;
 	char	*home;
 
-	if (!get_pwds(shell, &pwd, &home))
-		return (-1);
+	if (!get_pwds(shell, &pwd, &home, dir))
+		return (1);
 	old_pwd = ft_strdup(pwd);
 	if (!old_pwd)
-		return (ret_free(-1, pwd, NULL, home));
+		return (ret_free(1, pwd, NULL, home));
 	if (!dir || !ft_strcmp("", dir))
 	{
 		if (!try_chdir(NULL, home))
-			return (ret_free(-1, pwd, old_pwd, home));
+			return (ret_free(1, pwd, old_pwd, home));
 	}
 	else
 		if (!try_chdir(dir, NULL))
-			return (ret_free(-1, pwd, old_pwd, home));
+			return (ret_free(1, pwd, old_pwd, home));
 	free(pwd);
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
-		return (ret_free(-1, NULL, old_pwd, home));
+		return (ret_free(1, NULL, old_pwd, home));
 	if (!update_env(shell, pwd, old_pwd))
-		return (ret_free(-1, pwd, old_pwd, home));
+		return (ret_free(1, pwd, old_pwd, home));
+	if (!ft_strcmp("", home))
+		return (ret_free(0, pwd, old_pwd, NULL));
 	return (ret_free(0, pwd, old_pwd, home));
 }

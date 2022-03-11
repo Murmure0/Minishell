@@ -6,7 +6,7 @@
 /*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 15:47:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/07 16:12:11 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/11 15:11:01 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	update_env_paths(t_shell *sh)
 	int	i;
 
 	i = -1;
-	while (sh->path[++i])
+	while (sh->path && sh->path[++i])
 		free(sh->path[i]);
 	free(sh->path);
 	sh->path = get_env_paths(sh->env);
