@@ -6,13 +6,28 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:22:55 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/10 13:48:16 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/11 16:52:45 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 extern int	g_exit_st;
+
+int	check_hd_content(t_parsing *ps)
+{
+	int	j;
+
+	j = ps->j + 1;
+	while (ps->nodes[ps->i][j])
+	{
+		if (!is_space(ps->nodes[ps->i][j])
+			&& !is_chevron(ps->nodes[ps->i][j]))
+			return (1);
+		j++;
+	}
+	return (0);
+}
 
 static char	*adj_av(char *tmp)
 {

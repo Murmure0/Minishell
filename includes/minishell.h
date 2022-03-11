@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 17:16:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 13:48:46 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/11 16:58:07 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,11 +155,11 @@ t_node	*parse(t_parsing *ps, t_shell *sh);
 
 /* ---------------------------- parse_utils.c ----------------------- */
 int		arr_len(char **arr);
-char	*replace_in_str(char *s, char *value, int pos, int len);
 int		check_space_between_redirs(t_parsing *ps);
 void	skip_spaces(t_parsing *ps);
 void	modify_dollar_value(t_parsing *ps, t_shell *sh);
 void	init_quote_states(t_parsing *ps);
+void	end_parse(t_parsing *ps, t_node *nodes, t_shell *sh);
 
 /* ---------------------------- parse_files.c ---------------------- */
 int		get_files_nb(char *node, char chevron);
@@ -232,8 +232,10 @@ int		get_key_len(char *s, int pos);
 
 /* ---------------------------- parse_heredoc.c ---------------------- */
 int		add_heredoc_file(t_node *nodes, t_parsing *ps);
+int		parse_case_hd(t_node *nodes, t_parsing *ps);
 
 /* ---------------------------- parse_heredoc_del.c ---------------------- */
+int		check_hd_content(t_parsing *ps);
 char	*get_delimiter(t_parsing *ps);
 
 /* ---------------------------- ft_split_pipe.c ---------------------- */
@@ -242,6 +244,9 @@ void	set_quote(char c, t_split *st);
 void	init_struct(t_split *st);
 int		check_end(t_split *st, char const *s, char **arr);
 void	set_quote_utils(char c, t_split *st);
+
+/* ---------------------------- ft_split_pipe.c ---------------------- */
+char	*replace_in_str(char *s, char *value, int pos, int len);
 
 /* ----------------------------------------------------------------- */
 /* ---------------------------- EXEC ------------------------------- */
@@ -297,11 +302,16 @@ int		my_pwd(void);
 char	*get_var_value(char *cmd);
 char	*get_var_key(char *cmd);
 int		get_equal(char *s);
+void	free_get_pwd(char **pwd);
+int		get_pwds_inside(t_shell *s, char **home, char **pwd, int *add_home);
 
 /* -------------------------- builtins_utils.c ------------------*/
 void	free_export(char *key, char *value);
 int		get_key_value_export(char **key, char **value, char *cmd);
 int		create_oldpwd(t_shell *sh, int add_old, char *pwd);
 void	init_update_env_vars(int *i, int *add_old);
+
+/* -------------------------- main_utils.c ------------------*/
+void	process_readline_inside(t_parsing *ps, t_node *nodes, t_shell *shell);
 
 #endif

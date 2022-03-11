@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 13:14:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 14:40:47 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/11 16:18:11 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,16 @@ void	free_shellstruct(t_shell *sh)
 	}
 }
 
+static void	init_nodestruct_vars(t_parsing *ps, int *err, int *i, int *n)
+{
+	if (!ps)
+		*err = 0;
+	else
+		*err = ps->stop_err;
+	*i = -1;
+	*n = 0;
+}
+
 void	free_nodestruct(t_node *n, t_parsing *ps)
 {
 	int	i;
@@ -54,12 +64,7 @@ void	free_nodestruct(t_node *n, t_parsing *ps)
 	int	nodes;
 	int	err;
 
-	if (!ps)
-		err = 0;
-	else
-		err = ps->stop_err;
-	i = -1;
-	nodes = 0;
+	init_nodestruct_vars(ps, &err, &i, &nodes);
 	if (n)
 	{
 		nodes = n[0].node_nb;

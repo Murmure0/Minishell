@@ -3,31 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 14:39:18 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/11 16:54:59 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 extern int	g_exit_st;
-
-int	check_hd_content(t_parsing *ps)
-{
-	int	j;
-
-	j = ps->j + 1;
-	while (ps->nodes[ps->i][j])
-	{
-		if (!is_space(ps->nodes[ps->i][j])
-			&& !is_chevron(ps->nodes[ps->i][j]))
-			return (1);
-		j++;
-	}
-	return (0);
-}
 
 int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 {
@@ -38,16 +23,8 @@ int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 	}
 	if (ps->nodes[ps->i][ps->j] == '<')
 	{
-		if (!check_hd_content(ps))
-			return (ret_err(0, NO_FILE));
-		if (!nodes[ps->i].invalid_infile)
-			nodes[ps->i].in_id = 1;
-		ps->j++;
-		if (add_heredoc_file(nodes, ps))
-		{
-			ps->stop_err = 1;
+		if (!parse_case_hd(nodes, ps))
 			return (g_exit_st);
-		}
 	}
 	else if (ps->nodes[ps->i][ps->j] == '>')
 		return (ret_err(0, NO_FILE));
@@ -155,10 +132,6 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		}
 		ps->i++;
 	}
-	if (ps->cmd_nb)
-	{
-		expand_dollar_value_cmd(nodes, ps, sh);
-		remove_quotes_cmd(nodes, ps);
-	}
+	end_parse(ps, nodes, sh);
 	return (nodes);
 }

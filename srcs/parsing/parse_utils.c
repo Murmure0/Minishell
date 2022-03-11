@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:08:35 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/10 15:34:33 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/11 16:55:44 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,30 +60,13 @@ void	skip_spaces(t_parsing *ps)
 	}
 }
 
-char	*replace_in_str(char *s, char *value, int pos, int len)
+void	end_parse(t_parsing *ps, t_node *nodes, t_shell *sh)
 {
-	char	*before_dollar;
-	char	*tmp;
-	char	*tmp_two;
-	char	*ret;
-
-	before_dollar = str_slice(s, 0, pos);
-	if (!before_dollar)
-		return (NULL);
-	tmp = ft_strjoin(before_dollar, value);
-	free(before_dollar);
-	if (!tmp)
-		return (NULL);
-	tmp_two = ft_strdup(s);
-	if (!tmp_two)
+	if (ps->cmd_nb)
 	{
-		free(tmp);
-		return (NULL);
+		expand_dollar_value_cmd(nodes, ps, sh);
+		remove_quotes_cmd(nodes, ps);
 	}
-	ret = ft_strjoin(tmp, tmp_two + pos + len + 1);
-	free(tmp);
-	free(tmp_two);
-	return (ret);
 }
 
 void	init_quote_states(t_parsing *ps)

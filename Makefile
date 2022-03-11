@@ -4,10 +4,11 @@ CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror -I/Users/$(USER)/.brew/opt/readline/include
 
-CFLAGS += -g 
-CFLAGS += -fsanitize=address
+# CFLAGS += -g 
+# CFLAGS += -fsanitize=address
 
 MAIN = 	srcs/main.c			\
+		srcs/main_utils.c	\
 		srcs/init_struct.c	\
 		srcs/init_struct_utils.c	\
 		srcs/free.c	\
@@ -16,6 +17,7 @@ MAIN = 	srcs/main.c			\
 		srcs/env/env_utils.c			\
 		srcs/env/shlvl.c			\
 		srcs/parsing/parse.c \
+		srcs/parsing/replace_in_str.c \
 		srcs/parsing/parse_utils.c \
 		srcs/parsing/parse_quotes.c \
 		srcs/parsing/parse_cmds.c \
