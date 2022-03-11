@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 10:08:07 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/11 12:27:04 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ int	init_global_struct(t_parsing *ps, t_shell *sh)
 
 void	init_nodestruct(t_node **nodes, t_parsing **ps, t_shell *sh)
 {
+	int	i;
+
 	(*nodes)[(*ps)->i].node_nb = (*ps)->pipe_nb + 1;
 	(*nodes)[(*ps)->i].infiles = 0;
 	(*nodes)[(*ps)->i].infile_hd = 0;
@@ -56,11 +58,14 @@ void	init_nodestruct(t_node **nodes, t_parsing **ps, t_shell *sh)
 	(*nodes)[(*ps)->i].outfiles = 0;
 	(*nodes)[(*ps)->i].append = 0;
 	(*nodes)[(*ps)->i].invalid_infile = 0;
+	(*nodes)[(*ps)->i].cmd_nb = (*ps)->cmd_nb;
 	(*nodes)[(*ps)->i].cmd = malloc(sizeof(char *) * ((*ps)->cmd_nb + 1));
 	if (!(*nodes)[(*ps)->i].cmd)
 		ft_exit(sh, *ps, *nodes,
 			"Fail to malloc nodes cmds in init_shell_struct\n");
-	(*nodes)[(*ps)->i].cmd[(*ps)->cmd_nb] = 0;
+	i = -1;
+	while (++i < (*ps)->cmd_nb)
+		(*nodes)[(*ps)->i].cmd[i] = 0;
 }
 
 static void	trim_spaces(t_node **nodes, t_parsing **ps, t_shell *sh)

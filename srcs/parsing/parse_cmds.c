@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 16:25:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 10:29:02 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/11 11:33:20 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ void	add_command_args(t_node **nodes, t_parsing *ps, t_shell *sh)
 				return ;
 		(*nodes)[ps->i].cmd[ps->pos_cmd] = str_slice(ps->nodes[ps->i],
 				pos_start, ps->j);
-		printf("%s %d\n", (*nodes)[ps->i].cmd[ps->pos_cmd], ps->pos_cmd);
 		if (!(*nodes)[ps->i].cmd[ps->pos_cmd])
 			ft_exit(sh, ps, *nodes, "Fail to malloc args in add_command_args\n");
 		ps->pos_cmd++;

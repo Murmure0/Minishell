@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   files_expander.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 15:19:07 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/10 15:08:34 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/11 12:01:06 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,16 +94,21 @@ void	replace_exit_st_files(t_node *n, t_parsing *ps, t_shell *sh, int *pos)
 		ft_exit(sh, ps, n, "Fail to malloc nodes in replace dollar exit st");
 }
 
-void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh)
+void	expand_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh)
 {
 	int	j;
+	int	hd;
 
-	if (ps->nodes[ps->i][ps->j] == '>')
+	hd = 0;
+	if (ps->nodes[ps->i][ps->j] == '<')
+	{
 		j = ps->j + 1;
+		hd = 1;
+	}
 	else
 		j = ps->j;
 	skip_spaces_local(ps, &j);
-	while (ps->nodes[ps->i][j])
+	while (ps->nodes[ps->i][j] && !hd)
 	{
 		set_quotes_for_files(ps, &j);
 		if (ps->nodes[ps->i][j] == '$' && ps->nodes[ps->i][j + 1] == '?')

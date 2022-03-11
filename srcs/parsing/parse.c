@@ -3,16 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:00:41 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/10 15:05:41 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/11 14:39:18 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 extern int	g_exit_st;
+
+int	check_hd_content(t_parsing *ps)
+{
+	int	j;
+
+	j = ps->j + 1;
+	while (ps->nodes[ps->i][j])
+	{
+		if (!is_space(ps->nodes[ps->i][j])
+			&& !is_chevron(ps->nodes[ps->i][j]))
+			return (1);
+		j++;
+	}
+	return (0);
+}
 
 int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 {
@@ -23,6 +38,8 @@ int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 	}
 	if (ps->nodes[ps->i][ps->j] == '<')
 	{
+		if (!check_hd_content(ps))
+			return (ret_err(0, NO_FILE));
 		if (!nodes[ps->i].invalid_infile)
 			nodes[ps->i].in_id = 1;
 		ps->j++;
@@ -32,6 +49,8 @@ int	parse_case_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 			return (g_exit_st);
 		}
 	}
+	else if (ps->nodes[ps->i][ps->j] == '>')
+		return (ret_err(0, NO_FILE));
 	else if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1])
 	{
 		nodes[ps->i].in_id = 2;
@@ -55,6 +74,8 @@ int	parse_case_outfile(t_node *nodes, t_parsing *ps, t_shell *sh)
 		if (!add_file(nodes, ps, 3, sh))
 			return (0);
 	}
+	else if (ps->nodes[ps->i][ps->j] == '>')
+		return (ret_err(0, NO_FILE));
 	else if (ps->nodes[ps->i][ps->j])
 	{
 		if (!add_file(nodes, ps, 2, sh))
@@ -71,21 +92,25 @@ int	process_parse(t_node **nodes, t_parsing *ps, t_shell *sh)
 	if (ps->nodes[ps->i][ps->j] == '<')
 	{
 		ps->j++;
-		quotes_and_dollar_files(*nodes, ps, sh);
+		if (is_chevron(ps->nodes[ps->i][ps->j])
+			&& is_chevron(ps->nodes[ps->i][ps->j + 1]))
+			return (ret_err(0, NO_FILE));
+		expand_dollar_files(*nodes, ps, sh);
 		if (!parse_case_infile(*nodes, ps, sh))
 			return (0);
 	}
 	else if (ps->nodes[ps->i][ps->j] == '>')
 	{
 		ps->j++;
-		quotes_and_dollar_files(*nodes, ps, sh);
+		if (is_chevron(ps->nodes[ps->i][ps->j])
+			&& is_chevron(ps->nodes[ps->i][ps->j + 1]))
+			return (ret_err(0, NO_FILE));
+		expand_dollar_files(*nodes, ps, sh);
 		if (!parse_case_outfile(*nodes, ps, sh))
 			return (0);
 	}
 	else
-	{
 		add_command(nodes, ps, sh);
-	}
 	return (1);
 }
 
@@ -93,7 +118,8 @@ static int	inside_parse(t_node *nodes, t_parsing *ps, t_shell *sh)
 {
 	if (!process_parse(&nodes, ps, sh))
 	{
-		free_nodestruct(nodes);
+		ps->stop_err = 1;
+		free_nodestruct(nodes, ps);
 		return (-1);
 	}
 	if (ps->nodes[ps->i][ps->j] && ps->nodes[ps->i][ps->j + 1]
@@ -129,7 +155,10 @@ t_node	*parse(t_parsing *ps, t_shell *sh)
 		}
 		ps->i++;
 	}
-	expand_dollar_value_cmd(nodes, ps, sh);
-	remove_quotes_cmd(nodes, ps);
+	if (ps->cmd_nb)
+	{
+		expand_dollar_value_cmd(nodes, ps, sh);
+		remove_quotes_cmd(nodes, ps);
+	}
 	return (nodes);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 13:14:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/28 17:09:37 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/11 14:40:47 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,17 @@ void	free_shellstruct(t_shell *sh)
 	}
 }
 
-void	free_nodestruct(t_node *n)
+void	free_nodestruct(t_node *n, t_parsing *ps)
 {
 	int	i;
 	int	j;
 	int	nodes;
+	int	err;
 
+	if (!ps)
+		err = 0;
+	else
+		err = ps->stop_err;
 	i = -1;
 	nodes = 0;
 	if (n)
@@ -61,7 +66,7 @@ void	free_nodestruct(t_node *n)
 		while (++i < nodes)
 		{
 			j = -1;
-			if (n[i].cmd)
+			if (n[i].cmd_nb && !err)
 			{
 				while (n[i].cmd[++j])
 					free(n[i].cmd[j]);
@@ -77,7 +82,7 @@ void	free_nodestruct(t_node *n)
 void	final_free(t_shell *sh, t_parsing *ps, t_node *n)
 {
 	if (n)
-		free_nodestruct(n);
+		free_nodestruct(n, ps);
 	if (ps)
 		free_parstruct(ps);
 	if (sh)

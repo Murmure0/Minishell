@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 17:16:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 11:24:07 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/11 13:48:46 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # include <errno.h>
 # include <termios.h>
 
-# include <wait.h>
+// # include <wait.h>
 
 /* ERROR MESSAGES */
 
@@ -43,6 +43,7 @@ typedef struct s_node
 	int		invalid_infile;
 	int		node_nb;
 	int		append;
+	int		cmd_nb;
 	char	*infiles;
 	char	*outfiles;
 	char	**cmd;
@@ -110,7 +111,7 @@ int		not_emptycmd(char *cmd);
 /* ---------------------------- free.c ------------------------------------ */
 void	free_parstruct(t_parsing *ps);
 void	free_shellstruct(t_shell *sh);
-void	free_nodestruct(t_node *n);
+void	free_nodestruct(t_node *n, t_parsing *ps);
 void	final_free(t_shell *sh, t_parsing *ps, t_node *n);
 
 /* ---------------------------- signals.c ---------------------------- */
@@ -216,7 +217,7 @@ void	set_quotes_for_prompt(t_parsing *ps);
 void	skip_spaces_local(t_parsing *ps, int *j);
 void	set_quotes_for_files(t_parsing *ps, int *j);
 void	replace_dollar_files(t_node *n, t_parsing *ps, t_shell *sh, int *pos);
-void	quotes_and_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh);
+void	expand_dollar_files(t_node *nodes, t_parsing *ps, t_shell *sh);
 
 /* ---------------------------- parse_dollar.c ---------------------- */
 int		get_next_dollar(char *s, int pos);

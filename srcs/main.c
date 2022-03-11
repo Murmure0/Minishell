@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 06:59:26 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/10 17:15:47 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/11 14:32:17 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,9 @@ static void	process_readline(t_parsing *ps, t_node *nodes, t_shell *shell)
 		free_parstruct(ps);
 		if (nodes)
 		{
-			exec(nodes, shell);
-			free_nodestruct(nodes);
+			if (ps->cmd_nb)
+				exec(nodes, shell);
+			free_nodestruct(nodes, NULL);
 		}
 	}
 	else
