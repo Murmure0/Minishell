@@ -6,7 +6,7 @@
 /*   By: maelle <maelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:26:18 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/14 18:31:49 by maelle           ###   ########.fr       */
+/*   Updated: 2022/03/14 18:47:44 by maelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,6 @@ int	my_exit(t_node *first_node)
 			exit (2);
 		else if (!check_nb_arg(first_node))
 			return (0);
-		// if (ft_atoi(first_node->cmd[1]) == -1
-		// 	|| ft_atoi(first_node->cmd[1]) == -0)
-		// 	n_exit = 0;
 		else
 			n_exit = (ft_atoi(first_node->cmd[1]) & 0xFF);
 	}
