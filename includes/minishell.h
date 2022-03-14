@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 17:16:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/12 10:36:56 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 08:32:39 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,12 @@
 # include <stdlib.h>
 # include <sys/errno.h>
 # include <sys/types.h>
-# include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <dirent.h>
 # include <signal.h>
 # include <errno.h>
 # include <termios.h>
-
 
 // # include <wait.h>
 
