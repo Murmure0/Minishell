@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:26:20 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 16:45:11 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 14:18:53 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,8 @@ static int	get_pwds(t_shell *s, char **pwd, char **home, char *dir)
 		return (0);
 	else if (ret == 1)
 		return (1);
-	if (!add_home && !dir)
+	if (!add_home && (!dir || !ft_strcmp(dir, "")))
 	{
-		*home = ft_strdup("");
 		write(2, "minishell : cd: HOME not set\n", 29);
 		free(*pwd);
 		return (0);
