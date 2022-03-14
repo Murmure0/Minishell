@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 07:03:08 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 19:32:30 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 13:20:37 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ret_err(int ret, char *msg)
 	if (!msg)
 		perror(PERR);
 	else
-		printf("%s\n", msg);
+		write(2, &msg, ft_strlen(msg));
 	return (ret);
 }
 

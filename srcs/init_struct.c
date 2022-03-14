@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:33:36 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 12:27:04 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/14 13:06:14 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,28 +68,57 @@ void	init_nodestruct(t_node **nodes, t_parsing **ps, t_shell *sh)
 		(*nodes)[(*ps)->i].cmd[i] = 0;
 }
 
+// static void	trim_spaces(t_node **nodes, t_parsing **ps, t_shell *sh)
+// {
+// 	char	*tmp;
+
+// 	(*ps)->j = -1;
+// 	(*ps)->k = ft_strlen((*ps)->nodes[(*ps)->i]) - 2;
+// 	while (is_space((*ps)->nodes[(*ps)->i][++(*ps)->j])
+// 		|| is_space((*ps)->nodes[(*ps)->i][--(*ps)->k]))
+// 	{
+// 		tmp = ft_strtrim((*ps)->nodes[(*ps)->i], " ");
+// 		free((*ps)->nodes[(*ps)->i]);
+// 		(*ps)->nodes[(*ps)->i] = ft_strdup(tmp);
+// 		free(tmp);
+// 		if (!(*ps)->nodes[(*ps)->i])
+// 			ft_exit(sh, *ps, *nodes, "Fail to trim in init_local_struct\n");
+// 		tmp = ft_strtrim((*ps)->nodes[(*ps)->i], "\t");
+// 		free((*ps)->nodes[(*ps)->i]);
+// 		(*ps)->nodes[(*ps)->i] = ft_strdup(tmp);
+// 		free(tmp);
+// 		if (!(*ps)->nodes[(*ps)->i])
+// 			ft_exit(sh, *ps, *nodes, "Fail to trim in init_local_struct\n");
+// 		(*ps)->k = ft_strlen((*ps)->nodes[(*ps)->i]);
+// 	}
+// }
+
 static void	trim_spaces(t_node **nodes, t_parsing **ps, t_shell *sh)
 {
 	char	*tmp;
+	int		sp;
 
 	(*ps)->j = -1;
 	(*ps)->k = ft_strlen((*ps)->nodes[(*ps)->i]) - 2;
+	sp = 7;
 	while (is_space((*ps)->nodes[(*ps)->i][++(*ps)->j])
 		|| is_space((*ps)->nodes[(*ps)->i][--(*ps)->k]))
 	{
-		tmp = ft_strtrim((*ps)->nodes[(*ps)->i], " ");
+		while (++sp < 14)
+		{
+			tmp = ft_strtrim((*ps)->nodes[(*ps)->i], (char)sp);
+			free((*ps)->nodes[(*ps)->i]);
+			(*ps)->nodes[(*ps)->i] = ft_strdup(tmp);
+			free(tmp);
+			if (!(*ps)->nodes[(*ps)->i])
+				ft_exit(sh, *ps, *nodes, "Fail to trim in init_local_struct\n");
+		}
+		tmp = ft_strtrim((*ps)->nodes[(*ps)->i], ' ');
 		free((*ps)->nodes[(*ps)->i]);
 		(*ps)->nodes[(*ps)->i] = ft_strdup(tmp);
 		free(tmp);
 		if (!(*ps)->nodes[(*ps)->i])
 			ft_exit(sh, *ps, *nodes, "Fail to trim in init_local_struct\n");
-		tmp = ft_strtrim((*ps)->nodes[(*ps)->i], "\t");
-		free((*ps)->nodes[(*ps)->i]);
-		(*ps)->nodes[(*ps)->i] = ft_strdup(tmp);
-		free(tmp);
-		if (!(*ps)->nodes[(*ps)->i])
-			ft_exit(sh, *ps, *nodes, "Fail to trim in init_local_struct\n");
-		(*ps)->k = ft_strlen((*ps)->nodes[(*ps)->i]);
 	}
 }
 

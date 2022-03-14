@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 09:16:42 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/01 09:13:28 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 13:05:26 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ft_strdup(char *src);
 int		ft_strchr_pos(char *s, char c, int pos);
 int		is_space(char c);
 int		is_chevron(char c);
-char	*ft_strtrim(char const *s1, char const *set);
+char	*ft_strtrim(char const *s1, char c);
 char	*ft_itoa(int n);
 int		ft_atoi(const char *str);
 int		ft_strcmp(char *s1, char *s2);

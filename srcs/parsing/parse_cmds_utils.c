@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 11:38:50 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/10 15:24:13 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 14:07:13 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ void	process_get_cmds_nb(t_parsing *ps, char *node, int *i)
 		|| (is_space(node[*i]) && (ps->is_d_quote
 				|| ps->is_s_quote)))
 	{
-		(*i)++;
+		if (node[*i] != '\'' && node[*i] != '"')
+			(*i)++;
 		set_quotes(ps, node, i);
 	}
 }

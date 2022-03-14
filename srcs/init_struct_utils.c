@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_struct_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 07:10:31 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/08 19:10:30 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/14 13:20:00 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	check_empty_pipe(t_parsing *ps)
 	{
 		if (!ps->nodes[ps->i] || check_empty_before_pipe(ps->nodes[ps->i]))
 		{
-			printf("minishell: syntax error near unexpected token `|'\n");
+			write(2, "minishell: syntax error near unexpected token `|'\n", 51);
 			g_exit_st = 2;
 			return (0);
 		}

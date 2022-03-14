@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:08:35 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 16:55:44 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 13:23:04 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,9 @@ int	check_space_between_redirs(t_parsing *ps)
 		}
 		if (ps->nodes[ps->i][j] && is_chevron(ps->nodes[ps->i][j]))
 		{
-			printf("minishell: syntax error near unexpected token `%c'\n",
-				ps->nodes[ps->i][j]);
+			write(2, "minishell: syntax error near unexpected token `", 48);
+			write(2, &ps->nodes[ps->i][j], 1);
+			write(2, "'\n", 3);
 			return (0);
 		}
 	}

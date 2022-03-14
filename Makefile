@@ -3,7 +3,7 @@ NAME = minishell
 CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror -I/Users/$(USER)/.brew/opt/readline/include
-
+CFLAGS += -g
 MAIN = 	srcs/main.c			\
 		srcs/main_utils.c	\
 		srcs/init_struct.c	\

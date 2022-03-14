@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 16:25:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 11:33:20 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/14 13:45:38 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	add_command_args(t_node **nodes, t_parsing *ps, t_shell *sh)
 		else
 			break ;
 	}
-	(*nodes)[ps->i].cmd[ps->cmd_nb] = 0;
+	(*nodes)[ps->i].cmd[ps->pos_cmd] = 0;
 }
 
 void	add_command(t_node **nodes, t_parsing *ps, t_shell *sh)

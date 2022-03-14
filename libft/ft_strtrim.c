@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:40:14 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 10:09:42 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 13:05:42 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,7 @@ static char	*ft_strnew_trim(size_t size)
 	return ((char *)ft_memalloc_trim((size + 1) * (sizeof(char))));
 }
 
-static int	is_inset(char const *set, char c)
-{
-	int	i;
-
-	i = 0;
-	while (set[i])
-	{
-		if (set[i] == c)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-char	*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char const *s1, char c)
 {
 	char	*s2;
 	int		i;
@@ -51,12 +37,12 @@ char	*ft_strtrim(char const *s1, char const *set)
 
 	i = 0;
 	k = 0;
-	if (!s1 || !set)
+	if (!s1 || !c)
 		return (NULL);
-	while (is_inset(set, s1[i]))
+	while (s1[i] == c)
 		i++;
 	j = ft_strlen(s1) - 1;
-	while (j > i && is_inset(set, s1[j]))
+	while (j > i && s1[j] == c)
 		j--;
 	if (ft_strlen(s1) == i)
 		return (ft_strdup(""));
