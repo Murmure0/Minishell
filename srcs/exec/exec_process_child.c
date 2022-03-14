@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_process_child.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maelle <maelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:22:02 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/07 16:57:37 by mberthet         ###   ########.fr       */
+/*   Updated: 2022/03/14 17:31:18 by maelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ extern int	g_exit_st;
 static void	child_process(t_exec *exec_st, t_node *first_node,
 		t_shell *shell)
 {
+	signal(SIGQUIT, handle_sig_fork);
+	signal(SIGINT, handle_sig_fork);
 	if (exec_st->fd_in < 0 || exec_st->fd_out < 0)
 		exit(0);
 	if (exec_st->fd_in > 0)

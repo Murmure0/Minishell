@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_heredoc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maelle <maelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:23:01 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/11 16:51:13 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 18:16:37 by maelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ extern int	g_exit_st;
 
 static void	here_doc_reading(char *line, int pipe_hd, char *del)
 {
-	while (line)
+	while (1)
 	{
 		free(line);
 		line = get_next_line(STDIN_FILENO);
 		if (!line)
-			break ;
+			continue ;
 		if (!ft_strcmp(line, del))
 			break ;
 		else
@@ -112,7 +112,7 @@ int	add_heredoc_file(t_node *nodes, t_parsing *ps)
 	wait(&status);
 	if (status != 0)
 	{
-		g_exit_st = status << 8;
+		g_exit_st = status >> 8;
 		return (1);
 	}
 	return (0);

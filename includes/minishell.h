@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maelle <maelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 17:16:17 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/14 08:32:39 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 16:03:52 by maelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # include <errno.h>
 # include <termios.h>
 
-// # include <wait.h>
+# include <wait.h>
 
 /* ERROR MESSAGES */
 

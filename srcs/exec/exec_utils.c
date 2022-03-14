@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maelle <maelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 13:22:31 by mberthet          #+#    #+#             */
-/*   Updated: 2022/03/14 13:13:17 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 16:42:47 by maelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ static int	find_path(t_node *first_node, t_shell *shell)
 	int		i;
 
 	i = -1;
+
 	while (shell->path && shell->path[++i])
 	{
 		cmd = ft_strjoin(shell->path[i], first_node[0].cmd[0]);
