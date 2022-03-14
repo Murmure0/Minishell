@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 14:05:56 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/10 15:56:25 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 15:05:38 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ void	add_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 	if (nodes[ps->i].infiles)
 		free(nodes[ps->i].infiles);
 	nodes[ps->i].infiles = get_file_name(ps, nodes, 1);
+	if (!nodes[ps->i].infiles)
+		ft_exit(sh, ps, nodes, "Fail to malloc infiles in add_file\n");
 	nodes[ps->i].infiles = remove_quotes_files(ps, nodes[ps->i].infiles);
 	if (!nodes[ps->i].infiles)
 		ft_exit(sh, ps, nodes, "Fail to malloc infiles in add_file\n");
@@ -79,6 +81,8 @@ int	add_outfile(t_node *nodes, t_parsing *ps, int redir, t_shell *sh)
 	if (nodes[ps->i].outfiles)
 		free(nodes[ps->i].outfiles);
 	nodes[ps->i].outfiles = get_file_name(ps, nodes, 2);
+	if (!nodes[ps->i].outfiles)
+		ft_exit(sh, ps, nodes, "Fail to malloc outfiles in add_outfiles\n");
 	nodes[ps->i].outfiles = remove_quotes_files(ps, nodes[ps->i].outfiles);
 	if (!nodes[ps->i].outfiles)
 		ft_exit(sh, ps, nodes, "Fail to malloc outfiles in add_outfiles\n");
