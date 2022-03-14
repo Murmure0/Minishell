@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:08:35 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/14 13:23:04 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 14:56:07 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	check_space_between_redirs(t_parsing *ps)
 		{
 			write(2, "minishell: syntax error near unexpected token `", 48);
 			write(2, &ps->nodes[ps->i][j], 1);
-			write(2, "'\n", 3);
+			write(2, "'\n", 2);
 			return (0);
 		}
 	}

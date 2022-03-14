@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 19:12:37 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/14 13:15:47 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 14:57:31 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,26 @@ static int	check_has_key(char **env, char *key)
 
 int	first_export_var_check(char *cmd)
 {
+	int	i;
+
 	if (cmd[0] != '_' && !ft_isalpha(cmd[0]))
 	{
 		write(2, "minishell: export:", 19);
 		write(2, cmd, ft_strlen(cmd));
 		write(2, ": not a valid identifier\n", 25);
 		return (0);
+	}
+	i = 0;
+	while (cmd[++i])
+	{
+		if (cmd[i] != '_' && cmd[i] != '=' && !ft_isalnum(cmd[i])
+			&& cmd[i] != '/' && cmd[i] != '.' && cmd[i] != ' ' && cmd[i] != ':')
+		{
+			write(2, "minishell: export:", 19);
+			write(2, cmd, ft_strlen(cmd));
+			write(2, ": not a valid identifier\n", 25);
+			return (0);
+		}
 	}
 	return (1);
 }
