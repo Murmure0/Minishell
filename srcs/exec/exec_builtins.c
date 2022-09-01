@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_builtins.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/02 11:22:22 by mberthet          #+#    #+#             */
+/*   Updated: 2022/03/07 11:26:00 by mberthet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-extern int g_exit_st;
+extern int	g_exit_st;
 
 static int	find_echo_cd(t_node *first_node, t_shell *shell, char exec)
 {
@@ -8,7 +20,7 @@ static int	find_echo_cd(t_node *first_node, t_shell *shell, char exec)
 	{
 		if (exec == 'y')
 		{
-			my_echo(first_node[0].cmd + 1);
+			g_exit_st = my_echo(first_node[0].cmd + 1);
 			if (first_node->node_nb > 1)
 				exit(EXIT_SUCCESS);
 		}
@@ -58,7 +70,7 @@ static int	find_env_pwd(t_node *first_node, t_shell *shell, char exec)
 	{
 		if (exec == 'y')
 		{
-			g_exit_st = my_env(shell);
+			g_exit_st = my_env(shell, first_node);
 			if (first_node->node_nb > 1)
 				exit(g_exit_st);
 		}
@@ -79,7 +91,7 @@ static int	find_env_pwd(t_node *first_node, t_shell *shell, char exec)
 
 int	find_builtin(t_node *first_node, t_shell *shell, char exec)
 {
-	if (first_node[0].cmd)
+	if (first_node[0].cmd[0])
 	{
 		if (find_echo_cd(first_node, shell, exec))
 			return (1);
@@ -91,9 +103,9 @@ int	find_builtin(t_node *first_node, t_shell *shell, char exec)
 		{
 			if (exec == 'y')
 			{
-				my_exit(shell, first_node);
+				g_exit_st = my_exit(first_node);
 				if (first_node->node_nb > 1)
-					exit(EXIT_SUCCESS);
+					exit(g_exit_st);
 			}
 			return (1);
 		}

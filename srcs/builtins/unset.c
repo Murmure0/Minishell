@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 15:47:52 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/25 20:30:35 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/11 15:11:01 by mberthet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,13 @@ static int	update_env_paths(t_shell *sh)
 	int	i;
 
 	i = -1;
-	while (sh->path[++i])
+	while (sh->path && sh->path[++i])
 		free(sh->path[i]);
 	free(sh->path);
 	sh->path = get_env_paths(sh->env);
 	if (!sh->path)
 		return (-1);
 	return (1);
-}
-
-static int	contains_equal(char *s)
-{
-	int	i;
-
-	i = -1;
-	while (s[++i])
-	{
-		if (s[i] == '=')
-			return (1);
-	}
-	return (0);
 }
 
 static int	shift_vars(t_shell *sh, int i)
@@ -52,6 +39,17 @@ static int	shift_vars(t_shell *sh, int i)
 	return (1);
 }
 
+int	get_equal(char *s)
+{
+	int	i;
+
+	i = -1;
+	while (s[++i])
+		if (s[i] == '=')
+			return (i);
+	return (-1);
+}
+
 int	my_unset(t_shell *sh, char **var)
 {
 	int		i;
@@ -59,19 +57,17 @@ int	my_unset(t_shell *sh, char **var)
 
 	while (var && *var)
 	{
-		if (!*var || contains_equal(*var))
-			return (-1);
 		i = -1;
 		while (sh->env[++i])
 		{
 			env_key = str_slice(sh->env[i], 0, get_equal(sh->env[i]));
 			if (!env_key)
-				return (-1);
+				return (1);
 			if (!ft_strcmp(env_key, *var))
 			{
 				free(env_key);
 				if (!shift_vars(sh, i) && !update_env_paths(sh))
-					return (-1);
+					return (1);
 				break ;
 			}
 			free(env_key);

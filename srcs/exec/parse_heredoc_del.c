@@ -1,4 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_heredoc_del.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/02 13:22:55 by mberthet          #+#    #+#             */
+/*   Updated: 2022/03/11 16:52:45 by vmasse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
+
+extern int	g_exit_st;
+
+int	check_hd_content(t_parsing *ps)
+{
+	int	j;
+
+	j = ps->j + 1;
+	while (ps->nodes[ps->i][j])
+	{
+		if (!is_space(ps->nodes[ps->i][j])
+			&& !is_chevron(ps->nodes[ps->i][j]))
+			return (1);
+		j++;
+	}
+	return (0);
+}
 
 static char	*adj_av(char *tmp)
 {
@@ -10,7 +39,10 @@ static char	*adj_av(char *tmp)
 	len_tmp = ft_strlen(tmp);
 	str = malloc(sizeof(char) * len_tmp + 2);
 	if (!str)
+	{
+		g_exit_st = -1;
 		return (NULL);
+	}
 	while (++i < len_tmp)
 		str[i] = tmp[i];
 	str[len_tmp] = '\n';
@@ -24,7 +56,6 @@ char	*get_delimiter(t_parsing *ps)
 	char	*del;
 	char	*tmp;
 
-	ps->j++;
 	skip_spaces(ps);
 	pos_start = ps->j;
 	while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j])
@@ -35,7 +66,11 @@ char	*get_delimiter(t_parsing *ps)
 		ps->j++;
 	}
 	tmp = str_slice(ps->nodes[ps->i], pos_start, ps->j);
+	if (!tmp)
+		return (NULL);
 	del = adj_av(tmp);
+	if (!del)
+		return (NULL);
 	free(tmp);
 	return (del);
 }

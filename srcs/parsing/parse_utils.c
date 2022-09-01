@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 17:08:35 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/25 21:55:41 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 15:04:34 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ int	check_space_between_redirs(t_parsing *ps)
 	int	j;
 
 	j = ps->j;
-	if (ps->nodes[ps->i][j] && ps->nodes[ps->i][j + 1]
-		&& is_space(ps->nodes[ps->i][j + 1]))
+	if (is_space(ps->nodes[ps->i][j]))
 	{
 		j++;
 		while (ps->nodes[ps->i][j] && is_space(ps->nodes[ps->i][j]))
@@ -42,8 +41,9 @@ int	check_space_between_redirs(t_parsing *ps)
 		}
 		if (ps->nodes[ps->i][j] && is_chevron(ps->nodes[ps->i][j]))
 		{
-			printf("minishell: syntax error near unexpected token `%c'\n",
-				ps->nodes[ps->i][j]);
+			write(2, "minishell: syntax error near unexpected token `", 48);
+			write(2, &ps->nodes[ps->i][j], 1);
+			write(2, "'\n", 2);
 			return (0);
 		}
 	}
@@ -61,34 +61,17 @@ void	skip_spaces(t_parsing *ps)
 	}
 }
 
-t_node	*parse_ret_free(t_node *nodes)
+void	end_parse(t_parsing *ps, t_node *nodes, t_shell *sh)
 {
-	free(nodes);
-	return (NULL);
+	if (ps->cmd_nb)
+	{
+		expand_dollar_value_cmd(nodes, ps, sh);
+		remove_quotes_cmd(nodes, ps);
+	}
 }
 
-char	*replace_in_str(char *s, char *value, int pos, int len)
+void	init_quote_states(t_parsing *ps)
 {
-	char	*before_dollar;
-	char	*tmp;
-	char	*tmp_two;
-	char	*ret;
-
-	before_dollar = str_slice(s, 0, pos);
-	if (!before_dollar)
-		return (NULL);
-	tmp = ft_strjoin(before_dollar, value);
-	free(before_dollar);
-	if (!tmp)
-		return (NULL);
-	tmp_two = ft_strdup(s);
-	if (!tmp_two)
-	{
-		free(tmp);
-		return (NULL);
-	}
-	ret = ft_strjoin(tmp, tmp_two + pos + len + 1);
-	free(tmp);
-	free(tmp_two);
-	return (ret);
+	ps->is_d_quote = 0;
+	ps->is_s_quote = 0;
 }

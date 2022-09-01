@@ -1,32 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_utils.c                                   :+:      :+:    :+:   */
+/*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/22 16:16:28 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/25 10:06:17 by vmasse           ###   ########.fr       */
+/*   Created: 2022/03/11 16:28:10 by vmasse            #+#    #+#             */
+/*   Updated: 2022/03/11 16:31:25 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "../includes/minishell.h"
 
-void	set_quote(char c, t_split *st)
+void	process_readline_inside(t_parsing *ps, t_node *nodes, t_shell *shell)
 {
-	if (c == '\'' || c == '"')
+	if (nodes)
 	{
-		if (st->is_quote)
-			st->is_quote = 0;
-		else
-			st->is_quote = 1;
+		if (ps->cmd_nb)
+			exec(nodes, shell);
+		free_nodestruct(nodes, NULL);
 	}
-}
-
-void	init_struct(t_split *st)
-{
-	st->i = -1;
-	st->j = 0;
-	st->k = 0;
-	st->is_quote = 0;
 }

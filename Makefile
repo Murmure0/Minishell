@@ -3,39 +3,48 @@ NAME = minishell
 CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror -I/Users/$(USER)/.brew/opt/readline/include
-
-CFLAGS += -g 
-# CFLAGS += -fsanitize=address
-
+CFLAGS += -g
 MAIN = 	srcs/main.c			\
+		srcs/main_utils.c	\
 		srcs/init_struct.c	\
+		srcs/init_struct_utils.c	\
 		srcs/free.c	\
+		srcs/utils.c	\
 		srcs/env/env.c			\
 		srcs/env/env_utils.c			\
 		srcs/env/shlvl.c			\
 		srcs/parsing/parse.c \
+		srcs/parsing/replace_in_str.c \
 		srcs/parsing/parse_utils.c \
 		srcs/parsing/parse_quotes.c \
 		srcs/parsing/parse_cmds.c \
 		srcs/parsing/parse_cmds_utils.c \
 		srcs/parsing/parse_files.c \
-		srcs/parsing/files_expander.c \
 		srcs/parsing/parse_dollar.c \
 		srcs/parsing/parse_dollar_utils.c \
+		srcs/parsing/ft_split_pipe.c \
+		srcs/parsing/ft_split_utils.c \
 		srcs/parsing/remove_quotes.c \
+		srcs/parsing/remove_quotes_utils.c \
+		srcs/parsing/files_expander.c \
+		srcs/parsing/set_quotes.c \
+		srcs/parsing/set_quotes_two.c \
 		srcs/exec/parse_heredoc.c \
 		srcs/exec/parse_heredoc_del.c \
 		srcs/exec/gnl.c \
 		srcs/exec/exec.c \
-		srcs/exec/exec_builtins_redir.c \
 		srcs/exec/exec_process_child.c \
+		srcs/exec/exec_process_child_fd.c \
 		srcs/exec/exec_process_brother.c \
 		srcs/exec/exec_process_brother_fd.c \
 		srcs/exec/exec_process_parent.c \
+		srcs/exec/exec_process_parent_fd.c \
 		srcs/exec/exec_utils.c \
 		srcs/exec/exec_builtins.c \
+		srcs/exec/exec_builtins_redir.c \
 		srcs/builtins/echo.c \
 		srcs/builtins/cd.c \
+		srcs/builtins/cd_utils.c \
 		srcs/builtins/export.c \
 		srcs/builtins/unset.c \
 		srcs/builtins/pwd.c \

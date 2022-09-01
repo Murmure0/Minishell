@@ -6,7 +6,7 @@
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 14:05:56 by vmasse            #+#    #+#             */
-/*   Updated: 2022/02/25 17:06:36 by vmasse           ###   ########.fr       */
+/*   Updated: 2022/03/14 15:05:38 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,27 @@ int	get_files_nb(char *node, char chevron)
 char	*get_file_name(t_parsing *ps, t_node *nodes, int redir)
 {
 	int		pos_start;
+	int		count_s;
+	int		count_d;
 
-	ps->j++;
 	skip_spaces(ps);
 	pos_start = ps->j;
+	count_d = 0;
+	count_s = 0;
 	while (ps->nodes[ps->i] && ps->nodes[ps->i][ps->j])
 	{
-		if (is_space(ps->nodes[ps->i][ps->j]) ||
-			is_chevron(ps->nodes[ps->i][ps->j]))
+		if (ps->nodes[ps->i][ps->j] == '"')
+			count_d++;
+		if (ps->nodes[ps->i][ps->j] == '\'')
+			count_s++;
+		set_quotes_for_getfilename(ps, ps->j, &count_s, &count_d);
+		if ((is_space(ps->nodes[ps->i][ps->j])
+			|| is_chevron(ps->nodes[ps->i][ps->j]))
+			&& !ps->is_d_quote && !ps->is_s_quote)
 			break ;
 		ps->j++;
 	}
-	if (redir == 1 && nodes->invalid_infile)
+	if (redir == 1 && nodes[ps->i].invalid_infile)
 		return (NULL);
 	return (str_slice(ps->nodes[ps->i], pos_start, ps->j));
 }
@@ -57,8 +66,11 @@ void	add_infile(t_node *nodes, t_parsing *ps, t_shell *sh)
 	nodes[ps->i].infiles = get_file_name(ps, nodes, 1);
 	if (!nodes[ps->i].infiles)
 		ft_exit(sh, ps, nodes, "Fail to malloc infiles in add_file\n");
+	nodes[ps->i].infiles = remove_quotes_files(ps, nodes[ps->i].infiles);
+	if (!nodes[ps->i].infiles)
+		ft_exit(sh, ps, nodes, "Fail to malloc infiles in add_file\n");
 	if (access(nodes[ps->i].infiles, F_OK) != 0)
-		nodes->invalid_infile = 1;
+		nodes[ps->i].invalid_infile = 1;
 }
 
 int	add_outfile(t_node *nodes, t_parsing *ps, int redir, t_shell *sh)
@@ -69,6 +81,9 @@ int	add_outfile(t_node *nodes, t_parsing *ps, int redir, t_shell *sh)
 	if (nodes[ps->i].outfiles)
 		free(nodes[ps->i].outfiles);
 	nodes[ps->i].outfiles = get_file_name(ps, nodes, 2);
+	if (!nodes[ps->i].outfiles)
+		ft_exit(sh, ps, nodes, "Fail to malloc outfiles in add_outfiles\n");
+	nodes[ps->i].outfiles = remove_quotes_files(ps, nodes[ps->i].outfiles);
 	if (!nodes[ps->i].outfiles)
 		ft_exit(sh, ps, nodes, "Fail to malloc outfiles in add_outfiles\n");
 	nodes[ps->i].append = redir;
@@ -86,9 +101,9 @@ int	add_outfile(t_node *nodes, t_parsing *ps, int redir, t_shell *sh)
 
 int	add_file(t_node *nodes, t_parsing *ps, int redir, t_shell *sh)
 {
-	if (redir == 1 && !nodes->invalid_infile)
+	if (redir == 1 && !nodes[ps->i].invalid_infile)
 		add_infile(nodes, ps, sh);
-	else if (redir == 1 && nodes->invalid_infile)
+	else if (redir == 1 && nodes[ps->i].invalid_infile)
 		get_file_name(ps, nodes, 1);
 	else if (redir == 2 || redir == 3)
 		return (add_outfile(nodes, ps, redir, sh));

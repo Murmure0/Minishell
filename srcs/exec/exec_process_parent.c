@@ -1,78 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_process_parent.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/02 13:22:16 by mberthet          #+#    #+#             */
+/*   Updated: 2022/03/07 17:18:08 by mberthet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-int	find_fd_in_parent(t_node *last_node, t_exec *exec_st)
-{
-	int	fd_in;
-
-	fd_in = 0;
-	if (last_node->infiles || last_node->infile_hd)
-	{
-		printf("valeur inid : %d\n", last_node->in_id);
-		if (last_node->infiles && last_node->in_id == 2)
-		{
-			// write(1, "POUET\n", 6);
-			fd_in = open(last_node->infiles, O_RDONLY);
-			if (fd_in < 0)
-			{
-				write(2, last_node->infiles, ft_strlen(last_node->infiles));
-				perror(": ");
-				return (-1);
-			}
-		}
-		else if (last_node->in_id == 1 && !last_node->invalid_infile)
-			fd_in = last_node->infile_hd;
-	}
-	else
-		fd_in = exec_st->pfd_in;
-	return (fd_in);
-}
-
-int	find_fd_out_parent(t_node *last_node)
-{
-	int	fd_out;
-
-	fd_out = 1;
-	if (last_node[0].outfiles)
-	{
-		if (last_node[0].append == 2)
-			fd_out = open(last_node[0].outfiles, O_WRONLY | O_TRUNC);
-		else if (last_node[0].append == 3)
-			fd_out = open(last_node[0].outfiles, O_WRONLY | O_APPEND);
-		if (fd_out < 0)
-		{
-			write(2, last_node[0].outfiles, ft_strlen(last_node[0].outfiles));
-			perror(": ");
-			return (-1);
-		}
-	}
-	return (fd_out);
-}
-
-t_exec	*init_exec_st_parent(t_node *last_node, t_exec *exec_st)
-{
-	t_exec	*exec_st_parent;
-
-	exec_st_parent = malloc(sizeof(t_exec));
-	// return if !exec_st_parent
-	exec_st_parent->pfd_in = 0;
-	exec_st_parent->pfd_out = 0;
-	if (!exec_st_parent)
-	{
-		write(2, "Memory allocation failed\n", 26);
-		perror(": ");
-	}
-	exec_st_parent->fd_in = find_fd_in_parent(last_node, exec_st);
-	if (exec_st_parent->fd_in < 0)
-		return (NULL);
-	exec_st_parent->fd_out = find_fd_out_parent(last_node);
-	if (exec_st_parent->fd_out < 0)
-		return (NULL);
-	return (exec_st_parent);
-}
+extern int	g_exit_st;
 
 static void	parent_fork_process(t_node *last_node, t_exec *exec_st,
 	t_exec *exec_st_parent, t_shell *shell)
 {
+	if (exec_st_parent->fd_in < 0 || exec_st_parent->fd_out < 0)
+		exit (0);
 	if (exec_st_parent->fd_in > 0)
 		fd_dup(exec_st_parent->fd_in, STDIN_FILENO);
 	if (exec_st_parent->fd_out > 1)
@@ -82,29 +28,36 @@ static void	parent_fork_process(t_node *last_node, t_exec *exec_st,
 	free(exec_st);
 	free(exec_st_parent);
 	if (!find_builtin(last_node, shell, 'y'))
-	{
-		exec_cmd(last_node, shell);
-		write(2, "Erreur post execution process parent ", 38);
-		perror(": ");
-		exit(EXIT_FAILURE);
-	}
+		path_finder(last_node, shell);
 }
 
-void	parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
+int	fork_failed(t_exec *prev_exec_st, t_exec *exec_st_parent, t_node *last_node)
+{
+	g_exit_st = -1;
+	write(1, "minishell: ", 12);
+	write(1, last_node->cmd[0], ft_strlen(last_node->cmd[0]));
+	write(1, " : fork failed.\n", 16);
+	free(prev_exec_st);
+	free(exec_st_parent);
+	return (-1);
+}
+
+int	parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
 {
 	t_exec	*exec_st_parent;
 	pid_t	parent_pid;
 
 	exec_st_parent = init_exec_st_parent(last_node, prev_exec_st);
-	// return err if malloc failed
+	if (!exec_st_parent)
+	{
+		free(prev_exec_st);
+		return (-1);
+	}
 	parent_pid = fork();
 	if (parent_pid < 0)
 	{
-		write(2, "Parent fork failed", 19);
-		perror(": ");
-		free(prev_exec_st);
-		free(exec_st_parent);
-		exit(EXIT_FAILURE);
+		fork_failed(prev_exec_st, exec_st_parent, last_node);
+		return (-1);
 	}
 	if (parent_pid == 0)
 		parent_fork_process(last_node, prev_exec_st, exec_st_parent, shell);
@@ -112,4 +65,5 @@ void	parent_process(t_exec *prev_exec_st, t_node *last_node, t_shell *shell)
 	close(prev_exec_st->pfd_out);
 	free(prev_exec_st);
 	free(exec_st_parent);
+	return (0);
 }

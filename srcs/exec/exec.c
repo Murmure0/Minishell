@@ -1,43 +1,78 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/02 11:14:49 by mberthet          #+#    #+#             */
+/*   Updated: 2022/03/15 10:18:20 by mberthet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-static int	execution(t_node *first_node, t_shell *shell, t_exec *exec_st,
-		pid_t child_pid)
+extern int	g_exit_st;
+
+static int	execution(t_node *first_node, t_shell *shell, t_exec *exec_st)
 {
 	int		nb_cmd;
 
 	nb_cmd = first_node[0].node_nb;
 	signal(SIGQUIT, handle_sig_fork);
 	signal(SIGINT, handle_sig_fork);
-	child_pid = exec_child_proc(first_node, shell, exec_st);
+	if (exec_child_proc(first_node, shell, exec_st) < 0)
+		return (-1);
 	if (nb_cmd == 2)
-		parent_process(exec_st, first_node + 1, shell);
+	{
+		if (parent_process(exec_st, first_node + 1, shell) < 0)
+			return (-1);
+	}
 	else if (nb_cmd > 2)
-		brother_process(exec_st, first_node + 1, shell);
+	{
+		if (brother_process(exec_st, first_node + 1, shell) < 0)
+			return (-1);
+	}
 	return (1);
+}
+
+static int	id_cmd_exec(int nb_cmd, t_node *first_node, t_shell *shell,
+	t_exec *exec_st)
+{
+	if (nb_cmd == 1 && find_builtin(first_node, shell, 'n'))
+	{
+		if (redir_solo_builtin(first_node, shell, exec_st) < 0)
+			return (-1);
+	}
+	else
+	{
+		if (execution(first_node, shell, exec_st) < 0)
+			return (-1);
+	}
+	return (0);
 }
 
 int	exec(t_node *first_node, t_shell *shell)
 {
-	pid_t	child_pid;
 	t_exec	*exec_st;
 	int		nb_cmd;
 	int		status;
 
-	status = 0;
-	child_pid = 0;
 	nb_cmd = first_node[0].node_nb;
 	exec_st = init_exec_st(first_node);
 	if (!exec_st)
 		return (-1);
-	if (nb_cmd == 1 && find_builtin(first_node, shell, 'n'))
-		redir_solo_builtin(first_node, shell, exec_st);
-	else
-		execution(first_node, shell, exec_st, child_pid);
+	if (id_cmd_exec(nb_cmd, first_node, shell, exec_st) < 0)
+		return (-1);
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &shell->termios_p);
 	if (nb_cmd > 1)
+	{
 		while ((nb_cmd--) > 0)
 			wait(&status);
-	if (WIFSIGNALED(status))
-		g_exit_st = 128 + WTERMSIG(status);
+		if (WIFEXITED(status))
+			g_exit_st = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_exit_st = 128 + WTERMSIG(status);
+	}
 	return (0);
 }

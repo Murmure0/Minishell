@@ -1,4 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mberthet <mberthet@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/02 13:22:31 by mberthet          #+#    #+#             */
+/*   Updated: 2022/03/15 08:43:27 by mberthet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
+
+extern int	g_exit_st;
 
 void	fd_dup(int fd, int std)
 {
@@ -6,7 +20,14 @@ void	fd_dup(int fd, int std)
 	{
 		close(fd);
 		perror(": ");
-		exit (errno);
+		if (errno == EBADF)
+			exit(9);
+		if (errno == EBUSY)
+			exit(16);
+		if (errno == EINTR)
+			exit(4);
+		if (errno == EMFILE)
+			exit(24);
 	}
 	close(fd);
 }
@@ -17,45 +38,57 @@ t_exec	*init_exec_st(t_node *first_node)
 
 	exec_st = malloc(sizeof(t_exec));
 	if (!exec_st)
+	{
+		g_exit_st = -1;
+		write(2, "Memory allocation failed.\n", 26);
 		return (NULL);
+	}
 	exec_st->num_cmd = 1;
 	exec_st->pfd_in = 0;
 	exec_st->pfd_out = 0;
 	exec_st->fd_in = find_fd_in(first_node);
-	if (exec_st->fd_in < 0)
-		return (NULL);
 	exec_st->fd_out = find_fd_out(first_node, exec_st);
-	if (exec_st->fd_out < 0)
-		return (NULL);
 	return (exec_st);
 }
 
-int	path_finder(t_node *first_node, t_shell *shell)
+static void	exit_err(t_node *first_node)
 {
-	char	*tmp;
+	write(2, "minishell: ", 12);
+	write(2, first_node[0].cmd[0], ft_strlen(first_node[0].cmd[0]));
+	write(2, ": command not found\n", 21);
+	exit(127);
+}
+
+static int	find_path(t_node *first_node, t_shell *shell)
+{
+	char	*cmd;
 	int		i;
 
-	if (first_node[0].cmd)
+	i = -1;
+	while (shell->path && shell->path[++i])
 	{
-		execve(first_node->cmd[0], first_node->cmd, shell->env);
-		i = -1;
-		tmp = ft_strdup(first_node[0].cmd[0]);
-		while (shell->path[++i])
-		{
-			first_node[0].cmd[0] = ft_strjoin(shell->path[i], tmp);
-			if (!tmp)
-				return (-1);
-			execve(first_node[0].cmd[0], first_node[0].cmd, shell->env);
-			free(first_node[0].cmd[0]);
-		}
-		free(tmp);
+		cmd = ft_strjoin(shell->path[i], first_node[0].cmd[0]);
+		if (!cmd)
+			return (-1);
+		execve(cmd, first_node[0].cmd, shell->env);
+		free(cmd);
 	}
 	return (0);
 }
 
-int	exec_cmd(t_node *first_node, t_shell *shell)
+int	path_finder(t_node *first_node, t_shell *shell)
 {
-	if (!path_finder(first_node, shell))
-		return (-1);
+	if (first_node[0].cmd[0])
+	{
+		if (!strcmp(first_node[0].cmd[0], "")
+			|| !strcmp(first_node[0].cmd[0], " "))
+			exit_err(first_node);
+		execve(first_node[0].cmd[0], first_node[0].cmd, shell->env);
+		if (find_path(first_node, shell))
+			return (-1);
+		exit_err(first_node);
+	}
+	else
+		exit(0);
 	return (0);
 }

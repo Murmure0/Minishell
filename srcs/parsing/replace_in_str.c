@@ -1,33 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shlvl.c                                            :+:      :+:    :+:   */
+/*   replace_in_str.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vmasse <vmasse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/20 17:31:55 by vmasse            #+#    #+#             */
-/*   Updated: 2022/03/11 10:47:17 by vmasse           ###   ########.fr       */
+/*   Created: 2022/03/11 16:55:33 by vmasse            #+#    #+#             */
+/*   Updated: 2022/03/11 16:56:01 by vmasse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*update_shell_lvl(char *env)
+char	*replace_in_str(char *s, char *value, int pos, int len)
 {
-	char	*lvl;
-	char	*lvl_char;
+	char	*before_dollar;
+	char	*tmp;
+	char	*tmp_two;
+	char	*ret;
 
-	lvl = ft_substr(env, 6, ft_strlen(env) - 6);
-	if (!lvl)
+	before_dollar = str_slice(s, 0, pos);
+	if (!before_dollar)
 		return (NULL);
-	lvl_char = ft_itoa(ft_atoi(lvl) + 1);
-	if (!lvl_char)
+	tmp = ft_strjoin(before_dollar, value);
+	free(before_dollar);
+	if (!tmp)
+		return (NULL);
+	tmp_two = ft_strdup(s);
+	if (!tmp_two)
 	{
-		free(lvl);
+		free(tmp);
 		return (NULL);
 	}
-	env = ft_strjoin("SHLVL=", lvl_char);
-	free(lvl);
-	free(lvl_char);
-	return (env);
+	ret = ft_strjoin(tmp, tmp_two + pos + len + 1);
+	free(tmp);
+	free(tmp_two);
+	return (ret);
 }
